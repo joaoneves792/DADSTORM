@@ -1,0 +1,15 @@
+[3 de setembro de 2016][20:40:42] Initializing process Teste1tcp://localhost:53001/teste... Done
+[3 de setembro de 2016][20:40:42] Connectiong to process Teste2tcp://localhost:54002/teste... Done
+[3 de setembro de 2016][20:40:43] Connectiong to process Teste3tcp://localhost:55003/teste... Done
+[3 de setembro de 2016][20:40:44] FREEZE!
+[3 de setembro de 2016][20:40:45] Freeze request
+[3 de setembro de 2016][20:40:45] Freeze request
+[3 de setembro de 2016][20:40:49] Freeze request
+[3 de setembro de 2016][20:40:49] Freeze request
+[3 de setembro de 2016][20:40:54] Freeze request
+[3 de setembro de 2016][20:40:54] Freeze request
+[3 de setembro de 2016][20:40:59] Freeze request
+[3 de setembro de 2016][20:40:59] Freeze request
+[3 de setembro de 2016][20:41:04] Freeze request
+[3 de setembro de 2016][20:41:04] Freeze request
+[3 de setembro de 2016][20:41:04] UNFREEZE!

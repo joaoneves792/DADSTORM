@@ -37,7 +37,7 @@ namespace DistributedAlgoritmsClassLibrary
             StartTimer();
         }
 
-        public void Timeout() {
+        private void Timeout() {
             foreach (Tuple<Process, Message> sent in _sent) {
                 _fairLossPointToPointLink.Send(sent.Item1, sent.Item2);
             }
@@ -62,6 +62,22 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Deliver(Process process, Message message) {
             _listener(process, message);
+        }
+
+        public void Crash() {
+            _fairLossPointToPointLink.Crash();
+        }
+
+        public void Recover() {
+            _fairLossPointToPointLink.Recover();
+        }
+
+        public void Freeze() {
+            _fairLossPointToPointLink.Freeze();
+        }
+
+        public void Unfreeze() {
+            _fairLossPointToPointLink.Unfreeze();
         }
     }
 }

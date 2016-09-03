@@ -14,5 +14,10 @@ namespace DistributedAlgoritmsClassLibrary
 
         void Send(Process process, Message message);
         void Deliver(Process process, Message message);
+
+        void Crash();
+        void Recover();
+        void Freeze();
+        void Unfreeze();
     }
 }

@@ -26,6 +26,13 @@ namespace SecondaryConsoleApplication
 
             RetransmitForever node = new RetransmitForever(process1, listener.Deliver, process2, process3);
 
+            if (args[0].Equals("Teste1"))
+            {
+                node.Freeze();
+                Thread.Sleep(20000);
+                node.Unfreeze();
+            }
+
             Thread.Sleep(1000);
 
             node.Send(process2, "to " + process2.Name);
