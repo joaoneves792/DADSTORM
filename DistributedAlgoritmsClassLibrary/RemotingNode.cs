@@ -18,13 +18,13 @@ namespace DistributedAlgoritmsClassLibrary
 {
     using Message = Object;
 
-    public class RmiNode : MarshalByRefObject, FairLossPointToPointLink
+    public class RemotingNode : MarshalByRefObject, FairLossPointToPointLink
     {
         private readonly Process _process;
         private Action<Process, Message> _listener;
         private IDictionary<Process, FairLossPointToPointLink> _fairLossPointToPointLinks;
 
-        public RmiNode(Process process, Action<Process, Message> listener) {
+        public RemotingNode(Process process, Action<Process, Message> listener) {
             Log.Write(LogStatus.DEBUG, "Initializing process " + process.ToString() + "...");
 
             _process = process;
@@ -47,7 +47,7 @@ namespace DistributedAlgoritmsClassLibrary
             Log.WriteDone(LogStatus.DEBUG);
         }
 
-        public RmiNode(Process process, Action<Process, Message> listener, params Process[] otherProcesses) : this(process, listener) {
+        public RemotingNode(Process process, Action<Process, Message> listener, params Process[] otherProcesses) : this(process, listener) {
             foreach (Process otherProcess in otherProcesses) {
                 Connect(otherProcess);
             }

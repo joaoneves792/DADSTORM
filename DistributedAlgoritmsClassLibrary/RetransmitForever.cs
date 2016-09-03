@@ -23,7 +23,7 @@ namespace DistributedAlgoritmsClassLibrary
         public RetransmitForever(Process process, Action<Process, Message> listener)
         {
             _listener = listener;
-            _fairLossPointToPointLink = new RmiNode(process, Deliver);
+            _fairLossPointToPointLink = new RemotingNode(process, Deliver);
 
             _sent = new ConcurrentBag<Tuple<Process, Message>>();
             StartTimer();
@@ -31,7 +31,7 @@ namespace DistributedAlgoritmsClassLibrary
 
         public RetransmitForever(Process process, Action<Process, Message> listener, params Process[] otherProcesses) {
             _listener = listener;
-            _fairLossPointToPointLink = new RmiNode(process, Deliver, otherProcesses);
+            _fairLossPointToPointLink = new RemotingNode(process, Deliver, otherProcesses);
 
             _sent = new ConcurrentBag<Tuple<Process, Message>>();
             StartTimer();
