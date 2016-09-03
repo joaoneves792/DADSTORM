@@ -1,0 +1,5 @@
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\LoggingClassLibrary\bin\Debug\LoggingClassLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\LoggingClassLibrary\bin\Debug\LoggingClassLibrary.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.csprojResolveAssemblyReference.cache
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.pdb

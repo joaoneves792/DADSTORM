@@ -1,0 +1,12 @@
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\TestingConsoleApplication.exe.config
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\TestingConsoleApplication.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\TestingConsoleApplication.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.csprojResolveAssemblyReference.cache
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\LoggingClassLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\LoggingClassLibrary.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\SecondaryConsoleApplication.pdb

@@ -1,0 +1,1 @@
+[2 de setembro de 2016][19:54:34] Initializing process Teste3tcp://localhost:55003/teste ... Done

@@ -1,0 +1,21 @@
+[2 de setembro de 2016][17:21:48] Initializing process Teste1tcp://localhost:53001/teste ...[2 de setembro de 2016][17:22:31] Initializing process Teste1tcp://localhost:53001/teste ...[2 de setembro de 2016][17:22:31] done
+[2 de setembro de 2016][17:22:39] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][17:32:14] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][17:32:22] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][17:43:44] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][17:43:52] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][17:44:18] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][17:44:26] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][17:45:16] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][17:46:36] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][17:46:44] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][17:51:22] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][17:51:30] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][18:19:29] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][18:19:38] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][18:22:22] Initializing process Teste1tcp://localhost:53001/teste ...[2 de setembro de 2016][18:22:51] Initializing process Teste1tcp://localhost:53001/teste ...[2 de setembro de 2016][18:23:11] Initializing process Teste1tcp://localhost:53001/teste ...[2 de setembro de 2016][18:34:04] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][18:35:09] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][18:35:17] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][18:54:39] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][18:59:07] Initializing process Teste1tcp://localhost:53001/teste ...[2 de setembro de 2016][18:59:07] Initializing process Teste2tcp://localhost:54002/teste ... Done
+ Done
+[2 de setembro de 2016][18:59:07] Initializing process Teste3tcp://localhost:55003/teste ... Done
+[2 de setembro de 2016][18:59:41] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][18:59:57] Initializing process Teste1tcp://localhost:53001/teste ...[2 de setembro de 2016][18:59:57] Initializing process Teste2tcp://localhost:54002/teste ... Done
+[2 de setembro de 2016][18:59:57] Initializing process Teste3tcp://localhost:55003/teste ... Done
+[2 de setembro de 2016][19:00:17] Initializing process Teste1tcp://localhost:53001/teste ... Done
+[2 de setembro de 2016][19:00:17] Initializing process Teste3tcp://localhost:55003/teste ... Done
+[2 de setembro de 2016][19:02:03] Initializing process Teste2tcp://localhost:54002/teste ...[2 de setembro de 2016][19:02:03] Initializing process Teste3tcp://localhost:55003/teste ... Done
+ Done

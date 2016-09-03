@@ -1,0 +1,10 @@
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe.config
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\LoggingClassLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\LoggingClassLibrary.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.csprojResolveAssemblyReference.cache
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.pdb

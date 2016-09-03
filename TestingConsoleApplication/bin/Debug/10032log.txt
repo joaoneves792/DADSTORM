@@ -1,0 +1,1 @@
+[2 de setembro de 2016][19:56:15] Initializing process Teste2tcp://localhost:54002/teste ... Done
