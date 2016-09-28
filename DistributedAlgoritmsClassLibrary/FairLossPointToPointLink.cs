@@ -6,18 +6,8 @@ using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
-    using Message = Object;
-
-    public interface FairLossPointToPointLink
+    public interface FairLossPointToPointLink : PointToPointLink
     {
         void Anchor(Process process);
-
-        void Send(Process process, Message message);
-        void Deliver(Process process, Message message);
-
-        void Crash();
-        void Recover();
-        void Freeze();
-        void Unfreeze();
     }
 }

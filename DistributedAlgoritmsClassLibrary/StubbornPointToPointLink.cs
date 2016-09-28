@@ -8,14 +8,7 @@ namespace DistributedAlgoritmsClassLibrary
 {
     using Message = Object;
 
-    public interface StubbornPointToPointLink
+    public interface StubbornPointToPointLink : PointToPointLink
     {
-        void Send(Process process, Message message);
-        void Deliver(Process process, Message message);
-
-        void Crash();
-        void Recover();
-        void Freeze();
-        void Unfreeze();
     }
 }

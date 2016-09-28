@@ -7,7 +7,10 @@ namespace LoggingClassLibrary
     public enum LogStatus {
         DEBUG,
         ROUTINE,
-        CRITICAL
+        CRITICAL,
+        //todo: eliminate irrelevant logging levels
+        FULL,
+        LIGHT
     }
 
     public class Log {

@@ -10,3 +10,6 @@ C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConso
 C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\LoggingClassLibrary.pdb
 C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe
 C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\SecondaryConsoleApplication.pdb
+Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug\TestingConsoleApplication.exe.config
+Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.exe
+Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.pdb
