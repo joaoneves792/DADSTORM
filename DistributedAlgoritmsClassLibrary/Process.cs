@@ -55,6 +55,7 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public override int GetHashCode() {
+            //todo: get better hash code system
             return _name.GetHashCode() +
                    _url.GetHashCode();
         }

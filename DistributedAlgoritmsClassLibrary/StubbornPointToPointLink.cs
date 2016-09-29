@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
-    using Message = Object;
-
     public interface StubbornPointToPointLink : PointToPointLink
     {
     }

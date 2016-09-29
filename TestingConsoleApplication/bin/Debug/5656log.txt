@@ -1,0 +1,19 @@
+[29 de setembro de 2016][12:28:03] Initializing process Teste1tcp://localhost:53001/teste... Done
+[29 de setembro de 2016][12:28:03] Connectiong to process Teste2tcp://localhost:54002/teste... Done
+[29 de setembro de 2016][12:28:04] Connectiong to process Teste3tcp://localhost:55003/teste... Done
+[29 de setembro de 2016][12:28:05] FREEZE!
+[29 de setembro de 2016][12:28:06] 1 frozen requests
+[29 de setembro de 2016][12:28:10] 3 frozen requests
+[29 de setembro de 2016][12:28:10] 4 frozen requests
+[29 de setembro de 2016][12:28:15] 5 frozen requests
+[29 de setembro de 2016][12:28:20] 7 frozen requests
+[29 de setembro de 2016][12:28:20] 8 frozen requests
+[29 de setembro de 2016][12:28:25] 9 frozen requests
+[29 de setembro de 2016][12:28:25] 10 frozen requests
+[29 de setembro de 2016][12:28:30] 11 frozen requests
+[29 de setembro de 2016][12:28:30] 12 frozen requests
+[29 de setembro de 2016][12:28:35] 13 frozen requests
+[29 de setembro de 2016][12:28:35] 14 frozen requests
+[29 de setembro de 2016][12:28:40] 15 frozen requests
+[29 de setembro de 2016][12:28:41] 16 frozen requests
+[29 de setembro de 2016][12:28:45] 17 frozen requests
