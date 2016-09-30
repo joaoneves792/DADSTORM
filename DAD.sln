@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondaryConsoleApplication
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetMasterApplication", "PuppetMasterApplication\PuppetMasterApplication.csproj", "{70CD1EF9-F11D-4341-B459-319BEE583855}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorApplication", "OperatorApplication\OperatorApplication.csproj", "{5158F507-7F3C-48E5-978E-6DF75D750464}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessCreationServiceApplication", "ProcessCreationServiceApplication\ProcessCreationServiceApplication.csproj", "{01A83F12-7A09-4C42-8164-D0FD28F8AD5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{70CD1EF9-F11D-4341-B459-319BEE583855}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70CD1EF9-F11D-4341-B459-319BEE583855}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70CD1EF9-F11D-4341-B459-319BEE583855}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5158F507-7F3C-48E5-978E-6DF75D750464}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5158F507-7F3C-48E5-978E-6DF75D750464}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5158F507-7F3C-48E5-978E-6DF75D750464}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5158F507-7F3C-48E5-978E-6DF75D750464}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01A83F12-7A09-4C42-8164-D0FD28F8AD5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01A83F12-7A09-4C42-8164-D0FD28F8AD5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01A83F12-7A09-4C42-8164-D0FD28F8AD5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01A83F12-7A09-4C42-8164-D0FD28F8AD5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
