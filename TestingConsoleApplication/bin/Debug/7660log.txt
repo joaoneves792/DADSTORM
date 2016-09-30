@@ -1,0 +1,13 @@
+[Friday, September 30, 2016][12:57:23 PM] Initializing process Teste1tcp://localhost:53001/teste... Done
+[Friday, September 30, 2016][12:57:23 PM] Connectiong to process Teste2tcp://localhost:54002/teste... Done
+[Friday, September 30, 2016][12:57:24 PM] Connectiong to process Teste3tcp://localhost:55003/teste... Done
+[Friday, September 30, 2016][12:57:25 PM] FREEZE!
+[Friday, September 30, 2016][12:57:27 PM] 1 frozen requests
+[Friday, September 30, 2016][12:57:27 PM] 2 frozen requests
+[Friday, September 30, 2016][12:57:31 PM] 3 frozen requests
+[Friday, September 30, 2016][12:57:31 PM] 4 frozen requests
+[Friday, September 30, 2016][12:57:36 PM] 5 frozen requests
+[Friday, September 30, 2016][12:57:36 PM] 6 frozen requests
+[Friday, September 30, 2016][12:57:41 PM] 7 frozen requests
+[Friday, September 30, 2016][12:57:41 PM] 8 frozen requests
+[Friday, September 30, 2016][12:57:45 PM] UNFREEZE!

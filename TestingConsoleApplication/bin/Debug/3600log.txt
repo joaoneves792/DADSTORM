@@ -1,0 +1,5 @@
+[Friday, September 30, 2016][1:21:10 PM] Initializing process Teste1tcp://localhost:53001/teste... Done
+[Friday, September 30, 2016][1:21:10 PM] Connectiong to process Teste2tcp://localhost:54002/teste... Done
+[Friday, September 30, 2016][1:21:11 PM] Connectiong to process Teste3tcp://localhost:55003/teste... Done
+[Friday, September 30, 2016][1:21:12 PM] FREEZE!
+[Friday, September 30, 2016][1:21:14 PM] 1 frozen requests
