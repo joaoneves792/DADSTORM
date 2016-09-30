@@ -82,15 +82,16 @@ namespace PuppetMasterApplication
             }
         }
 
-        private bool Matches(String pattern, String line, out MatchCollection matchCollection) {
+        private bool Matches(String pattern, String line, out GroupCollection groupCollection) {
             Regex regex = new Regex(pattern, RegexOptions.Compiled);
 
-            if (!regex.IsMatch(line)) {
-                matchCollection = null;
+            Match match = regex.Match(line);
+            if (!match.Success) {
+                groupCollection = null;
                 return false;
             }
 
-            matchCollection = regex.Matches(line);
+            groupCollection = match.Groups;
             return true;
         }
 
@@ -99,31 +100,37 @@ namespace PuppetMasterApplication
         //</summary>
         private void ParseLineAndExecuteCommand(String line)
         {
-            MatchCollection matchCollection;
+            GroupCollection groupCollection;
 
-            if (Matches(OPERATOR_ID_COMMAND, line, out matchCollection)) {
-                ExecuteOperatorIdCommand();
+            if (Matches(OPERATOR_ID_COMMAND, line, out groupCollection)) {
+                ExecuteOperatorIdCommand(
+                    groupCollection[1].Value,
+                    groupCollection[2].Value,
+                    groupCollection[3].Value,
+                    groupCollection[4].Value,
+                    groupCollection[5].Value,
+                    groupCollection[6].Value);
 
-            } else if (Matches(START_COMMAND, line, out matchCollection)) {
-                ExecuteStartCommand(matchCollection[1].Value);
+            } else if (Matches(START_COMMAND, line, out groupCollection)) {
+                ExecuteStartCommand(groupCollection[1].Value);
 
-            } else if (Matches(INTERVAL_COMMAND, line, out matchCollection)) {
-                ExecuteIntervalCommand(matchCollection[1].Value, matchCollection[2].Value);
+            } else if (Matches(INTERVAL_COMMAND, line, out groupCollection)) {
+                ExecuteIntervalCommand(groupCollection[1].Value, groupCollection[2].Value);
 
-            } else if (Matches(STATUS_COMMAND, line, out matchCollection)) {
+            } else if (Matches(STATUS_COMMAND, line, out groupCollection)) {
                 ExecuteStatusCommand();
 
-            } else if (Matches(CRASH_COMMAND, line, out matchCollection)) {
-                ExecuteCrashCommand(matchCollection[1].Value);
+            } else if (Matches(CRASH_COMMAND, line, out groupCollection)) {
+                ExecuteCrashCommand(groupCollection[1].Value);
 
-            } else if (Matches(FREEZE_COMMAND, line, out matchCollection)) {
-                ExecuteFreezeCommand(matchCollection[1].Value);
+            } else if (Matches(FREEZE_COMMAND, line, out groupCollection)) {
+                ExecuteFreezeCommand(groupCollection[1].Value);
 
-            } else if (Matches(UNFREEZE_COMMAND, line, out matchCollection)) {
-                ExecuteUnfreezeCommand(matchCollection[1].Value);
+            } else if (Matches(UNFREEZE_COMMAND, line, out groupCollection)) {
+                ExecuteUnfreezeCommand(groupCollection[1].Value);
 
-            } else if (Matches(WAIT_COMMAND, line, out matchCollection)) {
-                ExecuteWaitCommand(matchCollection[1].Value);
+            } else if (Matches(WAIT_COMMAND, line, out groupCollection)) {
+                ExecuteWaitCommand(groupCollection[1].Value);
             }
         }
 

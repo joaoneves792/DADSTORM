@@ -1,0 +1,7 @@
+1 INPUT_OPS 2 REP_FACT 3 ROUTING primary ADDRESS tcp://localhost:1025/Operator,tcp://localhost:1026/Operator,tcp://localhost:1027/Operator OPERATOR_SPEC UNIQ 1
+2 INPUT_OPS filename.txt REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC COUNT
+3 INPUT_OPS C:\filename.txt REP_FACT 2 ROUTING random ADDRESS tcp://localhost:1025/Operator,tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+4 INPUT_OPS 2 REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC FILTER 1,>,1
+5 INPUT_OPS 2 REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC FILTER 1,=,0
+6 INPUT_OPS 2 REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC FILTER 1,<,-1
+7 INPUT_OPS 2 REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC CUSTOM myLib.dll, ClassName, myMethod

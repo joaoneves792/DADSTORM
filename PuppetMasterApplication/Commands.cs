@@ -13,6 +13,11 @@ namespace PuppetMasterApplication
     using OperatorId = String;
     using Milliseconds = String;
     using ProcessName = String;
+    using InputOps = String;
+    using RepFact = String;
+    using Routing = String;
+    using Address = String;
+    using OperatorSpec = String;
 
     internal partial class PuppetMaster
     {
@@ -30,16 +35,22 @@ namespace PuppetMasterApplication
         }
 
 
-        private void ExecuteOperatorIdCommand() {
-            System.Console.WriteLine("ExecuteOperatorIdCommand");
+        private void ExecuteOperatorIdCommand(
+            OperatorId operatorId,
+            InputOps inputOps,
+            RepFact repFact,
+            Routing routing,
+            Address address,
+            OperatorSpec operatorSpec) {
+            System.Console.WriteLine("ExecuteOperatorIdCommand: " + operatorId + " : " + inputOps + " : " + repFact + " : " + routing + " : " + address + " : " + operatorSpec);
         }
 
         private void ExecuteStartCommand(OperatorId operatorId) {
-            System.Console.WriteLine("ExecuteStartCommand");
+            System.Console.WriteLine("ExecuteStartCommand: " + operatorId);
         }
 
         private void ExecuteIntervalCommand(OperatorId operatorId, Milliseconds milliseconds) {
-            System.Console.WriteLine("ExecuteIntervalCommand");
+            System.Console.WriteLine("ExecuteIntervalCommand: " + operatorId + " : " + milliseconds);
         }
 
         private void ExecuteStatusCommand() {
@@ -47,19 +58,19 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteCrashCommand(ProcessName processName) {
-            System.Console.WriteLine("ExecuteCrashCommand");
+            System.Console.WriteLine("ExecuteCrashCommand: " + processName);
         }
 
         private void ExecuteFreezeCommand(ProcessName processName) {
-            System.Console.WriteLine("ExecuteFreezeCommand");
+            System.Console.WriteLine("ExecuteFreezeCommand: " + processName);
         }
 
         private void ExecuteUnfreezeCommand(ProcessName processName) {
-            System.Console.WriteLine("ExecuteUnfreezeCommand");
+            System.Console.WriteLine("ExecuteUnfreezeCommand: " + processName);
         }
 
         private void ExecuteWaitCommand(Milliseconds milliseconds) {
-            System.Console.WriteLine("ExecuteWaitCommand");
+            System.Console.WriteLine("ExecuteWaitCommand: " + milliseconds);
         }
 
 
