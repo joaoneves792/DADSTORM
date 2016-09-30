@@ -62,6 +62,14 @@
       <Project>{b3c05b35-5973-4b7d-b16c-d77252bf7ad4}</Project>
       <Name>LoggingClassLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OperatorApplication\OperatorApplication.csproj">
+      <Project>{5158f507-7f3c-48e5-978e-6df75d750464}</Project>
+      <Name>OperatorApplication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PuppetMasterApplication\PuppetMasterApplication.csproj">
+      <Project>{70cd1ef9-f11d-4341-b459-319bee583855}</Project>
+      <Name>PuppetMasterApplication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SecondaryConsoleApplication\SecondaryConsoleApplication.csproj">
       <Project>{4889fe8e-13ac-48ff-80bb-989ee3d791e0}</Project>
       <Name>SecondaryConsoleApplication</Name>

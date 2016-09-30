@@ -13,3 +13,9 @@ C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\TestingConso
 Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug\TestingConsoleApplication.exe.config
 Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.exe
 Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\OperatorApplication.exe
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\ProcessCreationServiceApplication.exe
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\PuppetMasterApplication.exe
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\OperatorApplication.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\PuppetMasterApplication.pdb
