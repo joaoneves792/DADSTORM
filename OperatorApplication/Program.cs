@@ -22,6 +22,9 @@ namespace OperatorApplication
 			while (!end) {
 				str = Console.ReadLine();
 				switch (str) {
+						case "quit":
+						end = true;
+						break;
 					case "UNIQ":
 						command = new UNIQCommand();
 						break;
@@ -36,9 +39,6 @@ namespace OperatorApplication
 						break;
 					case "CUSTOM":
 						command = new CUSTOMCommand();
-						break;
-					case "quit":
-						end = true;
 						break;
 					default:
 						Console.WriteLine("unrecognised.");
