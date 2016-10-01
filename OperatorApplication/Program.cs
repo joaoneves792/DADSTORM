@@ -14,7 +14,38 @@ namespace OperatorApplication
             //The rest of the args are the urls of the replicas for this operator
 
             Console.WriteLine("Hello! Running on port:"+ port);
-            Console.ReadKey();
-        }
+
+			bool end = false;
+			string str = "";
+			Command command = null;
+
+			while (!end) {
+				str = Console.ReadLine();
+				switch (str) {
+					case "UNIQ":
+						command = new UNIQCommand();
+						break;
+					case "COUNT":
+						command = new COUNTCommand();
+						break;
+					case "DUP":
+						command = new DUPCommand();
+						break;
+					case "FILTER":
+						command = new FILTERCommand();
+						break;
+					case "CUSTOM":
+						command = new CUSTOMCommand();
+						break;
+					case "quit":
+						end = true;
+						break;
+					default:
+						Console.WriteLine("unrecognised.");
+						break;
+				}
+			}
+
+		}
     }
 }

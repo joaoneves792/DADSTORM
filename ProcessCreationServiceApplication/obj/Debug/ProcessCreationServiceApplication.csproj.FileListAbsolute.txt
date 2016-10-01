@@ -6,3 +6,11 @@ C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreat
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.csprojResolveAssemblyReference.cache
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.exe
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.exe.config
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.exe
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\OperatorApplication.exe
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\OperatorApplication.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.csprojResolveAssemblyReference.cache
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.exe
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.pdb

@@ -6,3 +6,11 @@ C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\PuppetMaster
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.csprojResolveAssemblyReference.cache
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.exe
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\PuppetMasterApplication.exe.config
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\PuppetMasterApplication.exe
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\PuppetMasterApplication.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\ProcessCreationServiceApplication.exe
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.csprojResolveAssemblyReference.cache
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.exe
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.pdb
