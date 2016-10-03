@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace OperatorApplication
     using InputOps = String;
     using Address = String;
     using OperatorSpec = String;
+    using TupleMessage = List<String>;
 
     partial class Program
     {
@@ -66,8 +68,11 @@ namespace OperatorApplication
                 //Connect to process output
                 } else if (Matches(URL, inputOp, out groupCollection)) {
                     inputProcess = new Process(inputOp, inputOp);
+
                     pointToPointLink.Connect(inputProcess);
-                    //TODO: send url message
+                    pointToPointLink.Send(process, (Object) inputProcess);
+
+                    listener.addInputSource(inputProcess);
                 //Print error
                 } else {
                     Console.WriteLine("Error: invalid input op");
@@ -80,8 +85,15 @@ namespace OperatorApplication
         private class Listener
         {
             Command command;
+            private IDictionary<Process, bool> _inputSources;
+            private IProducerConsumerCollection<Process> _outputReceivers;
+            private IProducerConsumerCollection<String> _inputTuple;
 
             internal Listener(OperatorSpec operatorSpec) {
+                _inputSources = new ConcurrentDictionary<Process, bool>();
+                _outputReceivers = new ConcurrentBag<Process>();
+                _inputTuple = new ConcurrentBag<String>();
+
                 int fieldNumber = 0, value = 0;
                 Condition condition = Condition.UNDEFINED;
                 String[] operatorSpecList = operatorSpec.Split(',');
@@ -107,6 +119,21 @@ namespace OperatorApplication
                 }
             }
 
+            internal void addInputSource(Process inputSource) {
+                //Submit input source
+                _inputSources.Add(inputSource, false);
+
+                Console.WriteLine("Added input source " + inputSource.Name);
+            }
+
+            internal void addInputTuple(TupleMessage tupleMessage) {
+                //Concatenate input tuples
+                foreach(String message in tupleMessage) {
+                    _inputTuple.TryAdd(message);
+                    Console.WriteLine("Added tuple message " + message);
+                }
+            }
+
             private bool TryParseCondition(String value, out Condition condition)
             {
                 condition = Condition.UNDEFINED;
@@ -125,27 +152,33 @@ namespace OperatorApplication
                 return true;
             }
 
-            internal void Deliver(Process process, Message message)
-            {
+            internal void Deliver(Process process, Message message) {
                 //Parse message
                 if (message is TupleMessage) {
-                    TupleMessageCommand((TupleMessage) message);
-                } else if (message is UrlMessage) {
-                    UrlMessageCommand((UrlMessage) message);
+                    TupleMessageCommand(process, (TupleMessage) message);
+                } else if (message is Process) {
+                    UrlMessageCommand((Process) message);
                 }
             }
 
-            private void TupleMessageCommand(TupleMessage tupleMessage) {
-                //TODO: Implement me
+            private void TupleMessageCommand(Process process, TupleMessage tupleMessage) {
+                addInputTuple(tupleMessage);
+                _inputSources[process] = true;
 
-                //receive input
-                //verify all inputs
-                //return if not verified
-                //process tuples
+                bool obtainedAllInputs = _inputSources.Aggregate((a, b) => {
+                    return new KeyValuePair<Process, bool>(null, a.Value & b.Value);
+                }).Value;
+                if (obtainedAllInputs) {
+                    //FIXME: add tuple input
+                    //command.Execute();
+                }
             }
 
-            private void UrlMessageCommand(UrlMessage urlMessage) {
-                //TODO: Implement me
+            private void UrlMessageCommand(Process outputReceiver) {
+                //Submit output receiver
+                _outputReceivers.TryAdd(outputReceiver);
+
+                Console.WriteLine("Added output receiver " + outputReceiver.Name);
             }
         }
     }
