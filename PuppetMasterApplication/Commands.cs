@@ -70,7 +70,9 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteWaitCommand(Milliseconds milliseconds) {
-            System.Console.WriteLine("ExecuteWaitCommand: " + milliseconds);
+            //TODO: double-check this
+            System.Threading.Thread.Sleep(Int32.Parse(milliseconds));
+            System.Console.WriteLine("Executed Wait Command: " + milliseconds);
         }
 
 
