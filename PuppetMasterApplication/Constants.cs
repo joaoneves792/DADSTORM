@@ -10,15 +10,48 @@ namespace PuppetMasterApplication
     {
         //Constants
         private const int PORT = 10001;
-        private const String    SERVICE_NAME = "puppet",
+        private const String SERVICE_NAME = "puppet",
+                                START = @"^\ *",
+                                END = @"\ *$",
+                                SPACE = @"\ +",
+                                COMMA = @"\ *\,\ *",
+                                DIR = @"(?:\\|\/)",
 
-                                OPERATOR_ID_COMMAND = @"^\ *(\d+)\ +INPUT_OPS\ +((?:(?:(?:\d+)|(?:(?:[A-Z]:(?:\\|\/))?(?:.+(?:\\|\/))*.+(?:\\|\/)?))\ *\,\ *)*(?:(?:\d+)|(?:(?:[A-Z]:(?:\\|\/))?(?:.+(?:\\|\/))*.+(?:\\|\/)?)))\ +REP_FACT\ +(\d+)\ +ROUTING\ +((?:primary)|(?:hashing)|(?:random))\ +ADDRESS\ +((?:tcp:\/\/(?:(?:(?:\d{1,3}\.){3}\d{1,3})|(?:localhost)):\d{1,5}\/\w+\ *\,\ *)*tcp:\/\/(?:(?:(?:\d{1,3}\.){3}\d{1,3})|(?:localhost)):\d{1,5}\/\w+)\ +OPERATOR_SPEC\ +((?:UNIQ\ +-?\d+)|(?:COUNT)|(?:DUP)|(?:FILTER\ +-?\d+\ *\,\ *(?:>|<|=)\ *\,\ *-?\d+)|(?:CUSTOM\ +\w+\.dll\ *\,\ *\w+\ *\,\ *\w+))\ *$",
-                                START_COMMAND = @"^\ *Start\ +(\d+)\ *$",
-                                INTERVAL_COMMAND = @"^\ *Interval\ +(\d+)\ +(\d+)\ *$",
-                                STATUS_COMMAND = @"^\ *Status\ *$",
-                                CRASH_COMMAND = @"^\ *Crash\ +(tcp:\/\/(?:(?:(?:\d{1,3}\.){3}\d{1,3})|(?:localhost)):\d{1,5}\/\w+)\ *$",
-                                FREEZE_COMMAND = @"^\ *Freeze\ +(tcp:\/\/(?:(?:(?:\d{1,3}\.){3}\d{1,3})|(?:localhost)):\d{1,5}\/\w+)\ *$",
-                                UNFREEZE_COMMAND = @"^\ *Unfreeze\ +(tcp:\/\/(?:(?:(?:\d{1,3}\.){3}\d{1,3})|(?:localhost)):\d{1,5}\/\w+)\ *$",
-                                WAIT_COMMAND = @"^\ *Wait\ +(\d+)\ *$";
+                                INT = @"\d+",
+                                GROUP_INT = @"(" + INT + @")",
+                                URL = @"tcp:\/\/(?:(?:(?:\d{1,3}\.){3}\d{1,3})|(?:localhost)):\d{1,5}\/\w+",
+                                GROUP_URL = @"(" + URL + @")",
+                                OPERATOR_ID = @"(?:" + INT + @")",
+
+                                PARTITION = "(?:[A-Z]:" + DIR + @")?",
+                                DIRNAME = @"(?:.+" + DIR + @")*",
+                                FILENAME = @".+" + DIR + @"?",
+                                PATH = @"(?:" + PARTITION + DIRNAME + FILENAME + @")",
+
+                                INPUT_OP = @"(?:" + OPERATOR_ID + @"|" + PATH + @")",
+
+                                UNIQ = @"(?:UNIQ\ +-?\d+)",
+                                COUNT = @"(?:COUNT)",
+                                DUP = @"(?:DUP)",
+                                FILTER = @"(?:FILTER\ +-?\d+\ *\,\ *(?:>|<|=)\ *\,\ *-?\d+)",
+                                CUSTOM = @"(?:CUSTOM\ +\w+\.dll\ *\,\ *\w+\ *\,\ *\w+)",
+
+                                OPERATOR_ID_COMMAND =   START + GROUP_INT + SPACE +
+                                                        @"INPUT_OPS" + SPACE + @"((?:" + INPUT_OP + COMMA + @")*" + INPUT_OP + @")" + SPACE +
+                                                        @"REP_FACT" + SPACE + GROUP_INT + SPACE +
+                                                        @"ROUTING" + SPACE + @"((?:primary)|(?:hashing)|(?:random))" + SPACE +
+                                                        @"ADDRESS" + SPACE + @"((?:" + URL + COMMA + @")*" + URL + @")" + SPACE +
+                                                        @"OPERATOR_SPEC" + SPACE + @"(" + UNIQ + @"|" +
+                                                                                          COUNT + @"|" +
+                                                                                          DUP + @"|" +
+                                                                                          FILTER + @"|" +
+                                                                                          CUSTOM + @")" + END,
+                                START_COMMAND = START + @"Start" + SPACE + GROUP_INT + END,
+                                INTERVAL_COMMAND = START + @"Interval" + SPACE + GROUP_INT + SPACE + GROUP_INT + END,
+                                STATUS_COMMAND = START + @"Status" + END,
+                                CRASH_COMMAND = START + @"Crash" + SPACE + GROUP_URL + END,
+                                FREEZE_COMMAND = START + @"Freeze" + SPACE + GROUP_URL + END,
+                                UNFREEZE_COMMAND = START + @"Unfreeze" + SPACE + GROUP_URL + END,
+                                WAIT_COMMAND = START + @"Wait" + SPACE + GROUP_INT + END;
     }
 }

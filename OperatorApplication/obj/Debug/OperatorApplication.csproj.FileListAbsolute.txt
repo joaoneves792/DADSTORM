@@ -10,3 +10,7 @@ C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.csprojResolveAssemblyReference.cache
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.exe
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\LoggingClassLibrary.dll
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\LoggingClassLibrary.pdb

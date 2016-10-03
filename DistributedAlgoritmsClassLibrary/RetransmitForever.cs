@@ -64,12 +64,12 @@ namespace DistributedAlgoritmsClassLibrary
             _listener(process, message);
         }
 
-        public void Crash() {
-            _fairLossPointToPointLink.Crash();
+        public void Connect(Process process) {
+            _fairLossPointToPointLink.Connect(process);
         }
 
-        public void Recover() {
-            _fairLossPointToPointLink.Recover();
+        public void Crash() {
+            _fairLossPointToPointLink.Crash();
         }
 
         public void Freeze() {

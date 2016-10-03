@@ -8,8 +8,9 @@ namespace DistributedAlgoritmsClassLibrary
 {
     public interface PuppetPointToPointLink
     {
+        void Connect(Process process);
+
         void Crash();
-        void Recover();
         void Freeze();
         void Unfreeze();
     }

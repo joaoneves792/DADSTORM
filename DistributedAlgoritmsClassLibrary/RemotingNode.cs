@@ -60,20 +60,23 @@ namespace DistributedAlgoritmsClassLibrary
         public void Connect(Process process) {
             Log.Write(LogStatus.DEBUG, "Connectiong to process " + process.ToString() + "...");
 
-            FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
-                typeof(FairLossPointToPointLink),
-                process.Url);
+            //try {
+                FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
+                    typeof(FairLossPointToPointLink),
+                    process.Url);
 
-            if (_fairLossPointToPointLinks.ContainsKey(process)) {
-                _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
-            } else {
-                _fairLossPointToPointLinks.Add(process, fairLossPointToPointLink);
-            }
+                if (_fairLossPointToPointLinks.ContainsKey(process)) {
+                    _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
+                } else {
+                    _fairLossPointToPointLinks.Add(process, fairLossPointToPointLink);
+                }
 
-            try {
-                fairLossPointToPointLink.Anchor(_process);
-            }
-            catch (SocketException) { }
+                try {
+                    fairLossPointToPointLink.Anchor(_process);
+                } catch (SocketException) { }
+            //} catch () {
+
+            //}
 
             Log.WriteDone(LogStatus.DEBUG);
         }
@@ -112,10 +115,6 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Crash() {
-            //TODO: Implement method after knowing all requirements
-        }
-
-        public void Recover() {
             //TODO: Implement method after knowing all requirements
         }
 
