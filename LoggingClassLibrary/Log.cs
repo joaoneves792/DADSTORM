@@ -75,5 +75,19 @@ namespace LoggingClassLibrary
                 Console.WriteLine(" Done");
             }
         }
+
+        public static void WriteError(LogStatus logStatus)
+        {
+            //TODO: Increase condition readability (too much low-leveled)
+            if (logStatus >= _logStatus)
+            {
+                StreamWriter w = File.AppendText(Process.GetCurrentProcess().Id + "log.txt");
+                w.WriteLine(" Error");
+                w.Flush();
+                w.Close();
+
+                Console.WriteLine(" Error");
+            }
+        }
     }
 }

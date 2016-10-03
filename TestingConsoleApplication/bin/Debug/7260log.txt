@@ -1,0 +1,11 @@
+[3 de outubro de 2016][20:48:30] Initializing process Teste1tcp://localhost:53001/teste... Done
+[3 de outubro de 2016][20:48:30] Connecting to process Teste2tcp://localhost:54002/teste... Done
+[3 de outubro de 2016][20:48:31] Connecting to process Teste3tcp://localhost:55003/teste... Done
+[3 de outubro de 2016][20:48:32] FREEZE!
+[3 de outubro de 2016][20:48:35] 1 frozen requests
+[3 de outubro de 2016][20:48:35] 2 frozen requests
+[3 de outubro de 2016][20:48:40] 3 frozen requests
+[3 de outubro de 2016][20:48:40] 4 frozen requests
+[3 de outubro de 2016][20:48:45] 5 frozen requests
+[3 de outubro de 2016][20:48:45] 6 frozen requests
+[3 de outubro de 2016][20:48:50] 7 frozen requests

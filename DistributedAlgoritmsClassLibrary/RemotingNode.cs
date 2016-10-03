@@ -21,6 +21,8 @@ namespace DistributedAlgoritmsClassLibrary
 
     public class RemotingNode : MarshalByRefObject, FairLossPointToPointLink
     {
+        private static int TIMER = 100;
+
         private readonly Process _process;
         private Action<Process, Message> _listener, _frozenListener;
         private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests;
@@ -58,25 +60,47 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Connect(Process process) {
-            Log.Write(LogStatus.DEBUG, "Connectiong to process " + process.ToString() + "...");
+            Log.Write(LogStatus.DEBUG, "Connecting to process " + process.ToString() + "...");
 
-            //try {
-                FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
-                    typeof(FairLossPointToPointLink),
-                    process.Url);
+            FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
+                typeof(FairLossPointToPointLink),
+                process.Url);
 
-                if (_fairLossPointToPointLinks.ContainsKey(process)) {
-                    _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
-                } else {
-                    _fairLossPointToPointLinks.Add(process, fairLossPointToPointLink);
-                }
+            if (_fairLossPointToPointLinks.ContainsKey(process)) {
+                _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
+            } else {
+                _fairLossPointToPointLinks.Add(process, fairLossPointToPointLink);
+            }
 
-                try {
-                    fairLossPointToPointLink.Anchor(_process);
-                } catch (SocketException) { }
-            //} catch () {
+            try {
+                fairLossPointToPointLink.Anchor(_process);
 
-            //}
+                Log.WriteDone(LogStatus.DEBUG);
+            } catch (SocketException) {
+                Log.WriteError(LogStatus.DEBUG);
+                new Thread(() => {
+                    Thread.Sleep(TIMER);
+                    Connect(process);
+                }).Start();
+            }
+        }
+
+        public void Reconnect(Process process) {
+            Log.Write(LogStatus.DEBUG, "Reconnecting to process " + process.ToString() + "...");
+
+            FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
+                typeof(FairLossPointToPointLink),
+                process.Url);
+
+            if (_fairLossPointToPointLinks.ContainsKey(process)) {
+                _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
+            } else {
+                _fairLossPointToPointLinks.Add(process, fairLossPointToPointLink);
+            }
+
+            try {
+                fairLossPointToPointLink.Anchor(_process);
+            } catch (SocketException) { }
 
             Log.WriteDone(LogStatus.DEBUG);
         }
@@ -100,7 +124,7 @@ namespace DistributedAlgoritmsClassLibrary
             }).ContinueWith(task => {
                 //Handles remote exception
                 task.Exception.Handle(ex => {
-                    Connect(process);
+                    Reconnect(process);
                     return true;
                 });
             }, TaskContinuationOptions.OnlyOnFaulted);

@@ -1,0 +1,10 @@
+[3 de outubro de 2016][20:53:18] Initializing process Teste2tcp://localhost:54002/teste... Done
+[3 de outubro de 2016][20:53:18] Connecting to process Teste1tcp://localhost:53001/teste... Error
+[3 de outubro de 2016][20:53:22] Connecting to process Teste3tcp://localhost:55003/teste...[3 de outubro de 2016][20:53:23] Connecting to process Teste1tcp://localhost:53001/teste... Done
+ Error
+[3 de outubro de 2016][20:53:27] Connecting to process Teste1tcp://localhost:53001/teste...[3 de outubro de 2016][20:53:28] Reconnecting to process Teste1tcp://localhost:53001/teste... Error
+[3 de outubro de 2016][20:53:31] Connecting to process Teste1tcp://localhost:53001/teste...[3 de outubro de 2016][20:53:32] Reconnecting to process Teste1tcp://localhost:53001/teste... Done
+ Error
+[3 de outubro de 2016][20:53:35] Connecting to process Teste1tcp://localhost:53001/teste... Done
+[3 de outubro de 2016][20:53:37] Reconnecting to process Teste1tcp://localhost:53001/teste... Done
+ Done

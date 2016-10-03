@@ -24,7 +24,21 @@ namespace SecondaryConsoleApplication
                     process2 = new Process(args[2], args[3]),
                     process3 = new Process(args[4], args[5]);
 
-            StubbornPointToPointLink node = new RetransmitForever(process1, listener.Deliver, process2, process3);
+            if (args[0].Equals("Teste1"))
+            {
+                Thread.Sleep(20000);
+            }
+
+            StubbornPointToPointLink node = new RetransmitForever(process1, listener.Deliver/*, process2, process3*/);
+
+            node.Connect(process2);
+
+            if (!args[0].Equals("Teste1"))
+            {
+                Thread.Sleep(20000);
+            }
+
+            node.Connect(process3);
 
             if (args[0].Equals("Teste1"))
             {

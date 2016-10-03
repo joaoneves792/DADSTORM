@@ -1,3 +1,6 @@
 [3 de setembro de 2016][19:30:39] Initializing process Teste3tcp://localhost:55003/teste... Done
 [3 de setembro de 2016][19:30:39] Initializing process Teste3tcp://localhost:55003/teste...[3 de setembro de 2016][19:31:48] Initializing process Teste1tcp://localhost:53001/teste... Done
-[3 de setembro de 2016][19:31:48] Initializing process Teste1tcp://localhost:53001/teste...
+[3 de setembro de 2016][19:31:48] Initializing process Teste1tcp://localhost:53001/teste...[3 de outubro de 2016][20:47:28] Initializing process Teste2tcp://localhost:54002/teste... Done
+[3 de outubro de 2016][20:47:28] Connecting to process Teste1tcp://localhost:53001/teste... Error
+ Done
+[3 de outubro de 2016][20:47:32] Connecting to process Teste3tcp://localhost:55003/teste...

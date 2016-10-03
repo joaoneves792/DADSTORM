@@ -14,7 +14,7 @@ namespace TestingConsoleApplication
     class Program
     {
         static void Main(string[] args)
-        {/*
+        {
             Log.LogStatus = LogStatus.DEBUG;
 
             String arguments;
@@ -32,9 +32,9 @@ namespace TestingConsoleApplication
             arguments = "Teste3" + " " + "tcp://localhost:55003/teste" + " " +
                         "Teste1" + " " + "tcp://localhost:53001/teste" + " " +
                         "Teste2" + " " + "tcp://localhost:54002/teste";
-            Process.Start("SecondaryConsoleApplication.exe", arguments);*/
+            Process.Start("SecondaryConsoleApplication.exe", arguments);
 
-            Process.Start("PuppetMasterApplication.exe");
+            //Process.Start("PuppetMasterApplication.exe");
         }
     }
 }
