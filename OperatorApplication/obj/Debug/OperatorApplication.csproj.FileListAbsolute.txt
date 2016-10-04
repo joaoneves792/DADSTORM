@@ -14,3 +14,5 @@ C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorAppl
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\LoggingClassLibrary.dll
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\LoggingClassLibrary.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\CommonTypesLibrary.pdb

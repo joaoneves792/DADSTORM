@@ -137,34 +137,5 @@ namespace DistributedAlgoritmsClassLibrary
             //    Reconnect(process);
             //}
         }
-
-        public void Crash() {
-            //TODO: Implement method after knowing all requirements
-        }
-
-        public void Freeze() {
-            _listener = (process, message) => {
-                Tuple<Process, Message> request = new Tuple<Process, Message>(process, message);
-                while (!_frozenRequests.TryAdd(request)) {
-                    Log.WriteLine(LogStatus.CRITICAL, "Message not froze");
-                }
-                Log.WriteLine(LogStatus.DEBUG, _frozenRequests.Count + " frozen requests");
-            };
-
-            Log.WriteLine(LogStatus.DEBUG, "FREEZE!");
-        }
-
-        public void Unfreeze() {
-            Log.WriteLine(LogStatus.DEBUG, "UNFREEZE!");
-
-            _listener = _frozenListener;
-
-            foreach (Tuple<Process, Message> request in _frozenRequests) {
-                Task.Run(() => {
-                    _listener(request.Item1, request.Item2);
-                });
-            }
-            _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
-        }
     }
 }

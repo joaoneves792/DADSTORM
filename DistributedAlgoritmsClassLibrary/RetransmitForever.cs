@@ -67,17 +67,5 @@ namespace DistributedAlgoritmsClassLibrary
         public void Connect(Process process) {
             _fairLossPointToPointLink.Connect(process);
         }
-
-        public void Crash() {
-            _fairLossPointToPointLink.Crash();
-        }
-
-        public void Freeze() {
-            _fairLossPointToPointLink.Freeze();
-        }
-
-        public void Unfreeze() {
-            _fairLossPointToPointLink.Unfreeze();
-        }
     }
 }

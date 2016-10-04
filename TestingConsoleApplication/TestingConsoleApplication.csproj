@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +55,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonTypesLibrary\CommonTypesLibrary.csproj">
+      <Project>{8aa90885-c630-4770-814c-1c03726936d4}</Project>
+      <Name>CommonTypesLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DistributedAlgoritmsClassLibrary\DistributedAlgoritmsClassLibrary.csproj">
       <Project>{c9866e0e-b986-46b0-a80b-45f8971b29c7}</Project>
       <Name>DistributedAlgoritmsClassLibrary</Name>
@@ -65,6 +70,10 @@
     <ProjectReference Include="..\OperatorApplication\OperatorApplication.csproj">
       <Project>{5158f507-7f3c-48e5-978e-6df75d750464}</Project>
       <Name>OperatorApplication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProcessCreationServiceApplication\ProcessCreationServiceApplication.csproj">
+      <Project>{01a83f12-7a09-4c42-8164-d0fd28f8ad5d}</Project>
+      <Name>ProcessCreationServiceApplication</Name>
     </ProjectReference>
     <ProjectReference Include="..\PuppetMasterApplication\PuppetMasterApplication.csproj">
       <Project>{70cd1ef9-f11d-4341-b459-319bee583855}</Project>

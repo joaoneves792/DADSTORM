@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="PointToPointLink.cs" />
     <Compile Include="Process.cs" />
-    <Compile Include="PuppetPointToPointLink.cs" />
     <Compile Include="RetransmitForever.cs" />
     <Compile Include="RemotingNode.cs" />
     <Compile Include="FairLossPointToPointLink.cs" />

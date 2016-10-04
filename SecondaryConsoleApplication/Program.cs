@@ -29,7 +29,7 @@ namespace SecondaryConsoleApplication
                 Thread.Sleep(20000);
             }
 
-            StubbornPointToPointLink node = new RetransmitForever(process1, listener.Deliver/*, process2, process3*/);
+            RetransmitForever node = new RetransmitForever(process1, listener.Deliver/*, process2, process3*/);
 
             node.Connect(process2);
 
@@ -39,13 +39,6 @@ namespace SecondaryConsoleApplication
             }
 
             node.Connect(process3);
-
-            if (args[0].Equals("Teste1"))
-            {
-                node.Freeze();
-                Thread.Sleep(20000);
-                node.Unfreeze();
-            }
 
             Thread.Sleep(1000);
 

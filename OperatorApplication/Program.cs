@@ -18,17 +18,31 @@ namespace OperatorApplication
     using InputOps = String;
     using Address = String;
     using OperatorSpec = String;
-    using TupleMessage = List<String>;
 
-    partial class Program
-    {
-        private static bool Matches(String pattern, String line, out GroupCollection groupCollection)
-        {
+    internal partial class Operator {
+        private bool _isReady;
+
+        internal Operator() {
+            //Configuration component
+            _isReady = false;
+
+            //Execution component
+            _command = null;
+            _listener = ParseMessage;
+            _inputSources = new ConcurrentDictionary<Process, bool>();
+            _outputReceivers = new ConcurrentBag<Process>();
+            _inputTuple = new ConcurrentBag<String>();
+
+            //Puppet component
+            _frozenListener = ParseMessage;
+            _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
+        }
+
+        private bool Matches(String pattern, String line, out GroupCollection groupCollection) {
             Regex regex = new Regex(pattern, RegexOptions.Compiled);
 
             Match match = regex.Match(line);
-            if (!match.Success)
-            {
+            if (!match.Success) {
                 groupCollection = null;
                 return false;
             }
@@ -37,21 +51,21 @@ namespace OperatorApplication
             return true;
         }
 
-        static void Main(string[] args)
-        {
+        internal void Configure(string[] args) {
             //Give names to arguments
-            OperatorId      operatorId      = args[0];
-            Url             url             = args[1];
-            InputOps        inputOps        = args[2];
-            Address         address         = args[3];
-            OperatorSpec    operatorSpec    = args[4];
+            OperatorId operatorId = args[0];
+            Url url = args[1];
+            InputOps inputOps = args[2];
+            Address address = args[3];
+            OperatorSpec operatorSpec = args[4];
 
             //Define operator
-            Process process     = new Process(operatorId, url);
-            Listener listener   = new Listener(operatorSpec);
+            Process process = new Process(operatorId, url);
+            DefineOperatorType(operatorSpec);
 
             //Register operator into remoting
-            PointToPointLink pointToPointLink = new RemotingNode(process, listener.Deliver);
+            PointToPointLink pointToPointLink = new RemotingNode(process, Deliver);
+            SubmitAsPuppet(process);
 
             //Get inputOps' sources
             String[] inputOpsList = inputOps.Split(',');
@@ -62,124 +76,47 @@ namespace OperatorApplication
             foreach (String inputOp in inputOpsList) {
                 //Get file data
                 if (Matches(PATH, inputOp, out groupCollection) && File.Exists(inputOp)) {
+                    Console.WriteLine("Identified path " + inputOp);
                     fileStream = File.Open(inputOp, FileMode.Open, FileAccess.Read, FileShare.Read);
                     streamReader = new StreamReader(fileStream);
                     //TODO: parse file
-                //Connect to process output
+                    //Connect to process output
                 } else if (Matches(URL, inputOp, out groupCollection)) {
+                    Console.WriteLine("Identified url " + inputOp);
                     inputProcess = new Process(inputOp, inputOp);
 
                     pointToPointLink.Connect(inputProcess);
-                    pointToPointLink.Send(process, (Object) inputProcess);
+                    pointToPointLink.Send(process, (Object)inputProcess);
 
-                    listener.addInputSource(inputProcess);
-                //Print error
-                } else {
+                    addInputSource(inputProcess);
+                    //Print error
+                }
+                else
+                {
                     Console.WriteLine("Error: invalid input op");
+                    if (!Matches(PATH, inputOp, out groupCollection)) {
+                        Console.WriteLine("Cause: unidentified path");
+                    }
+                    if (!File.Exists(inputOp))
+                    {
+                        Console.WriteLine("Cause: unidentified file " + Directory.GetCurrentDirectory());
+                    }
                 }
             }
 
             //TODO: MAYBE wait until next phase
-		}
-
-        private class Listener
-        {
-            Command command;
-            private IDictionary<Process, bool> _inputSources;
-            private IProducerConsumerCollection<Process> _outputReceivers;
-            private IProducerConsumerCollection<String> _inputTuple;
-
-            internal Listener(OperatorSpec operatorSpec) {
-                _inputSources = new ConcurrentDictionary<Process, bool>();
-                _outputReceivers = new ConcurrentBag<Process>();
-                _inputTuple = new ConcurrentBag<String>();
-
-                int fieldNumber = 0, value = 0;
-                Condition condition = Condition.UNDEFINED;
-                String[] operatorSpecList = operatorSpec.Split(',');
-
-                //Define operator command
-                if (operatorSpecList[0].Equals("UNIQ") &&
-                    int.TryParse(operatorSpecList[1], out fieldNumber)) {
-                    command = new UNIQCommand(fieldNumber);
-                } else if (operatorSpecList[0].Equals("COUNT")) {
-                    command = new COUNTCommand();
-                } else if (operatorSpecList[0].Equals("DUP")) {
-                    command = new DUPCommand();
-                } else if (operatorSpecList[0].Equals("FILTER") &&
-                           int.TryParse(operatorSpecList[1], out fieldNumber) &&
-                           TryParseCondition(operatorSpecList[2], out condition) &&
-                           int.TryParse(operatorSpecList[3], out value)) {
-                    //FIXME: fix filter command constructor input
-                    //command = new FILTERCommand(fieldNumber, condition, value);
-                } else if (operatorSpecList[0].Equals("CUSTOM")) {
-                    command = new CUSTOMCommand();
-                } else {
-                    Console.WriteLine("unrecognised.");
-                }
-            }
-
-            internal void addInputSource(Process inputSource) {
-                //Submit input source
-                _inputSources.Add(inputSource, false);
-
-                Console.WriteLine("Added input source " + inputSource.Name);
-            }
-
-            internal void addInputTuple(TupleMessage tupleMessage) {
-                //Concatenate input tuples
-                foreach(String message in tupleMessage) {
-                    _inputTuple.TryAdd(message);
-                    Console.WriteLine("Added tuple message " + message);
-                }
-            }
-
-            private bool TryParseCondition(String value, out Condition condition)
-            {
-                condition = Condition.UNDEFINED;
-
-                //Parse condition
-                if (value.Equals(">")) {
-                    condition = Condition.GREATER_THAN;
-                } else if (value.Equals("<")) {
-                    condition = Condition.LESS_THAN;
-                } else if (value.Equals("=")) {
-                    condition = Condition.EQUALS;
-                } else {
-                    return false;
-                }
-
-                return true;
-            }
-
-            internal void Deliver(Process process, Message message) {
-                //Parse message
-                if (message is TupleMessage) {
-                    TupleMessageCommand(process, (TupleMessage) message);
-                } else if (message is Process) {
-                    UrlMessageCommand((Process) message);
-                }
-            }
-
-            private void TupleMessageCommand(Process process, TupleMessage tupleMessage) {
-                addInputTuple(tupleMessage);
-                _inputSources[process] = true;
-
-                bool obtainedAllInputs = _inputSources.Aggregate((a, b) => {
-                    return new KeyValuePair<Process, bool>(null, a.Value & b.Value);
-                }).Value;
-                if (obtainedAllInputs) {
-                    //FIXME: add tuple input
-                    //command.Execute();
-                }
-            }
-
-            private void UrlMessageCommand(Process outputReceiver) {
-                //Submit output receiver
-                _outputReceivers.TryAdd(outputReceiver);
-
-                Console.WriteLine("Added output receiver " + outputReceiver.Name);
-            }
         }
+    }
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            Operator operatorWorker = new Operator();
+            operatorWorker.Configure(args);
+            Console.ReadLine();
+        }
+
+        
     }
 }

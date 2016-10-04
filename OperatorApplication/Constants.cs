@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OperatorApplication
 {
-    partial class Program
+    partial class Operator
     {
         private const String URL = @"tcp:\/\/(?:(?:(?:\d{1,3}\.){3}\d{1,3})|(?:localhost)):\d{1,5}\/\w+",
 

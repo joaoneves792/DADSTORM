@@ -18,3 +18,5 @@ C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreat
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\LoggingClassLibrary.dll
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\LoggingClassLibrary.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\CommonTypesLibrary.pdb

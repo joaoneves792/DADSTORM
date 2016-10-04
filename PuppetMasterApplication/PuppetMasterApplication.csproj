@@ -53,6 +53,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonTypesLibrary\CommonTypesLibrary.csproj">
+      <Project>{8aa90885-c630-4770-814c-1c03726936d4}</Project>
+      <Name>CommonTypesLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProcessCreationServiceApplication\ProcessCreationServiceApplication.csproj">
       <Project>{01a83f12-7a09-4c42-8164-d0fd28f8ad5d}</Project>
       <Name>ProcessCreationServiceApplication</Name>

@@ -37,3 +37,5 @@ C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplic
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug\SecondaryConsoleApplication.pdb
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug\ProcessCreationServiceApplication.pdb
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.csprojResolveAssemblyReference.cache
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\TestingConsoleApplication\bin\Debug\CommonTypesLibrary.pdb
