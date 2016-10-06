@@ -1,0 +1,861 @@
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org
+Interval 1 1000
+Start 1
+Status
+Wait 0
+Wait 2000
+Crash tcp://localhost:1234/Operator
+Crash tcp://127.0.0.1:1025/Operator
+Freeze tcp://localhost:1234/Operator
+Freeze tcp://127.0.0.1:1025/Operator
+Unfreeze tcp://localhost:1234/Operator
+Unfreeze tcp://127.0.0.1:1025/Operator
+
+Interval -1 1000
+Interval a 1000
+Interval 1 a
+Interval 1 -1000
+
+Wait a
+Wait -1
+
+Crash www.fail.org

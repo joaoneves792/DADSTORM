@@ -12,6 +12,7 @@ using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Remoting.Channels;
 using System.Threading;
 using System.Runtime.Serialization.Formatters;
+using System.IO;
 
 using LoggingClassLibrary;
 using CommonTypesLibrary;
@@ -28,7 +29,8 @@ namespace TestingConsoleApplication
 
             //test1();
             //test2();
-            test3();
+            //test3();
+            test4();
 
             Console.ReadLine();
         }
@@ -68,6 +70,37 @@ namespace TestingConsoleApplication
                 Thread.Sleep(20000);
                 node.Unfreeze();
             }*/
+        }
+
+        static void test4() {
+            String[] inputOpsList = {"Scripts/1.txt", "Scripts/2.txt", "Scripts/3.txt", "Scripts/4.txt" };
+
+            FileStream fileStream;
+            ICollection<StreamReader> inputFiles = new HashSet<StreamReader>();
+            foreach (String inputOp in inputOpsList)
+            {
+                Console.WriteLine("Identified path " + inputOp);
+
+                fileStream = File.Open(inputOp, FileMode.Open, FileAccess.Read, FileShare.Read);
+                inputFiles.Add(new StreamReader(fileStream));
+            }
+
+            //Process files
+            foreach (StreamReader currentInputFile in inputFiles)
+            {
+                new Thread(() => {
+                    StreamReader inputFile = currentInputFile;
+
+                    String line;
+                    while ((line = inputFile.ReadLine()) != null)
+                    {
+                        new Thread(() => {
+                            Console.WriteLine(line);
+                        }).Start();
+                    }
+                    inputFile.Close();
+                }).Start();
+            }
         }
     }
 
