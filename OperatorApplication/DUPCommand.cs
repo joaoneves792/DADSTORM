@@ -13,7 +13,7 @@ namespace OperatorApplication {
 		}
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-			throw new NotImplementedException();
+			return inputTuple;
 		}
 	}
 }

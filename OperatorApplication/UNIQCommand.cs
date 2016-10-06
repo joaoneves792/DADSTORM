@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,28 +10,21 @@ namespace OperatorApplication {
 
     class UNIQCommand : Command {
 
-		int _field_number = -1;
+		ConcurrentDictionary<int, int> _field_numbers = new ConcurrentDictionary<int, int>();
 
 		public UNIQCommand() {
 			Console.WriteLine("\t-> UNIQ");
 		}
 
-		public UNIQCommand(int field_number) {
-			_field_number = field_number;
-		}
-
-		public UNIQCommand(string[] args) {
-			if (args.Length == 1) {
-				_field_number = Int32.Parse(args[0]);
-
-			} else {
-				// FIXME
-				throw new Exception("wrong number of args.");
-			}
-		}
-
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-			throw new NotImplementedException();
+			int field_number = Int32.Parse(inputTuple.First());
+
+			if (!_field_numbers.ContainsKey(field_number)) {
+				_field_numbers.TryAdd(field_number, field_number);
+				return inputTuple;
+			}
+
+			return null;
 		}
 	}
 }

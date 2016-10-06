@@ -8,12 +8,19 @@ namespace OperatorApplication {
     using TupleMessage = List<String>;
 
     class COUNTCommand : Command {
+
+		int count = 0;
+
 		public COUNTCommand() {
 			Console.WriteLine("\t-> COUNT");
 		}
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-			throw new NotImplementedException();
+			lock(this) {
+				count++;
+			}
+
+			return null;
 		}
 	}
 }
