@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Threading;
 
 using DistributedAlgoritmsClassLibrary;
 
@@ -18,23 +19,23 @@ namespace OperatorApplication
     using InputOps = String;
     using Address = String;
     using OperatorSpec = String;
+    using TupleMessage = List<String>;
 
     internal partial class Operator {
-        private bool _isReady;
+        private readonly System.Threading.EventWaitHandle _waitHandle;
 
         internal Operator() {
             //Configuration component
-            _isReady = false;
+            _waitHandle = new System.Threading.AutoResetEvent(false);
 
             //Execution component
+            _process = null;
             _command = null;
+            _pointToPointLink = null;
             _listener = ParseMessage;
-            _inputSources = new ConcurrentDictionary<Process, bool>();
             _outputReceivers = new ConcurrentBag<Process>();
-            _inputTuple = new ConcurrentBag<String>();
 
             //Puppet component
-            _frozenListener = ParseMessage;
             _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
         }
 
@@ -60,36 +61,32 @@ namespace OperatorApplication
             OperatorSpec operatorSpec = args[4];
 
             //Define operator
-            Process process = new Process(operatorId, url);
+            _process = new Process(operatorId, url);
             DefineOperatorType(operatorSpec);
 
             //Register operator into remoting
-            PointToPointLink pointToPointLink = new RemotingNode(process, Deliver);
-            SubmitAsPuppet(process);
+            _pointToPointLink = new RemotingNode(_process, Deliver);
+            SubmitAsPuppet();
 
             //Get inputOps' sources
             String[] inputOpsList = inputOps.Split(',');
             GroupCollection groupCollection;
             FileStream fileStream;
-            StreamReader streamReader;
+            ICollection<StreamReader> inputFiles = new HashSet<StreamReader>();
             Process inputProcess;
             foreach (String inputOp in inputOpsList) {
                 //Get file data
                 if (Matches(PATH, inputOp, out groupCollection) && File.Exists(inputOp)) {
                     Console.WriteLine("Identified path " + inputOp);
+
                     fileStream = File.Open(inputOp, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    streamReader = new StreamReader(fileStream);
-                    //TODO: parse file
-                    //Connect to process output
+                    inputFiles.Add(new StreamReader(fileStream));
                 } else if (Matches(URL, inputOp, out groupCollection)) {
                     Console.WriteLine("Identified url " + inputOp);
+
                     inputProcess = new Process(inputOp, inputOp);
-
-                    pointToPointLink.Connect(inputProcess);
-                    pointToPointLink.Send(process, (Object)inputProcess);
-
-                    addInputSource(inputProcess);
-                    //Print error
+                    _pointToPointLink.Connect(inputProcess);
+                    _pointToPointLink.Send(_process, (Object)inputProcess);
                 }
                 else
                 {
@@ -104,7 +101,24 @@ namespace OperatorApplication
                 }
             }
 
-            //TODO: MAYBE wait until next phase
+            _waitHandle.WaitOne();
+
+            //Process files
+            foreach (StreamReader currentInputFile in inputFiles) {
+                new Thread(() => {
+                    StreamReader inputFile = currentInputFile;
+
+                    String line;
+                    while ((line = inputFile.ReadLine()) != null) {
+                        new Thread(() => {
+                            //Assumption: all files and lines are valid
+                            TupleMessage tupleMessage = line.Split(',').ToList();
+                            TupleMessageCommand(tupleMessage);
+                        }).Start();
+                    }
+                    inputFile.Close();
+                }).Start();
+            }
         }
     }
 

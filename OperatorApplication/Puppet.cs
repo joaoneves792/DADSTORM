@@ -26,10 +26,9 @@ namespace OperatorApplication
     internal partial class Operator : MarshalByRefObject, IPuppet
     {
         private static String PUPPET_SERVICE_NAME = "puppet";
-        private Action<Process, Message> _frozenListener;
         private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests;
 
-        public void SubmitAsPuppet(Process process)
+        public void SubmitAsPuppet()
         {
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
@@ -54,8 +53,7 @@ namespace OperatorApplication
 
         public void Start() {
             Console.WriteLine("START");
-
-            TryExecuteCommand();
+            _waitHandle.Set();
         }
 
         public void Interval(Milliseconds milliseconds) {
@@ -73,7 +71,6 @@ namespace OperatorApplication
         public void Crash()
         {
             Console.WriteLine("CRASH");
-
             Environment.FailFast("Crash simulation");
         }
 
@@ -99,7 +96,7 @@ namespace OperatorApplication
 
             Log.WriteLine(LogStatus.DEBUG, "UNFREEZE!");
 
-            _listener = _frozenListener;
+            _listener = ParseMessage;
 
             foreach (Tuple<Process, Message> request in _frozenRequests)
             {
