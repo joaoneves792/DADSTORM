@@ -33,8 +33,9 @@ namespace OperatorApplication
                 int.TryParse(operatorSpecList[1], out fieldNumber))
             {
                 Console.WriteLine("UNIQ");
-                _command = new UNIQCommand(fieldNumber);
-            }
+				//_command = new UNIQCommand(fieldNumber); // segundo o luis, field_number is the first element of the tuple
+				_command = new UNIQCommand();
+			}
             else if (operatorSpecList[0].Equals("COUNT"))
             {
                 Console.WriteLine("COUNT");
@@ -51,9 +52,9 @@ namespace OperatorApplication
                      int.TryParse(operatorSpecList[3], out value))
             {
                 Console.WriteLine("FILTER");
-				_command = new FILTERCommand(fieldNumber, condition, value);
-			}
-            else if (operatorSpecList[0].Equals("CUSTOM"))
+				//_command = new FILTERCommand(fieldNumber, condition, value); // same
+				_command = new FILTERCommand(condition, value);
+			} else if (operatorSpecList[0].Equals("CUSTOM"))
             {
                 Console.WriteLine("CUSTOM");
                 _command = new CUSTOMCommand();

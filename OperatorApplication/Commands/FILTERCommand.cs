@@ -17,7 +17,7 @@ namespace OperatorApplication.Commands {
 			Console.WriteLine("\t-> DUP");
 		}
 
-		public FILTERCommand(int field_number, Condition condition, int value) {
+		public FILTERCommand(Condition condition, int value) {
 
 			if (condition == Condition.UNDEFINED) {
 				throw new InvalidConditionException("Invalid condition.\r\nCondition should be '<', '>', or '='");
