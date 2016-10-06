@@ -51,9 +51,9 @@ namespace OperatorApplication
                      int.TryParse(operatorSpecList[3], out value))
             {
                 Console.WriteLine("FILTER");
-                //FIXME: fix filter command constructor input
-                //command = new FILTERCommand(fieldNumber, condition, value);
-            }
+				//DONE :: FIXME: fix filter command constructor input
+				_command = new FILTERCommand(fieldNumber, condition, value);
+			}
             else if (operatorSpecList[0].Equals("CUSTOM"))
             {
                 Console.WriteLine("CUSTOM");

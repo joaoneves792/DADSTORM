@@ -16,3 +16,15 @@ C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorAppl
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\LoggingClassLibrary.pdb
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\CommonTypesLibrary.dll
 C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\CommonTypesLibrary.pdb
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\OperatorApplication.exe.config
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\OperatorApplication.exe
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\OperatorApplication.pdb
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\CommonTypesLibrary.dll
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\LoggingClassLibrary.dll
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\CommonTypesLibrary.pdb
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\LoggingClassLibrary.pdb
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.csprojResolveAssemblyReference.cache
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.exe
+Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.pdb

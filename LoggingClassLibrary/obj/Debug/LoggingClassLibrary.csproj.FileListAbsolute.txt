@@ -8,3 +8,8 @@ C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.csprojResolveAssemblyReference.cache
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.dll
 C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.pdb
+Z:\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\bin\Debug\LoggingClassLibrary.dll
+Z:\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\bin\Debug\LoggingClassLibrary.pdb
+Z:\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.csprojResolveAssemblyReference.cache
+Z:\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.dll
+Z:\Documents\Visual Studio 2015\Projects\dad\LoggingClassLibrary\obj\Debug\LoggingClassLibrary.pdb
