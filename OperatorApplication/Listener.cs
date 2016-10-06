@@ -16,11 +16,11 @@ namespace OperatorApplication
     internal partial class Operator
     {
         private Action<Process, Message> _listener;
+        PointToPointLink _pointToPointLink;
+        Process _process;
 
         Command _command;
-        private IDictionary<Process, bool> _inputSources;
         private IProducerConsumerCollection<Process> _outputReceivers;
-        private IProducerConsumerCollection<String> _inputTuple;
 
         private void DefineOperatorType(OperatorSpec operatorSpec)
         {
@@ -51,7 +51,6 @@ namespace OperatorApplication
                      int.TryParse(operatorSpecList[3], out value))
             {
                 Console.WriteLine("FILTER");
-				//DONE :: FIXME: fix filter command constructor input
 				_command = new FILTERCommand(fieldNumber, condition, value);
 			}
             else if (operatorSpecList[0].Equals("CUSTOM"))
@@ -62,24 +61,6 @@ namespace OperatorApplication
             else
             {
                 Console.WriteLine("unrecognised.");
-            }
-        }
-
-        private void addInputSource(Process inputSource)
-        {
-            //Submit input source
-            _inputSources.Add(inputSource, false);
-
-            Console.WriteLine("Added input source " + inputSource.Name);
-        }
-
-        private void addInputTuple(TupleMessage tupleMessage)
-        {
-            //Concatenate input tuples
-            foreach (String message in tupleMessage)
-            {
-                _inputTuple.TryAdd(message);
-                Console.WriteLine("Added tuple message " + message);
             }
         }
 
@@ -118,7 +99,7 @@ namespace OperatorApplication
             //Parse message
             if (message is TupleMessage)
             {
-                TupleMessageCommand(process, (TupleMessage)message);
+                TupleMessageCommand((TupleMessage)message);
             }
             else if (message is Process)
             {
@@ -126,21 +107,16 @@ namespace OperatorApplication
             }
         }
 
-        private void TupleMessageCommand(Process process, TupleMessage tupleMessage)
+        private void TupleMessageCommand(TupleMessage tupleMessage)
         {
-            addInputTuple(tupleMessage);
-            _inputSources[process] = true;
+            TupleMessage result = _command.Execute(tupleMessage);
 
-            TryExecuteCommand();
-        }
+            if (result == null) {
+                return;
+            }
 
-        private void TryExecuteCommand() {
-            bool obtainedAllInputs = _inputSources.Aggregate((a, b) => {
-                return new KeyValuePair<Process, bool>(null, a.Value & b.Value);
-            }).Value;
-            if (obtainedAllInputs) {
-                //FIXME: add tuple input
-                //command.Execute();
+            foreach (Process outputReceiver in _outputReceivers) {
+                _pointToPointLink.Send(_process, (Object)result);
             }
         }
 
