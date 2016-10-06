@@ -24,8 +24,7 @@ namespace DistributedAlgoritmsClassLibrary
         private static int TIMER = 100;
 
         private readonly Process _process;
-        private Action<Process, Message> _listener, _frozenListener;
-        private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests;
+        private Action<Process, Message> _listener;
         private IDictionary<Process, FairLossPointToPointLink> _fairLossPointToPointLinks;
 
         public RemotingNode(Process process, Action<Process, Message> listener) {
@@ -33,8 +32,6 @@ namespace DistributedAlgoritmsClassLibrary
 
             _process = process;
             _listener = listener;
-            _frozenListener = listener;
-            _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
             _fairLossPointToPointLinks = new Dictionary<Process, FairLossPointToPointLink>();
 
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
