@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OperatorApplication {
+namespace OperatorApplication.Commands {
     using TupleMessage = List<String>;
 
     class UNIQCommand : Command {

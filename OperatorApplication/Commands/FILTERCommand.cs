@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OperatorApplication.Exceptions;
 
-namespace OperatorApplication {
+namespace OperatorApplication.Commands {
     using TupleMessage = List<String>;
 
     class FILTERCommand : Command {
 
-		// segundo o luis, field_number is the first element of the tuple so this is wrong
-		//int _field_number = -1;
 		Condition _condition = Condition.UNDEFINED;
 		int _value = -1;
 
@@ -21,10 +20,8 @@ namespace OperatorApplication {
 		public FILTERCommand(int field_number, Condition condition, int value) {
 
 			if (condition == Condition.UNDEFINED) {
-				// FIXME: create right exception
-				throw new Exception("wrong condition.");
+				throw new InvalidConditionException("Invalid condition.\r\nCondition should be '<', '>', or '='");
 			} else {
-				//_field_number = field_number;
 				_condition = condition;
 				_value = value;
 			}
