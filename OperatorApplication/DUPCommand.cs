@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OperatorApplication {
-	class DUPCommand : Command {
+    using TupleMessage = List<String>;
+
+    class DUPCommand : Command {
 		public DUPCommand() {
 			Console.WriteLine("\t-> FILTER");
 		}
 
-		public override int Execute() {
+		public override TupleMessage Execute(TupleMessage inputTuple) {
 			throw new NotImplementedException();
 		}
 	}

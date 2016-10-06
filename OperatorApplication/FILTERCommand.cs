@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OperatorApplication {
-	class FILTERCommand : Command {
+    using TupleMessage = List<String>;
+
+    class FILTERCommand : Command {
 
 		int _field_number = -1;
 		Condition _condition = Condition.UNDEFINED;
@@ -29,8 +31,8 @@ namespace OperatorApplication {
 		}
 
 
-		public override int Execute() {
-			throw new NotImplementedException();
+		public override TupleMessage Execute(TupleMessage inputTuple) {
+            throw new NotImplementedException();
 		}
 
 	}

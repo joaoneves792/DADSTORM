@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OperatorApplication {
+    using TupleMessage = List<String>;
 
-	class UNIQCommand : Command {
+    class UNIQCommand : Command {
 
 		int _field_number = -1;
 
@@ -28,7 +29,7 @@ namespace OperatorApplication {
 			}
 		}
 
-		public override int Execute() {
+		public override TupleMessage Execute(TupleMessage inputTuple) {
 			throw new NotImplementedException();
 		}
 	}

@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OperatorApplication {
-	class COUNTCommand : Command {
+    using TupleMessage = List<String>;
+
+    class COUNTCommand : Command {
 		public COUNTCommand() {
 			Console.WriteLine("\t-> COUNT");
 		}
 
-		public override int Execute() {
+		public override TupleMessage Execute(TupleMessage inputTuple) {
 			throw new NotImplementedException();
 		}
 	}

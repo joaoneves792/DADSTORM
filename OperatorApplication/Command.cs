@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OperatorApplication {
-	abstract class Command {
+    using TupleMessage = List<String>;
+
+    abstract class Command {
 
 		public Command() { }
 
-		public abstract int Execute();
+		public abstract TupleMessage Execute(TupleMessage inputTuple);
 	}
 }
