@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Text.RegularExpressions;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels.Tcp;
 
 using ProcessCreationServiceApplication;
 
@@ -36,15 +39,13 @@ namespace PuppetMasterApplication
 
             String processCreationServiceUrl = "tcp://localhost:10000/";
 
-            Console.WriteLine(processCreationServiceUrl + ProcessCreationService.SERVICE_NAME);
-
+            TcpChannel channel = new TcpChannel(PORT);
+            ChannelServices.RegisterChannel(channel, true);
             IProcessCreationService processCreationService = (IProcessCreationService)Activator.GetObject(
                 typeof(IProcessCreationService),
                 processCreationServiceUrl + ProcessCreationService.SERVICE_NAME);
 
             _processCreationServiceTable.Add(processCreationServiceUrl, processCreationService);
-
-            processCreationService.Ping();
         }
 
 
@@ -96,6 +97,8 @@ namespace PuppetMasterApplication
                 operatorSpecs = operatorSpecs.Remove(operatorSpecs.Length - 1, 1);
             }
             Console.WriteLine("Operator:   " + operatorSpecs);
+
+            Console.ReadKey();
 
             foreach (Match address in addressList) {
                 GroupCollection groupCollection = new Regex(URL_ADDRESS, RegexOptions.Compiled).Match(address.Value).Groups;

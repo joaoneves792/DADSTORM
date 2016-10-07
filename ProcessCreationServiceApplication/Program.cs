@@ -22,19 +22,10 @@ namespace ProcessCreationServiceApplication
                 this,
                 SERVICE_NAME,
                 typeof(IProcessCreationService));
-
-            /*RemotingConfiguration.RegisterWellKnownServiceType(
-                typeof(ProcessCreationService),
-                "ProcessCreationService",
-                WellKnownObjectMode.Singleton);*/
         }
 
         public void CreateProcess(String arguments) {
             Process.Start("OperatorApplication.exe", arguments);
-        }
-
-        public void Ping() {
-            Console.WriteLine("ping");
         }
     }
 
@@ -44,7 +35,6 @@ namespace ProcessCreationServiceApplication
         {
             ProcessCreationService processCreatinService = new ProcessCreationService();
             processCreatinService.Run();
-            processCreatinService.Ping();
 
             Console.WriteLine("PCS waiting for commands...");
             Console.ReadKey();

@@ -42,11 +42,15 @@ namespace PuppetMasterApplication
                                 FILTER = @"(?:FILTER" + SPACE + @"-?\d+" + COMMA + @"(?:>|<|=)" + COMMA + @"-?\d+)",
                                 CUSTOM = @"(?:CUSTOM" + SPACE + @"\w+\.dll" + COMMA + @"\w+" + COMMA + @"\w+)",
 
-                                GROUP_OPERATOR_SPEC = OPEN + OPEN + @"(UNIQ)" + SPACE + @"(-?\d+)" + CLOSE + OR +
-                                                             OPEN + @"(COUNT)" + CLOSE + OR +
-                                                             OPEN + @"(DUP)" + CLOSE + OR +
-                                                             OPEN + @"(FILTER)" + SPACE + @"(-?\d+)" + COMMA + @"(>|<|=)" + COMMA + @"(-?\d+)" + CLOSE + OR +
-                                                             OPEN + @"(CUSTOM)" + SPACE + @"(\w+\.dll)" + COMMA + @"(\w+)" + COMMA + @"(\w+)" + CLOSE + CLOSE,
+                                GROUP_OPERATOR_SPEC = @"(UNIQ)" + OR +
+                                                      @"(COUNT)" + OR +
+                                                      @"(DUP)" + OR +
+                                                      @"(FILTER)" + OR +
+                                                      @"(CUSTOM)" + OR +
+                                                      @"(>)|(<)|(=)" + OR +
+                                                      @"(-?\d+)"  + OR +
+                                                      @"(\w+\.dll)" + OR +
+                                                      @"(\w+)",
 
                                 OPERATOR_ID_COMMAND =   START + GROUP_INT + SPACE +
                                                         @"INPUT_OPS" + SPACE + @"((?:" + INPUT_OP + COMMA + @")*" + INPUT_OP + CLOSE + SPACE +

@@ -1,2 +1,4 @@
-1 INPUT_OPS Scripts/3.txt , Scripts/4.txt REP_FACT 3 ROUTING primary ADDRESS tcp://localhost:1025/Operator,tcp://localhost:1026/Operator,tcp://localhost:1027/Operator OPERATOR_SPEC UNIQ 1
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 1
 2 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC COUNT
+
+-1 INPUT_OPS Scripts/3.txt , Scripts/4.txt REP_FACT 3 ROUTING primary ADDRESS tcp://localhost:1025/Operator,tcp://localhost:1026/Operator,tcp://localhost:1027/Operator OPERATOR_SPEC UNIQ 1
