@@ -1,15 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 using System.Text.RegularExpressions;
-using System.Runtime.Remoting.Channels;
+using System.Net.Sockets;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Remoting.Channels;
+using System.Threading;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.Serialization;
 
 using ProcessCreationServiceApplication;
+using CommonTypesLibrary;
 
 namespace PuppetMasterApplication
 {
@@ -24,10 +30,11 @@ namespace PuppetMasterApplication
     using Address = String;
     using OperatorSpec = String;
 
-    internal partial class PuppetMaster
+    internal partial class PuppetMaster : MarshalByRefObject, IPuppetMaster
     {
         //Tables
         private IDictionary<OperatorId, IList<Url>> _operatorResolutionCache;
+        private IDictionary<Url, IPuppet> _puppetTable;
         private IDictionary<Url, IProcessCreationService> _processCreationServiceTable;
 
         ///<summary>
@@ -35,12 +42,24 @@ namespace PuppetMasterApplication
         ///</summary>
         internal PuppetMaster() {
             _operatorResolutionCache = new Dictionary<OperatorId, IList<Url>>();
+            _puppetTable = new Dictionary<Url, IPuppet>();
             _processCreationServiceTable = new Dictionary<Url, IProcessCreationService>();
 
             String processCreationServiceUrl = "tcp://localhost:10000/";
 
-            TcpChannel channel = new TcpChannel(PORT);
+            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
+            provider.TypeFilterLevel = TypeFilterLevel.Full;
+
+            IDictionary RemoteChannelProperties = new Hashtable();
+            RemoteChannelProperties["name"] = SERVICE_NAME;
+            RemoteChannelProperties["port"] = PORT;
+            TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
             ChannelServices.RegisterChannel(channel, true);
+            RemotingServices.Marshal(
+                this,
+                SERVICE_NAME,
+                typeof(IPuppetMaster));
+
             IProcessCreationService processCreationService = (IProcessCreationService)Activator.GetObject(
                 typeof(IProcessCreationService),
                 processCreationServiceUrl + ProcessCreationService.SERVICE_NAME);
@@ -48,6 +67,10 @@ namespace PuppetMasterApplication
             _processCreationServiceTable.Add(processCreationServiceUrl, processCreationService);
         }
 
+        public void ReceiveUrl(Url url, ObjRef objRef) {
+            IPuppet puppet = (IPuppet)RemotingServices.Unmarshal(objRef);
+            _puppetTable.Add(url, puppet);
+        }
 
         private void ExecuteOperatorIdCommand(
             OperatorId operatorId,
@@ -63,6 +86,7 @@ namespace PuppetMasterApplication
                             operatorSpecList = new Regex(GROUP_OPERATOR_SPEC, RegexOptions.Compiled).Matches(operatorSpec);
 
             //Organize source list
+            //Assumption: the process creation is made downstream-wise
             String sources = "", inputOp;
             foreach (Match inputOpMatch in inputOpList) {
                 inputOp = inputOpMatch.Value;
@@ -76,7 +100,7 @@ namespace PuppetMasterApplication
             if (!sources.Equals("")) {
                 sources = sources.Remove(sources.Length - 1, 1);
             }
-            Console.WriteLine("Sources:    " + sources);
+            Console.WriteLine("Operator:   " + sources);
 
             //Organize replica list
             String replicas = "";
@@ -86,7 +110,7 @@ namespace PuppetMasterApplication
             if (!replicas.Equals("")) {
                 replicas = replicas.Remove(replicas.Length - 1, 1);
             }
-            Console.WriteLine("Replicas:   " + replicas);
+            Console.WriteLine("Operator:   " + replicas);
 
             //Organize operator spec list
             String operatorSpecs = "";
@@ -98,17 +122,13 @@ namespace PuppetMasterApplication
             }
             Console.WriteLine("Operator:   " + operatorSpecs);
 
-            Console.ReadKey();
-
             foreach (Match address in addressList) {
                 GroupCollection groupCollection = new Regex(URL_ADDRESS, RegexOptions.Compiled).Match(address.Value).Groups;
 
-                Console.WriteLine("a");
                 //Create process
                 String processCreationServiceUrl = groupCollection[1].Value + ":10000/";
                 _processCreationServiceTable[processCreationServiceUrl].CreateProcess(
                     operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs);
-                Console.WriteLine("b");
 
                 //Add operator id into operator resolution cache
                 if (_operatorResolutionCache.TryGetValue(operatorId, out urlList)) {

@@ -25,7 +25,7 @@ namespace OperatorApplication
 
     internal partial class Operator : MarshalByRefObject, IPuppet
     {
-        private static String PUPPET_SERVICE_NAME = "puppet";
+        private static String PUPPET_SERVICE_NAME = "Puppet";
         private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests;
 
         public void SubmitAsPuppet()
@@ -33,11 +33,10 @@ namespace OperatorApplication
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
 
-            IDictionary RemoteChannelProperties = new Hashtable();
+            /*IDictionary RemoteChannelProperties = new Hashtable();
             RemoteChannelProperties["name"] = PUPPET_SERVICE_NAME;
-            //RemoteChannelProperties["port"] = process.Port + 1100;
             TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
-            ChannelServices.RegisterChannel(channel, true);
+            ChannelServices.RegisterChannel(channel, true);*/
 
             ObjRef objRef = RemotingServices.Marshal(
                 this,
@@ -48,7 +47,7 @@ namespace OperatorApplication
                 typeof(IPuppetMaster),
                 "tcp://localhost:10001/PuppetMaster");
 
-            puppetMaster.ReceiveUrl(objRef);
+            puppetMaster.ReceiveUrl(_process.Url, objRef);
         }
 
         public void Start() {

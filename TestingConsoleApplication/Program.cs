@@ -123,7 +123,7 @@ namespace TestingConsoleApplication
                 typeof(IPuppetMaster));
         }
 
-        public void ReceiveUrl(ObjRef objRef)
+        public void ReceiveUrl(String url, ObjRef objRef)
         {
             TestFreeze(objRef);
         }

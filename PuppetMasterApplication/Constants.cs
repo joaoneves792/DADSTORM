@@ -10,7 +10,7 @@ namespace PuppetMasterApplication
     {
         //Constants
         private const int PORT = 10001;
-        private const String SERVICE_NAME = "puppet",
+        private const String SERVICE_NAME = "PuppetMaster",
                                 START = @"^\ *",
                                 END = @"\ *$",
                                 SPACE = @"\ +",
@@ -29,12 +29,12 @@ namespace PuppetMasterApplication
                                 OPERATOR_ID = OPEN + INT + CLOSE,
 
                                 PARTITION = "(?:[A-Z]:" + DIR + @")?",
-                                DIRNAME = @"(?:.+" + DIR + @")*",
+                                DIRNAMES = @"(?:.+" + DIR + @")*",
                                 FILENAME = @".+" + DIR + @"?",
-                                PATH = OPEN + PARTITION + DIRNAME + FILENAME + CLOSE,
+                                PATH = OPEN + PARTITION + DIRNAMES + FILENAME + CLOSE,
 
                                 INPUT_OP = OPEN + OPERATOR_ID + OR + PATH + CLOSE,
-                                GROUP_INPUT_OP = GROUP_OPEN + INPUT_OP + CLOSE,
+                                GROUP_INPUT_OP = @"(\d+)|((?:[A-Z]:(?:\\|\/))?(?:[\w.]+(?:\\|\/))*[\w.]+(?:\\|\/)?)",
 
                                 UNIQ = @"(?:UNIQ" + SPACE + @"-?\d+)",
                                 COUNT = @"(?:COUNT)",

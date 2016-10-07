@@ -8,8 +8,10 @@ using System.Runtime.Remoting;
 
 namespace CommonTypesLibrary
 {
+    using Url = String;
+
     public interface IPuppetMaster
     {
-        void ReceiveUrl(ObjRef objRef);
+        void ReceiveUrl(Url url, ObjRef objRef);
     }
 }

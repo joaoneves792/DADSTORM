@@ -29,6 +29,10 @@ namespace OperatorApplication
             String[] operatorSpecList = operatorSpec.Split(',');
 
             //Define operator command
+            Console.WriteLine(operatorSpecList[0]);
+            Console.WriteLine(operatorSpecList[0].Equals("UNIQ"));
+            if(operatorSpecList[0].Equals("UNIQ"))
+                int.TryParse(operatorSpecList[1], out fieldNumber);
             if (operatorSpecList[0].Equals("UNIQ") &&
                 int.TryParse(operatorSpecList[1], out fieldNumber))
             {
