@@ -114,6 +114,9 @@ namespace OperatorApplication
 
         private void TupleMessageCommand(TupleMessage tupleMessage)
         {
+            //TODO: test me
+            _waitHandle.WaitOne();
+
             TupleMessage result = _command.Execute(tupleMessage);
 
             if (result == null) {
