@@ -10,19 +10,44 @@ using System.Runtime.Remoting.Channels.Tcp;
 
 namespace ProcessCreationServiceApplication
 {
+    public class ProcessCreationService : MarshalByRefObject, IProcessCreationService
+    {
+        private static int PORT = 10000;
+        public static String SERVICE_NAME = "ProcessCreationService";
+
+        internal void Run() {
+            TcpChannel channel = new TcpChannel(PORT);
+            ChannelServices.RegisterChannel(channel, true);
+            RemotingServices.Marshal(
+                this,
+                SERVICE_NAME,
+                typeof(IProcessCreationService));
+
+            /*RemotingConfiguration.RegisterWellKnownServiceType(
+                typeof(ProcessCreationService),
+                "ProcessCreationService",
+                WellKnownObjectMode.Singleton);*/
+        }
+
+        public void CreateProcess(String arguments) {
+            Process.Start("OperatorApplication.exe", arguments);
+        }
+
+        public void Ping() {
+            Console.WriteLine("ping");
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            int PORT = 1000;
-
-            TcpChannel channel = new TcpChannel(PORT);
-            ChannelServices.RegisterChannel(channel, true);
-            RemotingConfiguration.RegisterWellKnownServiceType(typeof(ProcessCreationService), "ProcessCreationService", WellKnownObjectMode.Singleton);
+            ProcessCreationService processCreatinService = new ProcessCreationService();
+            processCreatinService.Run();
+            processCreatinService.Ping();
 
             Console.WriteLine("PCS waiting for commands...");
             Console.ReadKey();
-
         }
     }
 }

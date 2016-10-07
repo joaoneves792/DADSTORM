@@ -8,5 +8,7 @@ namespace ProcessCreationServiceApplication
 {
     public interface IProcessCreationService
     {
+        void CreateProcess(String arguments);
+        void Ping();
     }
 }

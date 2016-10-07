@@ -28,11 +28,9 @@ namespace TestingConsoleApplication
             new Test();
 
             //test1();
-            //test2();
+            test2();
             //test3();
-            test4();
-
-            Console.ReadLine();
+            //test4();
         }
 
         static void test1()
@@ -57,6 +55,7 @@ namespace TestingConsoleApplication
 
         static void test2()
         {
+            Process.Start("ProcessCreationServiceApplication.exe");
             Process.Start("PuppetMasterApplication.exe");
         }
 
@@ -101,6 +100,8 @@ namespace TestingConsoleApplication
                     inputFile.Close();
                 }).Start();
             }
+
+            Console.ReadLine();
         }
     }
 
