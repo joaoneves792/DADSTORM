@@ -17,8 +17,6 @@ using System.Runtime.Serialization;
 using ProcessCreationServiceApplication;
 using CommonTypesLibrary;
 
-using CommonTypesLibrary;
-
 namespace PuppetMasterApplication
 {
     //Aliases
@@ -134,6 +132,7 @@ namespace PuppetMasterApplication
                 _processCreationServiceTable[processCreationServiceUrl].CreateProcess(
                     operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs);
 
+
                 //Add operator id into operator resolution cache
                 if (_operatorResolutionCache.TryGetValue(operatorId, out urlList)) {
                     urlList.Add(groupCollection[0].Value);
@@ -149,24 +148,68 @@ namespace PuppetMasterApplication
 
         private void ExecuteStartCommand(OperatorId operatorId) {
             System.Console.WriteLine("ExecuteStartCommand: " + operatorId);
+            IList<Url> urlList = _operatorResolutionCache[operatorId];
+            foreach (Url url in urlList)
+            {
+                IPuppet puppet = _puppetTable[url];
+                Task.Run(() =>
+                {
+                    puppet.Start();
+                }).ContinueWith(task =>
+                {
+                    //Handles remote exception
+                    task.Exception.Handle(ex =>
+                    {
+                        return true;
+                    });
+                }, TaskContinuationOptions.OnlyOnFaulted);
+            }
         }
 
         private void ExecuteIntervalCommand(OperatorId operatorId, Milliseconds milliseconds) {
             System.Console.WriteLine("ExecuteIntervalCommand: " + operatorId + " : " + milliseconds);
+            IList<Url> urlList = _operatorResolutionCache[operatorId];
+            foreach(Url url in urlList)
+            {
+                IPuppet puppet = _puppetTable[url];
+                Task.Run(() =>
+                {
+                    puppet.Interval(Int32.Parse(milliseconds));
+                }).ContinueWith(task =>
+                {
+                    //Handles remote exception
+                    task.Exception.Handle(ex =>
+                    {
+                        return true;
+                    });
+                }, TaskContinuationOptions.OnlyOnFaulted);
+            }
+            
         }
 
         private void ExecuteStatusCommand() {
             System.Console.WriteLine("ExecuteStatusCommand");
+            foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable)
+            {
+                IPuppet puppet = entry.Value;
+                Task.Run(() =>
+                {
+                    puppet.Status();
+                }).ContinueWith(task =>
+                {
+                    //Handles remote exception
+                    task.Exception.Handle(ex =>
+                    {
+                        return true;
+                    });
+                }, TaskContinuationOptions.OnlyOnFaulted);
+            }
         }
 
         private void ExecuteCrashCommand(ProcessName processName) {
             System.Console.WriteLine("ExecuteCrashCommand: " + processName);
 
-
-            /*Call the corresponding method on the puppet asyncronously*/
-            /*TODO: maybe refactor me*/
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
-
             Task.Run(() => {
                 puppet.Crash();
             }).ContinueWith(task => {
@@ -180,10 +223,31 @@ namespace PuppetMasterApplication
 
         private void ExecuteFreezeCommand(ProcessName processName) {
             System.Console.WriteLine("ExecuteFreezeCommand: " + processName);
+
+            IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
+            Task.Run(() => {
+                puppet.Freeze();
+            }).ContinueWith(task => {
+                //Handles remote exception
+                task.Exception.Handle(ex => {
+                    return true;
+                });
+            }, TaskContinuationOptions.OnlyOnFaulted);
+
         }
 
         private void ExecuteUnfreezeCommand(ProcessName processName) {
             System.Console.WriteLine("ExecuteUnfreezeCommand: " + processName);
+            IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
+            Task.Run(() => {
+                puppet.Unfreeze();
+            }).ContinueWith(task => {
+                //Handles remote exception
+                task.Exception.Handle(ex => {
+                    return true;
+                });
+            }, TaskContinuationOptions.OnlyOnFaulted);
+
         }
 
         private void ExecuteWaitCommand(Milliseconds milliseconds) {

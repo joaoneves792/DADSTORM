@@ -66,6 +66,8 @@ namespace OperatorApplication
             Console.WriteLine("STATUS");
 
             //TODO: Implement me
+            // We need to display status of the rest of the system from our point of view
+            //Cant do that right now
         }
 
         public void Crash()
