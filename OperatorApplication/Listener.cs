@@ -119,6 +119,9 @@ namespace OperatorApplication
 
             TupleMessage result = _command.Execute(tupleMessage);
 
+            /*Sleep before passing on the results as ordered by the puppetMaster*/
+            System.Threading.Thread.Sleep(_sleepBetweenEvents);
+
             if (result == null) {
                 return;
             }

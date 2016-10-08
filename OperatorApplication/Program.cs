@@ -37,6 +37,8 @@ namespace OperatorApplication
 
             //Puppet component
             _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
+
+            _sleepBetweenEvents = 0;
         }
 
         private bool Matches(String pattern, String line, out GroupCollection groupCollection) {

@@ -17,6 +17,8 @@ using System.Runtime.Serialization;
 using ProcessCreationServiceApplication;
 using CommonTypesLibrary;
 
+using CommonTypesLibrary;
+
 namespace PuppetMasterApplication
 {
     //Aliases
@@ -29,8 +31,10 @@ namespace PuppetMasterApplication
     using Routing = String;
     using Address = String;
     using OperatorSpec = String;
+    using CommonTypesLibrary;
 
     internal partial class PuppetMaster : MarshalByRefObject, IPuppetMaster
+
     {
         //Tables
         private IDictionary<OperatorId, IList<Url>> _operatorResolutionCache;
@@ -157,6 +161,21 @@ namespace PuppetMasterApplication
 
         private void ExecuteCrashCommand(ProcessName processName) {
             System.Console.WriteLine("ExecuteCrashCommand: " + processName);
+
+
+            /*Call the corresponding method on the puppet asyncronously*/
+            /*TODO: maybe refactor me*/
+            IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
+
+            Task.Run(() => {
+                puppet.Crash();
+            }).ContinueWith(task => {
+                //Handles remote exception
+                task.Exception.Handle(ex => {
+                    return true;
+                });
+            }, TaskContinuationOptions.OnlyOnFaulted);
+
         }
 
         private void ExecuteFreezeCommand(ProcessName processName) {

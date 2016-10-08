@@ -28,6 +28,8 @@ namespace OperatorApplication
         private static String PUPPET_SERVICE_NAME = "Puppet";
         private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests;
 
+        private int _sleepBetweenEvents;
+
         public void SubmitAsPuppet()
         {
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
@@ -57,8 +59,7 @@ namespace OperatorApplication
 
         public void Interval(Milliseconds milliseconds) {
             Console.WriteLine("INTERVAL");
-
-            //TODO: Implement me
+            _sleepBetweenEvents = milliseconds;
         }
 
         public void Status() {
