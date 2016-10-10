@@ -10,21 +10,31 @@ namespace OperatorApplication.Commands {
 
     class UNIQCommand : Command {
 
-		ConcurrentDictionary<int, int> _field_numbers = new ConcurrentDictionary<int, int>();
+		private IProducerConsumerCollection<String> _uniqueId = new ConcurrentBag<String>();
+        private readonly int _fieldNumber;
 
-		public UNIQCommand() {
+		public UNIQCommand(int fieldNumber) {
+            _fieldNumber = fieldNumber;
+
 			Console.WriteLine("\t-> UNIQ");
 		}
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-			int field_number = Int32.Parse(inputTuple.First());
+            String tupleElement = inputTuple[_fieldNumber];
+            TupleMessage result = null;
 
-			if (!_field_numbers.ContainsKey(field_number)) {
-				_field_numbers.TryAdd(field_number, field_number);
-				return inputTuple;
-			}
+            lock (this) {
+                if (_uniqueId.Contains(tupleElement)) {
+                    Console.WriteLine("Tuple " + String.Join(", ", inputTuple) + " has duplicated value.");
+                } else {
 
-			return null;
-		}
+                    Console.WriteLine("Tuple " + String.Join(", ", inputTuple) + " has unique value.");
+                    _uniqueId.TryAdd(tupleElement);
+                    result = inputTuple;
+                }
+            }
+
+            return result;
+        }
 	}
 }

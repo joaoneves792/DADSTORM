@@ -10,38 +10,52 @@ namespace OperatorApplication.Commands {
 
     class FILTERCommand : Command {
 
-		Condition _condition = Condition.UNDEFINED;
-		int _value = -1;
+		private readonly Func<String, Boolean> _condition;
+        private readonly int _fieldNumber;
+        private readonly String _value;
 
-		public FILTERCommand() {
-			Console.WriteLine("\t-> DUP");
+        public FILTERCommand(int fieldNumber, Condition condition, String value) {
+            switch (condition) {
+                case Condition.GREATER_THAN:
+                    _condition = IsGreater;
+                    break;
+                case Condition.LESS_THAN:
+                    _condition = IsLess;
+                    break;
+                case Condition.EQUALS:
+                    _condition = IsEqual;
+                    break;
+                default:
+                    throw new InvalidConditionException("Invalid condition.\r\nCondition should be '<', '>', or '='");
+            }
+            _fieldNumber = fieldNumber;
+            _value = value;
+            Console.WriteLine("\t-> DUP");
 		}
 
-		public FILTERCommand(Condition condition, int value) {
+        private Boolean IsGreater(String value) {
+            return String.Compare(value, _value) > 0;
+        }
 
-			if (condition == Condition.UNDEFINED) {
-				throw new InvalidConditionException("Invalid condition.\r\nCondition should be '<', '>', or '='");
-			} else {
-				_condition = condition;
-				_value = value;
-			}
+        private Boolean IsLess(String value) {
+            return String.Compare(value, _value) < 0;
+        }
 
-		}
+        private Boolean IsEqual(String value) {
+            return String.Compare(value, _value) == 0;
+        }
 
+        public override TupleMessage Execute(TupleMessage inputTuple) {
+            String tupleElement = inputTuple[_fieldNumber];
 
-		public override TupleMessage Execute(TupleMessage inputTuple) {
+            if (!_condition(tupleElement)) {
+                Console.WriteLine("Tuple " + String.Join(", ", inputTuple) + " got stuck.");
+                return null;
+            }
 
-			int field_number = Int32.Parse(inputTuple.First());
-
-			if (   ((_condition == Condition.LESS_THAN) && (field_number < _value))
-				|| ((_condition == Condition.GREATER_THAN) && (field_number > _value))
-				|| ((_condition == Condition.EQUALS) && (field_number == _value))
-				)
-				return inputTuple;
-
-			return null;
-
-		}
+            Console.WriteLine("Tuple " + String.Join(", ", inputTuple) + " has passed through filter.");
+            return inputTuple;
+        }
 
 	}
 }

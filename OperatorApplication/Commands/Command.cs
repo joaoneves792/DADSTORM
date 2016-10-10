@@ -8,9 +8,6 @@ namespace OperatorApplication.Commands {
     using TupleMessage = List<String>;
 
     abstract class Command {
-
-		public Command() { }
-
-		public abstract TupleMessage Execute(TupleMessage inputTuple);
+        public abstract TupleMessage Execute(TupleMessage inputTuple);
 	}
 }

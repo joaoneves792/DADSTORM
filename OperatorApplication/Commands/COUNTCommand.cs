@@ -18,9 +18,10 @@ namespace OperatorApplication.Commands {
 		public override TupleMessage Execute(TupleMessage inputTuple) {
 			lock(this) {
 				count++;
-			}
+                Console.WriteLine("Incremented counter to " + count);
+            }
 
-			return null;
+            return null;
 		}
 	}
 }
