@@ -29,7 +29,6 @@ namespace PuppetMasterApplication
     using Routing = String;
     using Address = String;
     using OperatorSpec = String;
-    using CommonTypesLibrary;
 
     internal partial class PuppetMaster : MarshalByRefObject, IPuppetMaster
 
@@ -147,92 +146,55 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteStartCommand(OperatorId operatorId) {
-            System.Console.WriteLine("ExecuteStartCommand: " + operatorId);
+            Console.WriteLine("ExecuteStartCommand: " + operatorId);
             IList<Url> urlList = _operatorResolutionCache[operatorId];
-            foreach (Url url in urlList)
-            {
+            foreach (Url url in urlList) {
                 IPuppet puppet = _puppetTable[url];
-                Task.Run(() =>
-                {
+                Task.Run(() => {
                     puppet.Start();
-                }).ContinueWith(task =>
-                {
-                    //Handles remote exception
-                    task.Exception.Handle(ex =>
-                    {
-                        return true;
-                    });
-                }, TaskContinuationOptions.OnlyOnFaulted);
+                });
             }
         }
 
         private void ExecuteIntervalCommand(OperatorId operatorId, Milliseconds milliseconds) {
-            System.Console.WriteLine("ExecuteIntervalCommand: " + operatorId + " : " + milliseconds);
+            Console.WriteLine("ExecuteIntervalCommand: " + operatorId + " : " + milliseconds);
             IList<Url> urlList = _operatorResolutionCache[operatorId];
-            foreach(Url url in urlList)
-            {
+            foreach(Url url in urlList) {
                 IPuppet puppet = _puppetTable[url];
-                Task.Run(() =>
-                {
+                Task.Run(() => {
                     puppet.Interval(Int32.Parse(milliseconds));
-                }).ContinueWith(task =>
-                {
-                    //Handles remote exception
-                    task.Exception.Handle(ex =>
-                    {
-                        return true;
-                    });
-                }, TaskContinuationOptions.OnlyOnFaulted);
+                });
             }
             
         }
 
         private void ExecuteStatusCommand() {
-            System.Console.WriteLine("ExecuteStatusCommand");
-            foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable)
-            {
+            Console.WriteLine("ExecuteStatusCommand");
+            foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
                 IPuppet puppet = entry.Value;
-                Task.Run(() =>
-                {
+                Task.Run(() => {
                     puppet.Status();
-                }).ContinueWith(task =>
-                {
-                    //Handles remote exception
-                    task.Exception.Handle(ex =>
-                    {
-                        return true;
-                    });
-                }, TaskContinuationOptions.OnlyOnFaulted);
+                });
             }
         }
 
         private void ExecuteCrashCommand(ProcessName processName) {
-            System.Console.WriteLine("ExecuteCrashCommand: " + processName);
+            Console.WriteLine("ExecuteCrashCommand: " + processName);
 
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
                 puppet.Crash();
-            }).ContinueWith(task => {
-                //Handles remote exception
-                task.Exception.Handle(ex => {
-                    return true;
-                });
-            }, TaskContinuationOptions.OnlyOnFaulted);
+            });
 
         }
 
         private void ExecuteFreezeCommand(ProcessName processName) {
-            System.Console.WriteLine("ExecuteFreezeCommand: " + processName);
+            Console.WriteLine("ExecuteFreezeCommand: " + processName);
 
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
                 puppet.Freeze();
-            }).ContinueWith(task => {
-                //Handles remote exception
-                task.Exception.Handle(ex => {
-                    return true;
-                });
-            }, TaskContinuationOptions.OnlyOnFaulted);
+            });
 
         }
 
@@ -241,19 +203,14 @@ namespace PuppetMasterApplication
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
                 puppet.Unfreeze();
-            }).ContinueWith(task => {
-                //Handles remote exception
-                task.Exception.Handle(ex => {
-                    return true;
-                });
-            }, TaskContinuationOptions.OnlyOnFaulted);
+            });
 
         }
 
         private void ExecuteWaitCommand(Milliseconds milliseconds) {
             //TODO: double-check this
-            System.Threading.Thread.Sleep(Int32.Parse(milliseconds));
-            System.Console.WriteLine("Executed Wait Command: " + milliseconds);
+            Thread.Sleep(Int32.Parse(milliseconds));
+            Console.WriteLine("Executed Wait Command: " + milliseconds);
         }
 
 
