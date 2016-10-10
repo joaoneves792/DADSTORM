@@ -38,6 +38,10 @@ namespace PuppetMasterApplication
         private IDictionary<Url, IPuppet> _puppetTable;
         private IDictionary<Url, IProcessCreationService> _processCreationServiceTable;
 
+        //Constants
+        private const string OPERATOR_NAME = "Operator";
+        private const string PUPPET_NAME = "Puppet";
+
         ///<summary>
         /// Puppet Master CLI constructor
         ///</summary>
@@ -179,7 +183,8 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteCrashCommand(ProcessName processName) {
-            Console.WriteLine("ExecuteCrashCommand: " + processName);
+            processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
+            System.Console.WriteLine("ExecuteCrashCommand: " + processName);
 
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
@@ -190,6 +195,8 @@ namespace PuppetMasterApplication
 
         private void ExecuteFreezeCommand(ProcessName processName) {
             Console.WriteLine("ExecuteFreezeCommand: " + processName);
+            processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
+            System.Console.WriteLine("ExecuteFreezeCommand: " + processName);
 
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
@@ -199,6 +206,7 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteUnfreezeCommand(ProcessName processName) {
+            processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
             System.Console.WriteLine("ExecuteUnfreezeCommand: " + processName);
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
