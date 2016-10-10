@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading;
 
 using DistributedAlgoritmsClassLibrary;
+using LoggingClassLibrary;
 
 namespace OperatorApplication
 {
@@ -88,7 +89,7 @@ namespace OperatorApplication
 
                     inputProcess = new Process(inputOp, inputOp);
                     _pointToPointLink.Connect(inputProcess);
-                    _pointToPointLink.Send(_process, (Object)inputProcess);
+                    _pointToPointLink.Send(inputProcess, (Object)_process);
                 }
                 else
                 {
@@ -128,6 +129,8 @@ namespace OperatorApplication
     {
         public static void Main(string[] args)
         {
+            Log.LogStatus = LogStatus.DEBUG;
+
             Operator operatorWorker = new Operator();
             operatorWorker.Configure(args);
             Console.ReadLine();

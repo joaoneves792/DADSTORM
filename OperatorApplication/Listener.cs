@@ -37,8 +37,7 @@ namespace OperatorApplication
                 int.TryParse(operatorSpecList[1], out fieldNumber))
             {
                 Console.WriteLine("UNIQ");
-				//_command = new UNIQCommand(fieldNumber); // segundo o luis, field_number is the first element of the tuple
-				_command = new UNIQCommand();
+				_command = new UNIQCommand(fieldNumber);
 			}
             else if (operatorSpecList[0].Equals("COUNT"))
             {
@@ -52,12 +51,10 @@ namespace OperatorApplication
             }
             else if (operatorSpecList[0].Equals("FILTER") &&
                      int.TryParse(operatorSpecList[1], out fieldNumber) &&
-                     TryParseCondition(operatorSpecList[2], out condition) &&
-                     int.TryParse(operatorSpecList[3], out value))
+                     TryParseCondition(operatorSpecList[2], out condition))
             {
                 Console.WriteLine("FILTER");
-				//_command = new FILTERCommand(fieldNumber, condition, value); // same
-				_command = new FILTERCommand(condition, value);
+				_command = new FILTERCommand(fieldNumber, condition, operatorSpecList[3]);
 			} else if (operatorSpecList[0].Equals("CUSTOM"))
             {
                 Console.WriteLine("CUSTOM");
@@ -102,38 +99,37 @@ namespace OperatorApplication
         private void ParseMessage(Process process, Message message)
         {
             //Parse message
-            if (message is TupleMessage)
-            {
+            if (message is TupleMessage) {
+                Console.WriteLine("Received tuple " + String.Join(",", (TupleMessage)message) + " from process " + process.Name);
                 TupleMessageCommand((TupleMessage)message);
-            }
-            else if (message is Process)
-            {
+            } else if (message is Process) {
+                Console.WriteLine("Received url " + String.Join(",", (Process)message) + " from process " + process.Name);
                 UrlMessageCommand((Process)message);
             }
         }
 
         private void TupleMessageCommand(TupleMessage tupleMessage)
         {
-            //TODO: test me
-            _waitHandle.WaitOne();
-
             TupleMessage result = _command.Execute(tupleMessage);
 
             /*Sleep before passing on the results as ordered by the puppetMaster*/
             System.Threading.Thread.Sleep(_sleepBetweenEvents);
 
             if (result == null) {
+                Console.WriteLine("Not sending tuple");
                 return;
             }
 
             foreach (Process outputReceiver in _outputReceivers) {
-                _pointToPointLink.Send(_process, (Object)result);
+                Console.WriteLine("Sending tuple " + String.Join(",", result) + " to process " + outputReceiver.Name);
+                _pointToPointLink.Send(outputReceiver, (Object)result);
             }
         }
 
         private void UrlMessageCommand(Process outputReceiver)
         {
             //Submit output receiver
+            _pointToPointLink.Connect(outputReceiver);
             _outputReceivers.TryAdd(outputReceiver);
 
             Console.WriteLine("Added output receiver " + outputReceiver.Name);
