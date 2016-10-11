@@ -80,14 +80,7 @@ namespace OperatorApplication
         {
             Console.WriteLine("FREEZE!");
 
-            _listener = (process, message) => {
-                Tuple<Process, Message> request = new Tuple<Process, Message>(process, message);
-                while (!_frozenRequests.TryAdd(request))
-                {
-                    Log.WriteLine(LogStatus.CRITICAL, "Message not froze");
-                }
-                Log.WriteLine(LogStatus.DEBUG, _frozenRequests.Count + " frozen requests");
-            };
+            _listener = StoreMessage;
 
             Log.WriteLine(LogStatus.DEBUG, "FREEZE!");
         }
@@ -98,15 +91,7 @@ namespace OperatorApplication
 
             Log.WriteLine(LogStatus.DEBUG, "UNFREEZE!");
 
-            _listener = ParseMessage;
-
-            foreach (Tuple<Process, Message> request in _frozenRequests)
-            {
-                Task.Run(() => {
-                    _listener(request.Item1, request.Item2);
-                });
-            }
-            _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
+            LoadStoredMessages();
         }
     }
 }

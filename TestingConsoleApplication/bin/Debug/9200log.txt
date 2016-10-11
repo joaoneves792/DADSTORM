@@ -3,3 +3,5 @@
  Done
 [3 de outubro de 2016][20:48:29] Connecting to process Teste2tcp://localhost:54002/teste...[3 de outubro de 2016][20:48:30] Connecting to process Teste1tcp://localhost:53001/teste... Done
  Done
+[11 de outubro de 2016][14:46:14] Initializing process 2tcp://localhost:1026/Operator... Done
+[11 de outubro de 2016][14:46:15] Connecting to process tcp://localhost:1025/Operatortcp://localhost:1025/Operator... Done

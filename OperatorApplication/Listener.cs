@@ -4,8 +4,10 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using OperatorApplication.Commands;
 using DistributedAlgoritmsClassLibrary;
+using LoggingClassLibrary;
 
 namespace OperatorApplication
 {
@@ -94,6 +96,31 @@ namespace OperatorApplication
         private void Deliver(Process process, Message message)
         {
             _listener(process, message);
+        }
+
+        private void StoreMessage(Process process, Message message)
+        {
+            Tuple<Process, Message> request = new Tuple<Process, Message>(process, message);
+            while (!_frozenRequests.TryAdd(request))
+            {
+                Log.WriteLine(LogStatus.CRITICAL, "Message not froze");
+            }
+            Log.WriteLine(LogStatus.DEBUG, _frozenRequests.Count + " frozen requests");
+        }
+
+        private void ParseAndStoreMessage(Process process, Message message)
+        {
+            //Parse message
+            if (message is TupleMessage)
+            {
+                Console.WriteLine("Received tuple " + String.Join(",", (TupleMessage)message) + " from process " + process.Name);
+                StoreMessage(process, message);
+            }
+            else if (message is Process)
+            {
+                Console.WriteLine("Received url " + String.Join(",", (Process)message) + " from process " + process.Name);
+                UrlMessageCommand((Process)message);
+            }
         }
 
         private void ParseMessage(Process process, Message message)

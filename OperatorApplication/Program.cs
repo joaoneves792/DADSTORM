@@ -33,10 +33,10 @@ namespace OperatorApplication
             _process = null;
             _command = null;
             _pointToPointLink = null;
-            _listener = ParseMessage;
             _outputReceivers = new ConcurrentBag<Process>();
 
             //Puppet component
+            _listener = ParseAndStoreMessage;
             _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
 
             _sleepBetweenEvents = 0;
@@ -53,6 +53,17 @@ namespace OperatorApplication
 
             groupCollection = match.Groups;
             return true;
+        }
+
+        private void LoadStoredMessages() {
+            _listener = ParseMessage;
+
+            foreach (Tuple<Process, Message> request in _frozenRequests) {
+                new Thread(() => {
+                    _listener(request.Item1, request.Item2);
+                }).Start();
+            }
+            _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
         }
 
         internal void Configure(string[] args) {
@@ -105,6 +116,9 @@ namespace OperatorApplication
             }
 
             _waitHandle.WaitOne();
+
+            //Process already received tuples
+            LoadStoredMessages();
 
             //Process files
             foreach (StreamReader currentInputFile in inputFiles) {
