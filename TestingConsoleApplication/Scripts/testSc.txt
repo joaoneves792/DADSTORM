@@ -1,0 +1,13 @@
+Wait 2000
+Interval 1 3000
+Interval 2 3000
+Interval 3 3000
+Interval 4 3000
+Start 1
+Start 2
+Start 3
+Start 4
+Freeze tcp://127.0.0.1:1026/Operator
+Wait 2000
+Unfreeze tcp://127.0.0.1:1026/Operator
+

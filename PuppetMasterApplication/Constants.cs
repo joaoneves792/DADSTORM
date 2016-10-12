@@ -39,7 +39,7 @@ namespace PuppetMasterApplication
                                 UNIQ = @"(?:UNIQ" + SPACE + @"-?\d+)",
                                 COUNT = @"(?:COUNT)",
                                 DUP = @"(?:DUP)",
-                                FILTER = @"(?:FILTER" + SPACE + @"-?\d+" + COMMA + @"(?:>|<|=)" + COMMA + @"-?\d+)",
+                                FILTER = @"(?:FILTER" + SPACE + @"-?\d+" + COMMA + @"(?:>|<|=)" + COMMA + @"-?\w+)",
                                 CUSTOM = @"(?:CUSTOM" + SPACE + @"\w+\.dll" + COMMA + @"\w+" + COMMA + @"\w+)",
 
                                 GROUP_OPERATOR_SPEC = @"(UNIQ)" + OR +

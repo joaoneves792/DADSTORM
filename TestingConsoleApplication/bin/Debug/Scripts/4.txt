@@ -1,2 +1,2 @@
-asd,asd,fff
-ase,wws,ff
+ball,cube,pyramid
+ball,ball,cube
