@@ -53,6 +53,7 @@
     <Compile Include="Commands\FILTERCommand.cs" />
     <Compile Include="Exceptions\InvalidConditionException.cs" />
     <Compile Include="Exceptions\NonExistentMethodException.cs" />
+    <Compile Include="Exceptions\NonExistentClassException.cs" />
     <Compile Include="Listener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
-1 INPUT_OPS Scripts/3.txt , Scripts/4.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
-2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 02 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\CustomOperatorExamplaes\bin\Debug\CustomOperatorExamplaes.dll,CustomOperatorExamplaes.Basic,Repeat
 3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,ball
-4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM C:\\Users\\daedalus\\Documents\\Visual Studio 2015\\Projects\\dad\\CustomOperatorExamplaes\\bin\\Debug\\CustomOperatorExamplaes.dll,Basic,Repeat
-5 INPUT_OPS 4 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+
+-1 INPUT_OPS Scripts/3.txt , Scripts/4.txt REP_FACT 3 ROUTING primary ADDRESS tcp://localhost:1030/Operator,tcp://localhost:1026/Operator,tcp://localhost:1027/Operator OPERATOR_SPEC UNIQ 1

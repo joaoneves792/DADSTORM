@@ -14,26 +14,32 @@ namespace OperatorApplication.Commands {
 
 		private Assembly _assembly = null;
 		private Type _type = null;
-		private Object obj = null;
-		private MethodInfo method = null;
+		private Object _obj = null;
+		private MethodInfo _method = null;
 
 		public CUSTOMCommand(string customDll, string customClass, string customMethod) {
 			Console.WriteLine("\t-> CUSTOM");
 
 			_assembly = Assembly.LoadFrom(@customDll);
 			_type = _assembly.GetType(customClass);
-			obj = Activator.CreateInstance(_type);
-			method = _type.GetMethod(customMethod);
 
-			if (method == null) {
-				Console.WriteLine("\t-> CUSTOM");
+			if (_type == null) {
+				Console.WriteLine("\t-> NOPE");
+				throw new NonExistentClassException(customClass + "could not be found.");
+			}
+
+			_obj = Activator.CreateInstance(_type);
+			_method = _type.GetMethod(customMethod);
+
+			if (_method == null) {
+				Console.WriteLine("\t-> NOPE");
 				throw new NonExistentMethodException(customClass + "." + customMethod + "could not be found.");
 			}
 		}
 
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-			return (TupleMessage) method.Invoke(obj, new object[] { inputTuple });
+			return (TupleMessage) _method.Invoke(_obj, new object[] { inputTuple });
 		}
 	}
 }
