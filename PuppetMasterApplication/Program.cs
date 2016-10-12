@@ -24,6 +24,8 @@ namespace PuppetMasterApplication
     ///</summary>
     internal partial class PuppetMaster
     {
+        private bool isConfiguring;
+
         //<summary>
         // Reads configuration file
         //</summary>
@@ -82,6 +84,9 @@ namespace PuppetMasterApplication
             }
         }
 
+        //<summary>
+        // Match string using regex patterns
+        //</summary>
         private bool Matches(String pattern, String line, out GroupCollection groupCollection) {
             Regex regex = new Regex(pattern, RegexOptions.Compiled);
 
@@ -96,13 +101,31 @@ namespace PuppetMasterApplication
         }
 
         //<summary>
+        // Change to execution mode
+        //</summary>
+        private void ToggleToExecutionMode() {
+            if (isConfiguring) {
+                isConfiguring = false;
+                Thread.Sleep(5000);
+            }
+        }
+
+        //<summary>
+        // Change to configuration mode
+        //</summary>
+        private void ToggleToConfigurationMode() {
+            isConfiguring = true;
+        }
+
+        //<summary>
         // Converts string input into command
         //</summary>
         private void ParseLineAndExecuteCommand(String line)
         {
             GroupCollection groupCollection;
 
-            if (Matches(OPERATOR_ID_COMMAND, line, out groupCollection)) {
+            if (Matches(OPERATOR_ID_COMMAND, line, out groupCollection))
+            {
                 ExecuteOperatorIdCommand(
                     groupCollection[1].Value,
                     groupCollection[2].Value,
@@ -112,24 +135,31 @@ namespace PuppetMasterApplication
                     groupCollection[6].Value);
 
             } else if (Matches(START_COMMAND, line, out groupCollection)) {
+                ToggleToExecutionMode();
                 ExecuteStartCommand(groupCollection[1].Value);
 
             } else if (Matches(INTERVAL_COMMAND, line, out groupCollection)) {
+                ToggleToExecutionMode();
                 ExecuteIntervalCommand(groupCollection[1].Value, groupCollection[2].Value);
 
             } else if (Matches(STATUS_COMMAND, line, out groupCollection)) {
+                ToggleToExecutionMode();
                 ExecuteStatusCommand();
 
             } else if (Matches(CRASH_COMMAND, line, out groupCollection)) {
+                ToggleToExecutionMode();
                 ExecuteCrashCommand(groupCollection[1].Value);
 
             } else if (Matches(FREEZE_COMMAND, line, out groupCollection)) {
+                ToggleToExecutionMode();
                 ExecuteFreezeCommand(groupCollection[1].Value);
 
             } else if (Matches(UNFREEZE_COMMAND, line, out groupCollection)) {
+                ToggleToExecutionMode();
                 ExecuteUnfreezeCommand(groupCollection[1].Value);
 
             } else if (Matches(WAIT_COMMAND, line, out groupCollection)) {
+                ToggleToExecutionMode();
                 ExecuteWaitCommand(groupCollection[1].Value);
             }
         }
@@ -151,6 +181,7 @@ namespace PuppetMasterApplication
         {
             System.Console.Clear();
             string dir = GetScriptsDir();
+            ToggleToConfigurationMode();
 
             foreach (String fileName in fileNames.Split(' '))
             {

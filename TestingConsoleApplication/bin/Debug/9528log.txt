@@ -1,1 +1,3 @@
 [2 de setembro de 2016][20:04:15] Initializing process Teste2tcp://localhost:54002/teste ... Done
+[12 de outubro de 2016][13:43:14] Initializing process 2tcp://localhost:1026/Operator... Done
+[12 de outubro de 2016][13:43:15] Connecting to process tcp://localhost:1025/Operatortcp://localhost:1025/Operator... Done
