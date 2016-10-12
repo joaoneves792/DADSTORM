@@ -223,16 +223,15 @@ namespace PuppetMasterApplication
         // Close processes
         //</summary>
         internal void CloseProcesses() {
-            foreach (IProcessCreationService service in _processCreationServiceTable.Values) {
+            foreach (IPuppet puppet in _puppetTable.Values) {
                 try {
-                    //TODO: Uncomment me
-                    //service.CloseProcesses();
+                    puppet.Crash();
                 }
                 catch (Exception) { }
             }
 
             _operatorResolutionCache = new Dictionary<OperatorId, IList<Url>>();
-            _processCreationServiceTable = new Dictionary<Url, IProcessCreationService>();
+            _puppetTable = new Dictionary<Url, IPuppet>();
         }
     }
 }

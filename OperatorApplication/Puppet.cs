@@ -73,7 +73,7 @@ namespace OperatorApplication
         public void Crash()
         {
             Console.WriteLine("CRASH");
-            Environment.FailFast("Crash simulation");
+            Environment.Exit(0);
         }
 
         public void Freeze()
