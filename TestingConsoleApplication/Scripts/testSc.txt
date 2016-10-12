@@ -5,9 +5,12 @@ Interval 3 3000
 Interval 4 3000
 Start 1
 Start 2
+Freeze tcp://127.0.0.1:1026/Operator
 Start 3
 Start 4
-Freeze tcp://127.0.0.1:1026/Operator
-Wait 2000
+Wait 5000
 Unfreeze tcp://127.0.0.1:1026/Operator
+Wait 3000
+Crash tcp://127.0.0.1:1025/Operator
+Crash tcp://127.0.0.1:1026/Operator
 
