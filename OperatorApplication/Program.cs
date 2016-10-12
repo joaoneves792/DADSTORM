@@ -122,20 +122,20 @@ namespace OperatorApplication
 
             //Process files
             foreach (StreamReader currentInputFile in inputFiles) {
-                new Thread(() => {
-                    StreamReader inputFile = currentInputFile;
+                new Thread((inputFileObject) => {
+                    StreamReader inputFile = (StreamReader)inputFileObject;
 
-                    String line;
-                    while ((line = inputFile.ReadLine()) != null) {
-                        string lineCopy = String.Copy(line);
-                        new Thread(() => {
+                    String currentLine;
+                    while ((currentLine = inputFile.ReadLine()) != null) {
+                        new Thread((lineObject) => {
                             //Assumption: all files and lines are valid
-                            TupleMessage tupleMessage = lineCopy.Split(',').ToList();
+                            String line = (String)lineObject;
+                            TupleMessage tupleMessage = line.Split(',').ToList();
                             TupleMessageCommand(tupleMessage);
-                        }).Start();
+                        }).Start((Object)currentLine);
                     }
                     inputFile.Close();
-                }).Start();
+                }).Start((Object)currentInputFile);
             }
         }
     }
