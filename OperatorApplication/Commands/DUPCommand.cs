@@ -9,7 +9,7 @@ namespace OperatorApplication.Commands {
 
     class DUPCommand : Command {
 		public DUPCommand() {
-			Console.WriteLine("\t-> FILTER");
+			Console.WriteLine("\t-> DUP");
 		}
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {

@@ -56,3 +56,5 @@ Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug
 Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug\PuppetMasterApplication.pdb
 Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug\SecondaryConsoleApplication.pdb
 Z:\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.csprojResolveAssemblyReference.cache
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\bin\Debug\CommonTypesLibrary.pdb

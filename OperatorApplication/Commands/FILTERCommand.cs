@@ -30,7 +30,7 @@ namespace OperatorApplication.Commands {
             }
             _fieldNumber = fieldNumber;
             _value = value;
-            Console.WriteLine("\t-> DUP");
+            Console.WriteLine("\t-> FILTER");
 		}
 
         private Boolean IsGreater(String value) {

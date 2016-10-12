@@ -34,3 +34,9 @@ Z:\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\b
 Z:\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.csprojResolveAssemblyReference.cache
 Z:\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.exe
 Z:\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\LoggingClassLibrary.dll
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\CommonTypesLibrary.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\LoggingClassLibrary.pdb

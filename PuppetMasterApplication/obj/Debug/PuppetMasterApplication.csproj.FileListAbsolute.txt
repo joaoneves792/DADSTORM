@@ -26,3 +26,5 @@ Z:\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\P
 Z:\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.csprojResolveAssemblyReference.cache
 Z:\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.exe
 Z:\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.pdb
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\daedalus\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\CommonTypesLibrary.pdb

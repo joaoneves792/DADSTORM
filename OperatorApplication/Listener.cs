@@ -56,8 +56,8 @@ namespace OperatorApplication
 			} else if (operatorSpecList[0].Equals("CUSTOM"))
             {
                 Console.WriteLine("CUSTOM");
-                _command = new CUSTOMCommand();
-            }
+				_command = new CUSTOMCommand(operatorSpecList[1], operatorSpecList[2], operatorSpecList[3]);
+			}
             else
             {
                 Console.WriteLine("unrecognised.");

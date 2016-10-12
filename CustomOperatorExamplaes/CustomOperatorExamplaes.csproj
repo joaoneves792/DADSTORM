@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5158F507-7F3C-48E5-978E-6DF75D750464}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{F3865353-6943-47EB-895E-93D1ECBE94D7}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OperatorApplication</RootNamespace>
-    <AssemblyName>OperatorApplication</AssemblyName>
+    <RootNamespace>CustomOperatorExamplaes</RootNamespace>
+    <AssemblyName>CustomOperatorExamplaes</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -35,7 +32,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,39 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Command.cs" />
-    <Compile Include="Condition.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Commands\COUNTCommand.cs" />
-    <Compile Include="Commands\CUSTOMCommand.cs" />
-    <Compile Include="Commands\DUPCommand.cs" />
-    <Compile Include="Commands\FILTERCommand.cs" />
-    <Compile Include="Exceptions\InvalidConditionException.cs" />
-    <Compile Include="Exceptions\NonExistentMethodException.cs" />
-    <Compile Include="Listener.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Basic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Puppet.cs" />
-    <Compile Include="Commands\UNIQCommand.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommonTypesLibrary\CommonTypesLibrary.csproj">
-      <Project>{8aa90885-c630-4770-814c-1c03726936d4}</Project>
-      <Name>CommonTypesLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DistributedAlgoritmsClassLibrary\DistributedAlgoritmsClassLibrary.csproj">
-      <Project>{c9866e0e-b986-46b0-a80b-45f8971b29c7}</Project>
-      <Name>DistributedAlgoritmsClassLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LoggingClassLibrary\LoggingClassLibrary.csproj">
-      <Project>{b3c05b35-5973-4b7d-b16c-d77252bf7ad4}</Project>
-      <Name>LoggingClassLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
