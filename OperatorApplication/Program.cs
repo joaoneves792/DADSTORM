@@ -127,9 +127,10 @@ namespace OperatorApplication
 
                     String line;
                     while ((line = inputFile.ReadLine()) != null) {
+                        string lineCopy = String.Copy(line);
                         new Thread(() => {
                             //Assumption: all files and lines are valid
-                            TupleMessage tupleMessage = line.Split(',').ToList();
+                            TupleMessage tupleMessage = lineCopy.Split(',').ToList();
                             TupleMessageCommand(tupleMessage);
                         }).Start();
                     }
