@@ -56,7 +56,7 @@ namespace DistributedAlgoritmsClassLibrary
 
             Tuple<Process, Message> sent = new Tuple<Process, Message>(process, message);
             while (!_sent.TryAdd(sent)) {
-                Log.WriteLine(LogStatus.CRITICAL, "Message not sent");
+                Log.WriteLine(LogStatus.DEBUG, "Message not sent");
             }
         }
 

@@ -26,15 +26,11 @@ namespace OperatorApplication
 
         private void DefineOperatorType(OperatorSpec operatorSpec)
         {
-            int fieldNumber = 0, value = 0;
+            int fieldNumber = 0;
             Condition condition = Condition.UNDEFINED;
             String[] operatorSpecList = operatorSpec.Split(',');
 
             //Define operator command
-            Console.WriteLine(operatorSpecList[0]);
-            Console.WriteLine(operatorSpecList[0].Equals("UNIQ"));
-            if(operatorSpecList[0].Equals("UNIQ"))
-                int.TryParse(operatorSpecList[1], out fieldNumber);
             if (operatorSpecList[0].Equals("UNIQ") &&
                 int.TryParse(operatorSpecList[1], out fieldNumber))
             {
@@ -103,7 +99,7 @@ namespace OperatorApplication
             Tuple<Process, Message> request = new Tuple<Process, Message>(process, message);
             while (!_frozenRequests.TryAdd(request))
             {
-                Log.WriteLine(LogStatus.CRITICAL, "Message not froze");
+                Log.WriteLine(LogStatus.DEBUG, "Message not froze");
             }
             Log.WriteLine(LogStatus.DEBUG, _frozenRequests.Count + " frozen requests");
         }

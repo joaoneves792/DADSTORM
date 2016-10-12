@@ -6,15 +6,12 @@ namespace LoggingClassLibrary
 {
     public enum LogStatus {
         DEBUG,
-        ROUTINE,
-        CRITICAL,
-        //todo: eliminate irrelevant logging levels
         FULL,
         LIGHT
     }
 
     public class Log {
-        private static LogStatus _logStatus = LogStatus.CRITICAL;
+        private static LogStatus _logStatus = LogStatus.LIGHT;
 
         public static LogStatus LogStatus {
             get { return _logStatus; }
