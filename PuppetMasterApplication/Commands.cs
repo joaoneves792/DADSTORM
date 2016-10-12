@@ -105,7 +105,6 @@ namespace PuppetMasterApplication
             if (!sources.Equals("")) {
                 sources = sources.Remove(sources.Length - 1, 1);
             }
-            Console.WriteLine("Operator:   " + sources);
 
             //Organize replica list
             String replicas = "";
@@ -115,7 +114,6 @@ namespace PuppetMasterApplication
             if (!replicas.Equals("")) {
                 replicas = replicas.Remove(replicas.Length - 1, 1);
             }
-            Console.WriteLine("Operator:   " + replicas);
 
             //Organize operator spec list
             String operatorSpecs = "";
@@ -125,7 +123,6 @@ namespace PuppetMasterApplication
             if (!operatorSpecs.Equals("")) {
                 operatorSpecs = operatorSpecs.Remove(operatorSpecs.Length - 1, 1);
             }
-            Console.WriteLine("Operator:   " + operatorSpecs);
 
             foreach (Match address in addressList) {
                 GroupCollection groupCollection = new Regex(URL_ADDRESS, RegexOptions.Compiled).Match(address.Value).Groups;
@@ -161,7 +158,6 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteIntervalCommand(OperatorId operatorId, Milliseconds milliseconds) {
-            Console.WriteLine("ExecuteIntervalCommand: " + operatorId + " : " + milliseconds);
             IList<Url> urlList = _operatorResolutionCache[operatorId];
             foreach(Url url in urlList) {
                 IPuppet puppet = _puppetTable[url];
@@ -173,7 +169,6 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteStatusCommand() {
-            Console.WriteLine("ExecuteStatusCommand");
             foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
                 IPuppet puppet = entry.Value;
                 Task.Run(() => {
@@ -184,7 +179,6 @@ namespace PuppetMasterApplication
 
         private void ExecuteCrashCommand(ProcessName processName) {
             processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
-            System.Console.WriteLine("ExecuteCrashCommand: " + processName);
 
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
@@ -194,9 +188,7 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteFreezeCommand(ProcessName processName) {
-            Console.WriteLine("ExecuteFreezeCommand: " + processName);
             processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
-            System.Console.WriteLine("ExecuteFreezeCommand: " + processName);
 
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
@@ -207,7 +199,6 @@ namespace PuppetMasterApplication
 
         private void ExecuteUnfreezeCommand(ProcessName processName) {
             processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
-            System.Console.WriteLine("ExecuteUnfreezeCommand: " + processName);
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
             Task.Run(() => {
                 puppet.Unfreeze();
@@ -218,7 +209,6 @@ namespace PuppetMasterApplication
         private void ExecuteWaitCommand(Milliseconds milliseconds) {
             //TODO: double-check this
             Thread.Sleep(Int32.Parse(milliseconds));
-            Console.WriteLine("Executed Wait Command: " + milliseconds);
         }
 
 
