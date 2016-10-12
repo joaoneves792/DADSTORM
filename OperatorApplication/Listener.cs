@@ -17,7 +17,7 @@ namespace OperatorApplication
 
     internal partial class Operator
     {
-        private Action<Process, Message> _listener;
+        private Action<Process, Message> _listener, _send;
         PointToPointLink _pointToPointLink;
         Process _process;
 
@@ -104,6 +104,16 @@ namespace OperatorApplication
             Log.WriteLine(LogStatus.DEBUG, _frozenRequests.Count + " frozen requests");
         }
 
+        private void StoreReply(Process process, Message message)
+        {
+            Tuple<Process, Message> reply = new Tuple<Process, Message>(process, message);
+            while (!_frozenReplies.TryAdd(reply))
+            {
+                Log.WriteLine(LogStatus.DEBUG, "Message not froze");
+            }
+            Log.WriteLine(LogStatus.DEBUG, _frozenRequests.Count + " frozen replies");
+        }
+
         private void ParseAndStoreMessage(Process process, Message message)
         {
             //Parse message
@@ -145,7 +155,7 @@ namespace OperatorApplication
 
             foreach (Process outputReceiver in _outputReceivers) {
                 Console.WriteLine("Sending tuple " + String.Join(",", result) + " to process " + outputReceiver.Name);
-                _pointToPointLink.Send(outputReceiver, (Object)result);
+                _send(outputReceiver, (Object)result);
             }
         }
 

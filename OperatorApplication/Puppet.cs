@@ -26,7 +26,7 @@ namespace OperatorApplication
     internal partial class Operator : MarshalByRefObject, IPuppet
     {
         private static String PUPPET_SERVICE_NAME = "Puppet";
-        private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests;
+        private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests, _frozenReplies;
 
         private int _sleepBetweenEvents;
 
@@ -81,6 +81,7 @@ namespace OperatorApplication
             Console.WriteLine("FREEZE!");
 
             _listener = StoreMessage;
+            _send = StoreReply;
 
             Log.WriteLine(LogStatus.DEBUG, "FREEZE!");
         }

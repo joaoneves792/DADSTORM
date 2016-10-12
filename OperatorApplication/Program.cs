@@ -37,7 +37,9 @@ namespace OperatorApplication
 
             //Puppet component
             _listener = ParseAndStoreMessage;
+            _send = StoreReply;
             _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
+            _frozenReplies = new ConcurrentBag<Tuple<Process, Message>>();
 
             _sleepBetweenEvents = 0;
         }
@@ -57,13 +59,21 @@ namespace OperatorApplication
 
         private void LoadStoredMessages() {
             _listener = ParseMessage;
+            _send = _pointToPointLink.Send;
 
             foreach (Tuple<Process, Message> request in _frozenRequests) {
                 new Thread(() => {
                     _listener(request.Item1, request.Item2);
                 }).Start();
             }
+            foreach (Tuple<Process, Message> reply in _frozenReplies) {
+                new Thread(() => {
+                    _send(reply.Item1, reply.Item2);
+                }).Start();
+            }
+
             _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
+            _frozenReplies = new ConcurrentBag<Tuple<Process, Message>>();
         }
 
         internal void Configure(string[] args) {
@@ -80,6 +90,7 @@ namespace OperatorApplication
 
             //Register operator into remoting
             _pointToPointLink = new RemotingNode(_process, Deliver);
+            _send = _pointToPointLink.Send;
             SubmitAsPuppet();
 
             //Get inputOps' sources
