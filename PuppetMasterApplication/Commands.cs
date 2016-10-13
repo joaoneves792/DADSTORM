@@ -87,8 +87,11 @@ namespace PuppetMasterApplication
             IList<Url> urlList;
 
             MatchCollection inputOpList = new Regex(GROUP_INPUT_OP, RegexOptions.Compiled).Matches(inputOps),
-                            addressList = new Regex(GROUP_URL, RegexOptions.Compiled).Matches(addresses),
-                            operatorSpecList = new Regex(GROUP_OPERATOR_SPEC, RegexOptions.Compiled).Matches(operatorSpec);
+                            addressList = new Regex(GROUP_URL, RegexOptions.Compiled).Matches(addresses);
+            //operatorSpecList = new Regex(GROUP_OPERATOR_SPEC, RegexOptions.Compiled).Matches(operatorSpec);
+
+            GroupCollection operatorSpecList;
+            Matches(GROUP_OPERATOR_SPEC, operatorSpec, out operatorSpecList);
 
             //Organize source list
             //Assumption: the process creation is made downstream-wise
@@ -117,12 +120,29 @@ namespace PuppetMasterApplication
 
             //Organize operator spec list
             String operatorSpecs = "";
-            foreach (Match operatorSpecField in operatorSpecList) {
-                operatorSpecs += operatorSpecField.Value + ",";
+            if (operatorSpecList[1].Value.Equals("UNIQ")) {
+                operatorSpecs += operatorSpecList[1].Value + ",";
+                operatorSpecs += operatorSpecList[2].Value;
             }
-            if (!operatorSpecs.Equals("")) {
-                operatorSpecs = operatorSpecs.Remove(operatorSpecs.Length - 1, 1);
+            if (operatorSpecList[3].Value.Equals("COUNT")) {
+                operatorSpecs += operatorSpecList[3].Value;
             }
+            if (operatorSpecList[4].Value.Equals("DUP")) {
+                operatorSpecs += operatorSpecList[4].Value;
+            }
+            if (operatorSpecList[5].Value.Equals("FILTER")) {
+                operatorSpecs += operatorSpecList[5].Value + ",";
+                operatorSpecs += operatorSpecList[6].Value + ",";
+                operatorSpecs += operatorSpecList[7].Value + ",";
+                operatorSpecs += operatorSpecList[8].Value;
+            }
+            if (operatorSpecList[9].Value.Equals("CUSTOM")) {
+                operatorSpecs += operatorSpecList[9].Value + ",";
+                operatorSpecs += operatorSpecList[10].Value + ".dll,";
+                operatorSpecs += operatorSpecList[10].Value + "." + operatorSpecList[11].Value + ",";
+                operatorSpecs += operatorSpecList[12].Value;
+            }
+            Console.WriteLine("Operator:   " + operatorSpecs);
 
             foreach (Match address in addressList) {
                 GroupCollection groupCollection = new Regex(URL_ADDRESS, RegexOptions.Compiled).Match(address.Value).Groups;

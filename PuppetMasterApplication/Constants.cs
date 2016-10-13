@@ -36,21 +36,27 @@ namespace PuppetMasterApplication
                                 INPUT_OP = OPEN + OPERATOR_ID + OR + PATH + CLOSE,
                                 GROUP_INPUT_OP = @"(\d+)|((?:[A-Z]:(?:\\|\/))?(?:[\w.]+(?:\\|\/))*[\w.]+(?:\\|\/)?)",
 
+                                QUOTE = "\"[^\"]+\"",
+                                GROUP_QUOTE = "\"([^\"]+)\"",
+                                GROUP_QUOTE_DLL = "\"([^\"]+).dll\"",
+
                                 UNIQ = @"(?:UNIQ" + SPACE + @"-?\d+)",
                                 COUNT = @"(?:COUNT)",
                                 DUP = @"(?:DUP)",
                                 FILTER = @"(?:FILTER" + SPACE + @"-?\d+" + COMMA + @"(?:>|<|=)" + COMMA + @"-?\w+)",
-                                CUSTOM = @"(?:CUSTOM" + SPACE + @"\w+\.dll" + COMMA + @"\w+" + COMMA + @"\w+)",
+                                CUSTOM = @"(?:CUSTOM" + SPACE + QUOTE + COMMA + QUOTE + COMMA + QUOTE + @")",
 
-                                GROUP_OPERATOR_SPEC = @"(UNIQ)" + OR +
-                                                      @"(COUNT)" + OR +
-                                                      @"(DUP)" + OR +
-                                                      @"(FILTER)" + OR +
-                                                      @"(CUSTOM)" + OR +
-                                                      @"(>)|(<)|(=)" + OR +
-                                                      @"(-?\d+)"  + OR +
-                                                      @"(\w+\.dll)" + OR +
-                                                      @"(\w+)",
+                                GROUP_UNIQ = @"(?:(UNIQ)" + SPACE + @"(-?\d+))",
+                                GROUP_COUNT = @"(COUNT)",
+                                GROUP_DUP = @"(DUP)",
+                                GROUP_FILTER = @"(?:(FILTER)" + SPACE + @"(-?\d+)" + COMMA + @"(>|<|=)" + COMMA + @"(-?\w+))",
+                                GROUP_CUSTOM = @"(?:(CUSTOM)" + SPACE + GROUP_QUOTE_DLL + COMMA + GROUP_QUOTE + COMMA + GROUP_QUOTE + @")",
+
+                                GROUP_OPERATOR_SPEC = OPEN + GROUP_UNIQ + OR +
+                                                      GROUP_COUNT + OR +
+                                                      GROUP_DUP + OR +
+                                                      GROUP_FILTER + OR +
+                                                      GROUP_CUSTOM + CLOSE,
 
                                 OPERATOR_ID_COMMAND =   START + GROUP_INT + SPACE +
                                                         @"INPUT_OPS" + SPACE + @"((?:" + INPUT_OP + COMMA + @")*" + INPUT_OP + CLOSE + SPACE +

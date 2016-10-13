@@ -21,11 +21,11 @@ namespace OperatorApplication.Commands {
 			Console.WriteLine("\t-> CUSTOM");
 
 			_assembly = Assembly.LoadFrom(@customDll);
-			_type = _assembly.GetType(customDll + "." + customClass);
+			_type = _assembly.GetType(customClass);
 
 			if (_type == null) {
 				Console.WriteLine("\t-> NOPE");
-				throw new NonExistentClassException(customDll + "." + customClass + " could not be found.");
+				throw new NonExistentClassException(customClass + " could not be found.");
 			}
 
 			_obj = Activator.CreateInstance(_type);
