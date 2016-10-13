@@ -94,5 +94,23 @@ namespace OperatorApplication
 
             LoadStoredMessages();
         }
+
+        public void Semantics(String semantics)
+        {
+            Console.WriteLine("SEMANTICS");
+
+            //TODO: by default and on first release, the semantic is at-most-once
+        }
+
+        public void LoggingLevel(String loggingLevel)
+        {
+            Console.WriteLine("LOGGING_LEVEL");
+
+            if (loggingLevel.Equals("full")) {
+                Log.LogStatus = LogStatus.FULL;
+            } else if (loggingLevel.Equals("light")) {
+                Log.LogStatus = LogStatus.LIGHT;
+            }
+        }
     }
 }

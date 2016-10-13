@@ -1,3 +1,9 @@
 [3 de setembro de 2016][20:44:18] Initializing process Teste2tcp://localhost:54002/teste... Done
 [3 de setembro de 2016][20:44:18] Connectiong to process Teste1tcp://localhost:53001/teste... Done
 [3 de setembro de 2016][20:44:19] Connectiong to process Teste3tcp://localhost:55003/teste... Done
+[13 de outubro de 2016][15:59:12] Initializing process 2tcp://localhost:1026/Operator... Done
+[13 de outubro de 2016][15:59:13] Connecting to process tcp://localhost:1025/Operatortcp://localhost:1025/Operator... Done
+[13 de outubro de 2016][15:59:14] Connecting to process 3tcp://localhost:1027/Operator... Done
+[13 de outubro de 2016][15:59:19] FREEZE!
+[13 de outubro de 2016][15:59:22] 1 frozen requests
+[13 de outubro de 2016][15:59:24] UNFREEZE!

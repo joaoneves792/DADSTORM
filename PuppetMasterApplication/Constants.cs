@@ -74,6 +74,8 @@ namespace PuppetMasterApplication
                                 CRASH_COMMAND = START + @"Crash" + SPACE + GROUP_URL + END,
                                 FREEZE_COMMAND = START + @"Freeze" + SPACE + GROUP_URL + END,
                                 UNFREEZE_COMMAND = START + @"Unfreeze" + SPACE + GROUP_URL + END,
-                                WAIT_COMMAND = START + @"Wait" + SPACE + GROUP_INT + END;
+                                WAIT_COMMAND = START + @"Wait" + SPACE + GROUP_INT + END,
+                                SEMANTICS_COMMAND = START + @"Semantics" + SPACE + "((?:at-most-once)|(?:at-least-once)|(?:exactly-once))" + END,
+                                LOGGING_LEVEL_COMMAND = START + @"LoggingLevel" + SPACE + "((?:full)|(?:light))" + END;
     }
 }

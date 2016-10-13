@@ -142,7 +142,6 @@ namespace PuppetMasterApplication
                 operatorSpecs += operatorSpecList[10].Value + "." + operatorSpecList[11].Value + ",";
                 operatorSpecs += operatorSpecList[12].Value;
             }
-            Console.WriteLine("Operator:   " + operatorSpecs);
 
             foreach (Match address in addressList) {
                 GroupCollection groupCollection = new Regex(URL_ADDRESS, RegexOptions.Compiled).Match(address.Value).Groups;
@@ -229,6 +228,24 @@ namespace PuppetMasterApplication
         private void ExecuteWaitCommand(Milliseconds milliseconds) {
             //TODO: double-check this
             Thread.Sleep(Int32.Parse(milliseconds));
+        }
+
+        private void ExecuteSemanticsCommand(String semantic) {
+            foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
+                IPuppet puppet = entry.Value;
+                Task.Run(() => {
+                    puppet.Semantics(semantic);
+                });
+            }
+        }
+
+        private void ExecuteLoggingLevelCommand(String loggingLevel) {
+            foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
+                IPuppet puppet = entry.Value;
+                Task.Run(() => {
+                    puppet.LoggingLevel(loggingLevel);
+                });
+            }
         }
 
 

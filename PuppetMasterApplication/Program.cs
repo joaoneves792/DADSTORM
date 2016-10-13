@@ -161,6 +161,10 @@ namespace PuppetMasterApplication
             } else if (Matches(WAIT_COMMAND, line, out groupCollection)) {
                 ToggleToExecutionMode();
                 ExecuteWaitCommand(groupCollection[1].Value);
+            } else if (Matches(SEMANTICS_COMMAND, line, out groupCollection)) {
+                ExecuteSemanticsCommand(groupCollection[1].Value);
+            } else if (Matches(LOGGING_LEVEL_COMMAND, line, out groupCollection)) {
+                ExecuteLoggingLevelCommand(groupCollection[1].Value);
             }
         }
 
