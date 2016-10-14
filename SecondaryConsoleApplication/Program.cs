@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using DistributedAlgoritmsClassLibrary;
-using LoggingClassLibrary;
 
 namespace SecondaryConsoleApplication
 {
@@ -16,8 +15,6 @@ namespace SecondaryConsoleApplication
     {
         static void Main(string[] args)
         {
-            Log.LogStatus = LogStatus.DEBUG;
-
             Listener listener = new Listener();
 
             Process process1 = new Process(args[0], args[1]),

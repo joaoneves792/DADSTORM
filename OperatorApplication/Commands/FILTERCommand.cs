@@ -30,7 +30,6 @@ namespace OperatorApplication.Commands {
             }
             _fieldNumber = fieldNumber;
             _value = value;
-            Console.WriteLine("\t-> FILTER");
 		}
 
         private Boolean IsGreater(String value) {
@@ -49,11 +48,9 @@ namespace OperatorApplication.Commands {
             String tupleElement = inputTuple[_fieldNumber];
 
             if (!_condition(tupleElement)) {
-                Console.WriteLine("Tuple " + String.Join(", ", inputTuple) + " got stuck.");
                 return null;
             }
 
-            Console.WriteLine("Tuple " + String.Join(", ", inputTuple) + " has passed through filter.");
             return inputTuple;
         }
 

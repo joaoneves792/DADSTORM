@@ -72,10 +72,6 @@
       <Project>{c9866e0e-b986-46b0-a80b-45f8971b29c7}</Project>
       <Name>DistributedAlgoritmsClassLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LoggingClassLibrary\LoggingClassLibrary.csproj">
-      <Project>{b3c05b35-5973-4b7d-b16c-d77252bf7ad4}</Project>
-      <Name>LoggingClassLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

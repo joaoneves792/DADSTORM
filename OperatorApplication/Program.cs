@@ -10,7 +10,6 @@ using System.IO;
 using System.Threading;
 
 using DistributedAlgoritmsClassLibrary;
-using LoggingClassLibrary;
 
 namespace OperatorApplication
 {
@@ -36,6 +35,7 @@ namespace OperatorApplication
             _outputReceivers = new ConcurrentBag<Process>();
 
             //Puppet component
+            _logStatus = LogStatus.LIGHT;
             _listener = ParseAndStoreMessage;
             _send = StoreReply;
             _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
@@ -102,26 +102,25 @@ namespace OperatorApplication
             foreach (String inputOp in inputOpsList) {
                 //Get file data
                 if (Matches(PATH, inputOp, out groupCollection) && File.Exists(inputOp)) {
-                    Console.WriteLine("Identified path " + inputOp);
-
                     fileStream = File.Open(inputOp, FileMode.Open, FileAccess.Read, FileShare.Read);
                     inputFiles.Add(new StreamReader(fileStream));
                 } else if (Matches(URL, inputOp, out groupCollection)) {
-                    Console.WriteLine("Identified url " + inputOp);
-
                     inputProcess = new Process(inputOp, inputOp);
                     _pointToPointLink.Connect(inputProcess);
                     _pointToPointLink.Send(inputProcess, (Object)_process);
                 }
                 else
                 {
-                    Console.WriteLine("Error: invalid input op");
+                    //throw exception
+                    //Console.WriteLine("Error: invalid input op");
                     if (!Matches(PATH, inputOp, out groupCollection)) {
-                        Console.WriteLine("Cause: unidentified path");
+                        //throw exception
+                        //Console.WriteLine("Cause: unidentified path");
                     }
                     if (!File.Exists(inputOp))
                     {
-                        Console.WriteLine("Cause: unidentified file " + Directory.GetCurrentDirectory());
+                        //throw exception
+                        //Console.WriteLine("Cause: unidentified file " + Directory.GetCurrentDirectory());
                     }
                 }
             }
@@ -155,8 +154,6 @@ namespace OperatorApplication
     {
         public static void Main(string[] args)
         {
-            Log.LogStatus = LogStatus.DEBUG;
-
             Operator operatorWorker = new Operator();
             operatorWorker.Configure(args);
             Console.ReadLine();

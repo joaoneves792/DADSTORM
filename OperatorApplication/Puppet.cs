@@ -15,7 +15,6 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization;
 
 using DistributedAlgoritmsClassLibrary;
-using LoggingClassLibrary;
 using CommonTypesLibrary;
 
 namespace OperatorApplication
@@ -25,8 +24,15 @@ namespace OperatorApplication
 
     internal partial class Operator : MarshalByRefObject, IPuppet
     {
+        private enum LogStatus {
+            FULL,
+            LIGHT
+        }
+
         private static String PUPPET_SERVICE_NAME = "Puppet";
         private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests, _frozenReplies;
+        private IPuppetMaster _puppetMaster;
+        private LogStatus _logStatus;
 
         private int _sleepBetweenEvents;
 
@@ -45,26 +51,22 @@ namespace OperatorApplication
                 PUPPET_SERVICE_NAME,
                 typeof(IPuppet));
 
-            IPuppetMaster puppetMaster = (IPuppetMaster)Activator.GetObject(
+            _puppetMaster = (IPuppetMaster)Activator.GetObject(
                 typeof(IPuppetMaster),
                 "tcp://localhost:10001/PuppetMaster");
 
-            puppetMaster.ReceiveUrl(_process.Url, objRef);
+            _puppetMaster.ReceiveUrl(_process.Url, objRef);
         }
 
         public void Start() {
-            Console.WriteLine("START");
             _waitHandle.Set();
         }
 
         public void Interval(Milliseconds milliseconds) {
-            Console.WriteLine("INTERVAL");
             _sleepBetweenEvents = milliseconds;
         }
 
         public void Status() {
-            Console.WriteLine("STATUS");
-
             //TODO: Implement me
             // We need to display status of the rest of the system from our point of view
             //Cant do that right now
@@ -72,44 +74,42 @@ namespace OperatorApplication
 
         public void Crash()
         {
-            Console.WriteLine("CRASH");
             Environment.Exit(0);
         }
 
         public void Freeze()
         {
-            Console.WriteLine("FREEZE!");
-
             _listener = StoreMessage;
             _send = StoreReply;
-
-            Log.WriteLine(LogStatus.DEBUG, "FREEZE!");
         }
 
         public void Unfreeze()
         {
-            Console.WriteLine("UNFREEZE!");
-
-            Log.WriteLine(LogStatus.DEBUG, "UNFREEZE!");
-
             LoadStoredMessages();
         }
 
         public void Semantics(String semantics)
         {
-            Console.WriteLine("SEMANTICS");
-
             //TODO: by default and on first release, the semantic is at-most-once
         }
 
         public void LoggingLevel(String loggingLevel)
         {
-            Console.WriteLine("LOGGING_LEVEL");
-
             if (loggingLevel.Equals("full")) {
-                Log.LogStatus = LogStatus.FULL;
+                _logStatus = LogStatus.FULL;
             } else if (loggingLevel.Equals("light")) {
-                Log.LogStatus = LogStatus.LIGHT;
+                _logStatus = LogStatus.LIGHT;
+            }
+        }
+
+        private void Log(LogStatus logStatus, String message) {
+            if (logStatus >= _logStatus) {
+                Task.Run(() => {
+                    _puppetMaster.Log(String.Format(
+                    "tuple {0} {1}",
+                    _process.Url,
+                    message));
+                });
             }
         }
     }

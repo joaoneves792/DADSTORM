@@ -8,10 +8,6 @@ namespace OperatorApplication.Commands {
     using TupleMessage = List<String>;
 
     class DUPCommand : Command {
-		public DUPCommand() {
-			Console.WriteLine("\t-> DUP");
-		}
-
 		public override TupleMessage Execute(TupleMessage inputTuple) {
 			return inputTuple;
 		}

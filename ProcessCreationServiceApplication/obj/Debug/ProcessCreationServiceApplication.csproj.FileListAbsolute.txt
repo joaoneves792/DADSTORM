@@ -1,17 +1,3 @@
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.exe.config
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.exe
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.pdb
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\OperatorApplication.exe
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\OperatorApplication.pdb
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.csprojResolveAssemblyReference.cache
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.exe
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.pdb
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\LoggingClassLibrary.dll
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\LoggingClassLibrary.pdb
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\CommonTypesLibrary.dll
-C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\ProcessCreationServiceApplication\bin\Debug\CommonTypesLibrary.pdb
 Z:\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.exe.config
 Z:\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.exe
 Z:\Documents\Visual Studio 2015\Projects\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.pdb

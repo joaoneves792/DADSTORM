@@ -18,13 +18,10 @@ namespace OperatorApplication.Commands {
 		private MethodInfo _method = null;
 
 		public CUSTOMCommand(string customDll, string customClass, string customMethod) {
-			Console.WriteLine("\t-> CUSTOM");
-
 			_assembly = Assembly.LoadFrom(@customDll);
 			_type = _assembly.GetType(customClass);
 
 			if (_type == null) {
-				Console.WriteLine("\t-> NOPE");
 				throw new NonExistentClassException(customClass + " could not be found.");
 			}
 
@@ -32,7 +29,6 @@ namespace OperatorApplication.Commands {
 			_method = _type.GetMethod(customMethod);
 
 			if (_method == null) {
-				Console.WriteLine("\t-> NOPE");
 				throw new NonExistentMethodException(customClass + "." + customMethod + " could not be found.");
 			}
 		}

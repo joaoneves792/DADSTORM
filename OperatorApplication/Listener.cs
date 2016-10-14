@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 using OperatorApplication.Commands;
 using DistributedAlgoritmsClassLibrary;
-using LoggingClassLibrary;
 
 namespace OperatorApplication
 {
@@ -34,33 +33,28 @@ namespace OperatorApplication
             if (operatorSpecList[0].Equals("UNIQ") &&
                 int.TryParse(operatorSpecList[1], out fieldNumber))
             {
-                Console.WriteLine("UNIQ");
 				_command = new UNIQCommand(fieldNumber);
 			}
             else if (operatorSpecList[0].Equals("COUNT"))
             {
-                Console.WriteLine("COUNT");
                 _command = new COUNTCommand();
             }
             else if (operatorSpecList[0].Equals("DUP"))
             {
-                Console.WriteLine("DUP");
                 _command = new DUPCommand();
             }
             else if (operatorSpecList[0].Equals("FILTER") &&
                      int.TryParse(operatorSpecList[1], out fieldNumber) &&
                      TryParseCondition(operatorSpecList[2], out condition))
             {
-                Console.WriteLine("FILTER");
 				_command = new FILTERCommand(fieldNumber, condition, operatorSpecList[3]);
 			} else if (operatorSpecList[0].Equals("CUSTOM"))
             {
-                Console.WriteLine("CUSTOM");
 				_command = new CUSTOMCommand(operatorSpecList[1], operatorSpecList[2], operatorSpecList[3]);
 			}
             else
             {
-                Console.WriteLine("unrecognised.");
+                //TODO: throw exception
             }
         }
 
@@ -97,21 +91,13 @@ namespace OperatorApplication
         private void StoreMessage(Process process, Message message)
         {
             Tuple<Process, Message> request = new Tuple<Process, Message>(process, message);
-            while (!_frozenRequests.TryAdd(request))
-            {
-                Log.WriteLine(LogStatus.DEBUG, "Message not froze");
-            }
-            Log.WriteLine(LogStatus.DEBUG, _frozenRequests.Count + " frozen requests");
+            _frozenRequests.TryAdd(request);
         }
 
         private void StoreReply(Process process, Message message)
         {
             Tuple<Process, Message> reply = new Tuple<Process, Message>(process, message);
-            while (!_frozenReplies.TryAdd(reply))
-            {
-                Log.WriteLine(LogStatus.DEBUG, "Message not froze");
-            }
-            Log.WriteLine(LogStatus.DEBUG, _frozenRequests.Count + " frozen replies");
+            _frozenReplies.TryAdd(reply);
         }
 
         private void ParseAndStoreMessage(Process process, Message message)
@@ -119,12 +105,10 @@ namespace OperatorApplication
             //Parse message
             if (message is TupleMessage)
             {
-                Console.WriteLine("Received tuple " + String.Join(",", (TupleMessage)message) + " from process " + process.Name);
                 StoreMessage(process, message);
             }
             else if (message is Process)
             {
-                Console.WriteLine("Received url " + String.Join(",", (Process)message) + " from process " + process.Name);
                 UrlMessageCommand((Process)message);
             }
         }
@@ -133,10 +117,8 @@ namespace OperatorApplication
         {
             //Parse message
             if (message is TupleMessage) {
-                Console.WriteLine("Received tuple " + String.Join(",", (TupleMessage)message) + " from process " + process.Name);
                 TupleMessageCommand((TupleMessage)message);
             } else if (message is Process) {
-                Console.WriteLine("Received url " + String.Join(",", (Process)message) + " from process " + process.Name);
                 UrlMessageCommand((Process)message);
             }
         }
@@ -149,12 +131,12 @@ namespace OperatorApplication
             System.Threading.Thread.Sleep(_sleepBetweenEvents);
 
             if (result == null) {
-                Console.WriteLine("Not sending tuple");
                 return;
             }
 
+            Log(LogStatus.FULL, String.Join(" - ", result));
+
             foreach (Process outputReceiver in _outputReceivers) {
-                Console.WriteLine("Sending tuple " + String.Join(",", result) + " to process " + outputReceiver.Name);
                 _send(outputReceiver, (Object)result);
             }
         }
@@ -164,8 +146,6 @@ namespace OperatorApplication
             //Submit output receiver
             _pointToPointLink.Connect(outputReceiver);
             _outputReceivers.TryAdd(outputReceiver);
-
-            Console.WriteLine("Added output receiver " + outputReceiver.Name);
         }
     }
 }

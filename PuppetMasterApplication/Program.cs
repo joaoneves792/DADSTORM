@@ -41,7 +41,6 @@ namespace PuppetMasterApplication
                 {
                     continue;
                 }
-                Console.WriteLine(line);
                 try
                 {
                     ParseLineAndExecuteCommand(line);
@@ -126,6 +125,7 @@ namespace PuppetMasterApplication
 
             if (Matches(OPERATOR_ID_COMMAND, line, out groupCollection))
             {
+                Log(line);
                 ExecuteOperatorIdCommand(
                     groupCollection[1].Value,
                     groupCollection[2].Value,
@@ -136,34 +136,43 @@ namespace PuppetMasterApplication
 
             } else if (Matches(START_COMMAND, line, out groupCollection)) {
                 ToggleToExecutionMode();
+                Log(line);
                 ExecuteStartCommand(groupCollection[1].Value);
 
             } else if (Matches(INTERVAL_COMMAND, line, out groupCollection)) {
                 ToggleToExecutionMode();
+                Log(line);
                 ExecuteIntervalCommand(groupCollection[1].Value, groupCollection[2].Value);
 
             } else if (Matches(STATUS_COMMAND, line, out groupCollection)) {
                 ToggleToExecutionMode();
+                Log(line);
                 ExecuteStatusCommand();
 
             } else if (Matches(CRASH_COMMAND, line, out groupCollection)) {
                 ToggleToExecutionMode();
+                Log(line);
                 ExecuteCrashCommand(groupCollection[1].Value);
 
             } else if (Matches(FREEZE_COMMAND, line, out groupCollection)) {
                 ToggleToExecutionMode();
+                Log(line);
                 ExecuteFreezeCommand(groupCollection[1].Value);
 
             } else if (Matches(UNFREEZE_COMMAND, line, out groupCollection)) {
                 ToggleToExecutionMode();
+                Log(line);
                 ExecuteUnfreezeCommand(groupCollection[1].Value);
 
             } else if (Matches(WAIT_COMMAND, line, out groupCollection)) {
                 ToggleToExecutionMode();
+                Log(line);
                 ExecuteWaitCommand(groupCollection[1].Value);
             } else if (Matches(SEMANTICS_COMMAND, line, out groupCollection)) {
+                Log(line);
                 ExecuteSemanticsCommand(groupCollection[1].Value);
             } else if (Matches(LOGGING_LEVEL_COMMAND, line, out groupCollection)) {
+                Log(line);
                 ExecuteLoggingLevelCommand(groupCollection[1].Value);
             }
         }

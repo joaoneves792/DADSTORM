@@ -1,8 +1,0 @@
-[3 de outubro de 2016][20:54:20] Initializing process Teste1tcp://localhost:53001/teste... Done
-[3 de outubro de 2016][20:54:20] Connecting to process Teste2tcp://localhost:54002/teste... Done
-[3 de outubro de 2016][20:54:21] Connecting to process Teste3tcp://localhost:55003/teste... Done
-[3 de outubro de 2016][20:54:22] FREEZE!
-[3 de outubro de 2016][20:54:26] 1 frozen requests
-[3 de outubro de 2016][20:54:26] 2 frozen requests
-[3 de outubro de 2016][20:54:30] 3 frozen requests
-[3 de outubro de 2016][20:54:30] 4 frozen requests

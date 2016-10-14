@@ -14,7 +14,6 @@ using System.Threading;
 using System.Runtime.Serialization.Formatters;
 using System.IO;
 
-using LoggingClassLibrary;
 using CommonTypesLibrary;
 
 namespace TestingConsoleApplication
@@ -23,9 +22,7 @@ namespace TestingConsoleApplication
     {
         static void Main(string[] args)
         {
-            Log.LogStatus = LogStatus.DEBUG;
-
-            new Test();
+            //new Test();
 
             //test1();
             test2();
@@ -105,7 +102,7 @@ namespace TestingConsoleApplication
         }
     }
 
-    internal class Test : MarshalByRefObject, IPuppetMaster
+    internal class Test : MarshalByRefObject//, IPuppetMaster
     {
         internal Test() {
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();

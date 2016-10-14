@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using LoggingClassLibrary;
-
 namespace DistributedAlgoritmsClassLibrary
 {
     using Message = Object;
@@ -55,9 +53,7 @@ namespace DistributedAlgoritmsClassLibrary
             _fairLossPointToPointLink.Send(process, message);
 
             Tuple<Process, Message> sent = new Tuple<Process, Message>(process, message);
-            while (!_sent.TryAdd(sent)) {
-                Log.WriteLine(LogStatus.DEBUG, "Message not sent");
-            }
+            _sent.TryAdd(sent);
         }
 
         public void Deliver(Process process, Message message) {

@@ -49,12 +49,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StubbornPointToPointLink.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LoggingClassLibrary\LoggingClassLibrary.csproj">
-      <Project>{b3c05b35-5973-4b7d-b16c-d77252bf7ad4}</Project>
-      <Name>LoggingClassLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -13,8 +13,6 @@ using System.Runtime.Remoting.Channels;
 using System.Threading;
 using System.Runtime.Serialization.Formatters;
 
-using LoggingClassLibrary;
-
 namespace DistributedAlgoritmsClassLibrary
 {
     using Message = Object;
@@ -28,8 +26,6 @@ namespace DistributedAlgoritmsClassLibrary
         private IDictionary<Process, FairLossPointToPointLink> _fairLossPointToPointLinks;
 
         public RemotingNode(Process process, Action<Process, Message> listener) {
-            Log.Write(LogStatus.DEBUG, "Initializing process " + process.ToString() + "...");
-
             _process = process;
             _listener = listener;
             _fairLossPointToPointLinks = new Dictionary<Process, FairLossPointToPointLink>();
@@ -46,8 +42,6 @@ namespace DistributedAlgoritmsClassLibrary
                 this,
                 process.ServiceName,
                 typeof(FairLossPointToPointLink));
-
-            Log.WriteDone(LogStatus.DEBUG);
         }
 
         public RemotingNode(Process process, Action<Process, Message> listener, params Process[] otherProcesses) : this(process, listener) {
@@ -57,8 +51,6 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Connect(Process process) {
-            Log.Write(LogStatus.DEBUG, "Connecting to process " + process.ToString() + "...");
-
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
                 process.Url);
@@ -71,10 +63,7 @@ namespace DistributedAlgoritmsClassLibrary
 
             try {
                 fairLossPointToPointLink.Anchor(_process);
-
-                Log.WriteDone(LogStatus.DEBUG);
             } catch (SocketException) {
-                Log.WriteError(LogStatus.DEBUG);
                 new Thread(() => {
                     Thread.Sleep(TIMER);
                     Connect(process);
@@ -83,8 +72,6 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Reconnect(Process process) {
-            Log.Write(LogStatus.DEBUG, "Reconnecting to process " + process.ToString() + "...");
-
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
                 process.Url);
@@ -98,8 +85,6 @@ namespace DistributedAlgoritmsClassLibrary
             try {
                 fairLossPointToPointLink.Anchor(_process);
             } catch (SocketException) { }
-
-            Log.WriteDone(LogStatus.DEBUG);
         }
 
         public void Anchor(Process process) {

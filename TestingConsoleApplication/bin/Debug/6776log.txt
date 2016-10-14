@@ -1,3 +1,0 @@
-[3 de outubro de 2016][20:22:28] Initializing process Teste3tcp://localhost:55003/teste... Done
-[3 de outubro de 2016][20:22:28] Connectiong to process Teste1tcp://localhost:53001/teste... Done
-[3 de outubro de 2016][20:22:29] Connectiong to process Teste2tcp://localhost:54002/teste... Done

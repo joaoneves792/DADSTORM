@@ -13,6 +13,7 @@ using System.Runtime.Remoting.Channels;
 using System.Threading;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization;
+using System.IO;
 
 using ProcessCreationServiceApplication;
 using CommonTypesLibrary;
@@ -39,8 +40,10 @@ namespace PuppetMasterApplication
         private IDictionary<Url, IProcessCreationService> _processCreationServiceTable;
 
         //Constants
-        private const string OPERATOR_NAME = "Operator";
-        private const string PUPPET_NAME = "Puppet";
+        private const String OPERATOR_NAME = "Operator";
+        private const String PUPPET_NAME = "Puppet";
+
+        private String _semantic, _loggingLevel;
 
         ///<summary>
         /// Puppet Master CLI constructor
@@ -49,6 +52,9 @@ namespace PuppetMasterApplication
             _operatorResolutionCache = new Dictionary<OperatorId, IList<Url>>();
             _puppetTable = new Dictionary<Url, IPuppet>();
             _processCreationServiceTable = new Dictionary<Url, IProcessCreationService>();
+
+            _semantic = "at-most-once";
+            _loggingLevel = "light";
 
             String processCreationServiceUrl = "tcp://localhost:10000/";
 
@@ -74,7 +80,20 @@ namespace PuppetMasterApplication
 
         public void ReceiveUrl(Url url, ObjRef objRef) {
             IPuppet puppet = (IPuppet)RemotingServices.Unmarshal(objRef);
+            puppet.Semantics(_semantic);
+            puppet.LoggingLevel(_loggingLevel);
             _puppetTable.Add(url, puppet);
+        }
+
+        public void Log(String message) {
+            lock (this) {
+                StreamWriter w = File.AppendText("log.txt");
+                w.WriteLine(message);
+                w.Flush();
+                w.Close();
+
+                Console.WriteLine(message);
+            }
         }
 
         private void ExecuteOperatorIdCommand(
@@ -231,6 +250,8 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteSemanticsCommand(String semantic) {
+            _semantic = semantic;
+
             foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
                 IPuppet puppet = entry.Value;
                 Task.Run(() => {
@@ -240,6 +261,8 @@ namespace PuppetMasterApplication
         }
 
         private void ExecuteLoggingLevelCommand(String loggingLevel) {
+            _loggingLevel = loggingLevel;
+
             foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
                 IPuppet puppet = entry.Value;
                 Task.Run(() => {

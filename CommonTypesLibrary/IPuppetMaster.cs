@@ -13,5 +13,6 @@ namespace CommonTypesLibrary
     public interface IPuppetMaster
     {
         void ReceiveUrl(Url url, ObjRef objRef);
+        void Log(String message);
     }
 }

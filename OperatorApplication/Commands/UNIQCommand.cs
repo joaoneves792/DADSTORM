@@ -15,8 +15,6 @@ namespace OperatorApplication.Commands {
 
 		public UNIQCommand(int fieldNumber) {
             _fieldNumber = fieldNumber;
-
-			Console.WriteLine("\t-> UNIQ");
 		}
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
@@ -24,11 +22,7 @@ namespace OperatorApplication.Commands {
             TupleMessage result = null;
 
             lock (this) {
-                if (_uniqueId.Contains(tupleElement)) {
-                    Console.WriteLine("Tuple " + String.Join(", ", inputTuple) + " has duplicated value.");
-                } else {
-
-                    Console.WriteLine("Tuple " + String.Join(", ", inputTuple) + " has unique value.");
+                if (!_uniqueId.Contains(tupleElement)) {
                     _uniqueId.TryAdd(tupleElement);
                     result = inputTuple;
                 }
