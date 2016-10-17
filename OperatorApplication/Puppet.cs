@@ -67,9 +67,20 @@ namespace OperatorApplication
         }
 
         public void Status() {
-            //TODO: Implement me
-            // We need to display status of the rest of the system from our point of view
-            //Cant do that right now
+			//TODO: Implement me
+			// We need to display status of the rest of the system from our point of view
+			//Cant do that right now
+
+			Console.WriteLine("sTATUS :");
+			Console.WriteLine("\t Operator type : " + _command.ToString());
+			Console.WriteLine("\t State: " + "running");
+
+			foreach (KeyValuePair<string,string> pair in _command.Status()) {
+                Console.WriteLine("\t " + pair.Key + ": " + pair.Value);
+            }
+
+            Log(_logStatus, _command.ToString());
+
         }
 
         public void Crash()

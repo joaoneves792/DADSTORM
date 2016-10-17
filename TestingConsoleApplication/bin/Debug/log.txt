@@ -16024,3 +16024,194 @@ tuple tcp://localhost:1025/Operator 239669 - FL - CLAY COUNTY - 0 - 13198.07 - 0
 tuple tcp://localhost:1025/Operator 530369 - FL - CLAY COUNTY - 0 - 48252.01 - 0 - 0 - 48252.01 - 36139.79 - 0 - 0 - 0 - 0 - 29.9826 - -81.7238 - Residential - Wood - 4
 tuple tcp://localhost:1026/Operator 601327 - FL - COLUMBIA COUNTY - 212850 - 212850 - 212850 - 212850 - 212850 - 340143.88 - 0 - 0 - 0 - 0 - 29.925 - -82.7109 - Residential - Wood - 1
 tuple tcp://localhost:1026/Operator 302578 - FL - COLUMBIA COUNTY - 135000 - 135000 - 135000 - 135000 - 135000 - 150719.13 - 0 - 0 - 0 - 0 - 29.9248 - -82.71114 - Residential - Wood - 1
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+tuple tcp://localhost:1025/Operator pear - orange - grape
+tuple tcp://localhost:1025/Operator apple - apple - banana
+Start 2
+tuple tcp://localhost:1026/Operator apple - apple - banana
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+Start 3
+tuple tcp://localhost:1027/Operator pear - orange - grape
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+tuple tcp://localhost:1027/Operator apple - apple - banana
+Start 4
+Start 5
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+tuple tcp://localhost:1025/Operator pear - orange - grape
+Start 2
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+tuple tcp://localhost:1026/Operator apple - apple - banana
+Start 3
+tuple tcp://localhost:1027/Operator pear - orange - grape
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+tuple tcp://localhost:1027/Operator apple - apple - banana
+Start 4
+Start 5
+tuple tcp://localhost:1029/Operator ball - cube - pyramid
+tuple tcp://localhost:1029/Operator apple - apple - banana
+tuple tcp://localhost:1029/Operator pear - orange - grape
+Status
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1025/Operator pear - orange - grape
+Start 2
+tuple tcp://localhost:1026/Operator apple - apple - banana
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+Start 3
+tuple tcp://localhost:1027/Operator pear - orange - grape
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+tuple tcp://localhost:1027/Operator apple - apple - banana
+Start 4
+Start 5
+tuple tcp://localhost:1029/Operator pear - orange - grape
+tuple tcp://localhost:1029/Operator ball - cube - pyramid
+tuple tcp://localhost:1029/Operator apple - apple - banana
+Status
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1025/Operator pear - orange - grape
+Start 2
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+tuple tcp://localhost:1026/Operator apple - apple - banana
+tuple tcp://localhost:1026/Operator pear - orange - grape
+Start 3
+tuple tcp://localhost:1027/Operator pear - orange - grape
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+tuple tcp://localhost:1027/Operator apple - apple - banana
+Start 4
+Start 5
+tuple tcp://localhost:1029/Operator apple - apple - banana
+tuple tcp://localhost:1029/Operator ball - cube - pyramid
+tuple tcp://localhost:1029/Operator pear - orange - grape
+Status
+tuple tcp://localhost:1027/Operator OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:1026/Operator OperatorApplication.Commands.DUPCommand
+tuple tcp://localhost:1029/Operator OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:1028/Operator OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:1025/Operator OperatorApplication.Commands.UNIQCommand
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1025/Operator pear - orange - grape
+Start 2
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+tuple tcp://localhost:1026/Operator apple - apple - banana
+Start 3
+tuple tcp://localhost:1027/Operator apple - apple - banana
+tuple tcp://localhost:1027/Operator pear - orange - grape
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+Start 4
+Start 5
+tuple tcp://localhost:1029/Operator apple - apple - banana
+tuple tcp://localhost:1029/Operator pear - orange - grape
+tuple tcp://localhost:1029/Operator ball - cube - pyramid
+Status
+tuple tcp://localhost:1025/Operator OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:1026/Operator OperatorApplication.Commands.DUPCommand
+tuple tcp://localhost:1028/Operator OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:1029/Operator OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:1027/Operator OperatorApplication.Commands.FILTERCommand
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator pear - orange - grape
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+Start 2
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator apple - apple - banana
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+Start 3
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+tuple tcp://localhost:1027/Operator pear - orange - grape
+tuple tcp://localhost:1027/Operator apple - apple - banana
+Start 4
+Start 5
+tuple tcp://localhost:1029/Operator ball - cube - pyramid
+tuple tcp://localhost:1029/Operator pear - orange - grape
+tuple tcp://localhost:1029/Operator apple - apple - banana
+Status
+tuple tcp://localhost:1026/Operator OperatorApplication.Commands.DUPCommand
+tuple tcp://localhost:1027/Operator OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:1028/Operator OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:1029/Operator OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:1025/Operator OperatorApplication.Commands.UNIQCommand
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+tuple tcp://localhost:1025/Operator pear - orange - grape
+Start 2
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+tuple tcp://localhost:1026/Operator apple - apple - banana
+Start 3
+tuple tcp://localhost:1027/Operator pear - orange - grape
+tuple tcp://localhost:1027/Operator apple - apple - banana
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+Start 4
+Start 5
+tuple tcp://localhost:1029/Operator apple - apple - banana
+tuple tcp://localhost:1029/Operator pear - orange - grape
+tuple tcp://localhost:1029/Operator ball - cube - pyramid
+Status
+tuple tcp://localhost:1025/Operator OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:1029/Operator OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:1028/Operator OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:1027/Operator OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:1026/Operator OperatorApplication.Commands.DUPCommand

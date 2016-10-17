@@ -5,3 +5,7 @@ Z:\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\bi
 Z:\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.csprojResolveAssemblyReference.cache
 Z:\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.dll
 Z:\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.pdb

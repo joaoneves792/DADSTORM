@@ -8,6 +8,7 @@ using OperatorApplication.Exceptions;
 
 
 namespace OperatorApplication.Commands {
+	using System.Collections.Concurrent;
 	using TupleMessage = List<String>;
 
 	class CUSTOMCommand : Command {
@@ -36,6 +37,17 @@ namespace OperatorApplication.Commands {
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
 			return (TupleMessage) _method.Invoke(_obj, new object[] { inputTuple });
+		}
+
+		public override ConcurrentDictionary<string, string> Status() {
+
+			ConcurrentDictionary<string, string> status = new ConcurrentDictionary<string, string>();
+
+			status.TryAdd("Library", "hello");
+			status.TryAdd("Class", "there");
+			status.TryAdd("Method", "is it me");
+
+			return status;
 		}
 	}
 }

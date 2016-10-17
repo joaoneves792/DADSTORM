@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using OperatorApplication.Exceptions;
 
 namespace OperatorApplication.Commands {
-    using TupleMessage = List<String>;
+	using System.Collections.Concurrent;
+	using TupleMessage = List<String>;
 
-    class FILTERCommand : Command {
+	class FILTERCommand : Command {
 
 		private readonly Func<String, Boolean> _condition;
         private readonly int _fieldNumber;
@@ -54,5 +55,15 @@ namespace OperatorApplication.Commands {
             return inputTuple;
         }
 
+		public override ConcurrentDictionary<string, string> Status() {
+
+			ConcurrentDictionary<string, string> status = new ConcurrentDictionary<string, string>();
+
+			status.TryAdd("Field Number", "wim away");
+			status.TryAdd("Condition", "wim away");
+			status.TryAdd("Value", "wim away");
+
+			return status;
+		}
 	}
 }

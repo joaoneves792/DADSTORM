@@ -10,3 +10,13 @@ Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\Loggi
 Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.csprojResolveAssemblyReference.cache
 Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.exe
 Z:\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\OperatorApplication.exe.config
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\OperatorApplication.exe
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\OperatorApplication.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\CommonTypesLibrary.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.csprojResolveAssemblyReference.cache
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.exe
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\OperatorApplication\obj\Debug\OperatorApplication.pdb

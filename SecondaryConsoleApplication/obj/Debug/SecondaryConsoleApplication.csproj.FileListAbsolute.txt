@@ -8,3 +8,11 @@ Z:\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\bin\Deb
 Z:\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.csprojResolveAssemblyReference.cache
 Z:\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.exe
 Z:\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe.config
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.csprojResolveAssemblyReference.cache
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.exe
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.pdb

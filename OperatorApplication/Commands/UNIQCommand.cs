@@ -30,5 +30,14 @@ namespace OperatorApplication.Commands {
 
             return result;
         }
+
+		public override ConcurrentDictionary<string, string> Status() {
+
+			ConcurrentDictionary<string, string> status = new ConcurrentDictionary<string, string>();
+
+			status.TryAdd("Field Number", ""+_fieldNumber);
+
+			return status;
+		}
 	}
 }

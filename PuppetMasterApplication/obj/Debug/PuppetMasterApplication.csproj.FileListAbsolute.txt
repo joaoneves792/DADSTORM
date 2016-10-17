@@ -8,3 +8,13 @@ Z:\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\P
 Z:\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.csprojResolveAssemblyReference.cache
 Z:\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.exe
 Z:\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\PuppetMasterApplication.exe.config
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\PuppetMasterApplication.exe
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\PuppetMasterApplication.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\ProcessCreationServiceApplication.exe
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\CommonTypesLibrary.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\bin\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.csprojResolveAssemblyReference.cache
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.exe
+C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\PuppetMasterApplication\obj\Debug\PuppetMasterApplication.pdb
