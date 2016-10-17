@@ -31,13 +31,16 @@ namespace OperatorApplication.Commands {
             return result;
         }
 
-		public override ConcurrentDictionary<string, string> Status() {
 
-			ConcurrentDictionary<string, string> status = new ConcurrentDictionary<string, string>();
 
-			status.TryAdd("Field Number", ""+_fieldNumber);
+		public override List<KeyValuePair<string, string>> Status() {
+
+			List<KeyValuePair<string, string>> status = new List<KeyValuePair<string, string>>();
+
+			status.Add(new KeyValuePair<string, string>("Field Number", "" + _fieldNumber));
 
 			return status;
 		}
+
 	}
 }

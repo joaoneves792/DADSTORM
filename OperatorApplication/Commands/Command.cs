@@ -12,6 +12,6 @@ namespace OperatorApplication.Commands {
         public abstract TupleMessage Execute(TupleMessage inputTuple);
 
 		// FIXME: dictionary is a stupid idea
-        public abstract ConcurrentDictionary<string, string> Status();
+		public abstract List<KeyValuePair<string, string>> Status();
 	}
 }

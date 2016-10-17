@@ -20,13 +20,15 @@ namespace OperatorApplication.Commands {
             return null;
 		}
 
-        public override ConcurrentDictionary<string, string> Status() {
 
-            ConcurrentDictionary<string, string> status = new ConcurrentDictionary<string, string>();
+		public override List<KeyValuePair<string, string>> Status() {
 
-			status.TryAdd("Seen tuples", ""+_count);
-			
-            return status;
+			List<KeyValuePair<string, string>> status = new List<KeyValuePair<string, string>>();
+
+			status.Add(new KeyValuePair<string, string>("Seen tuples", ""+_count));
+
+			return status;
 		}
-    }
+
+	}
 }

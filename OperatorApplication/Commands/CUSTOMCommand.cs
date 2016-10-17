@@ -16,9 +16,18 @@ namespace OperatorApplication.Commands {
 		private Assembly _assembly = null;
 		private Type _type = null;
 		private Object _obj = null;
-		private MethodInfo _method = null;
+		private MethodInfo _methodInfo = null;
+
+		private string _dll = null;
+		private string _class = null;
+		private string _method = null;
 
 		public CUSTOMCommand(string customDll, string customClass, string customMethod) {
+
+			_dll = customDll;
+			_class = customClass;
+			_method = customMethod;
+
 			_assembly = Assembly.LoadFrom(@customDll);
 			_type = _assembly.GetType(customClass);
 
@@ -27,7 +36,7 @@ namespace OperatorApplication.Commands {
 			}
 
 			_obj = Activator.CreateInstance(_type);
-			_method = _type.GetMethod(customMethod);
+			_methodInfo = _type.GetMethod(customMethod);
 
 			if (_method == null) {
 				throw new NonExistentMethodException(customClass + "." + customMethod + " could not be found.");
@@ -36,18 +45,20 @@ namespace OperatorApplication.Commands {
 
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-			return (TupleMessage) _method.Invoke(_obj, new object[] { inputTuple });
+			return (TupleMessage)_methodInfo.Invoke(_obj, new object[] { inputTuple });
 		}
 
-		public override ConcurrentDictionary<string, string> Status() {
 
-			ConcurrentDictionary<string, string> status = new ConcurrentDictionary<string, string>();
+		public override List<KeyValuePair<string, string>> Status() {
 
-			status.TryAdd("Library", "hello");
-			status.TryAdd("Class", "there");
-			status.TryAdd("Method", "is it me");
+			List<KeyValuePair<string, string>> status = new List<KeyValuePair<string, string>>();
+
+			status.Add(new KeyValuePair<string, string>("Library", "" + _dll));
+			status.Add(new KeyValuePair<string, string>("Class", "" + _class));
+			status.Add(new KeyValuePair<string, string>("Method", "" + _method));
 
 			return status;
 		}
+
 	}
 }

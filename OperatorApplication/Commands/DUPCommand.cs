@@ -13,9 +13,9 @@ namespace OperatorApplication.Commands {
 			return inputTuple;
 		}
 
-		public override ConcurrentDictionary<string, string> Status() {
+		public override List<KeyValuePair<string, string>> Status() {
 
-			ConcurrentDictionary<string, string> status = new ConcurrentDictionary<string, string>();
+			List<KeyValuePair<string, string>> status = new List<KeyValuePair<string, string>>();
 
 			return status;
 		}

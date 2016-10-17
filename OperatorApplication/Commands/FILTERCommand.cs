@@ -11,20 +11,24 @@ namespace OperatorApplication.Commands {
 
 	class FILTERCommand : Command {
 
-		private readonly Func<String, Boolean> _condition;
+		private readonly Func<String, Boolean> _conditionEvalutor;
         private readonly int _fieldNumber;
         private readonly String _value;
+		private Condition _condition;
 
         public FILTERCommand(int fieldNumber, Condition condition, String value) {
-            switch (condition) {
+
+			_condition = condition;
+
+			switch (condition) {
                 case Condition.GREATER_THAN:
-                    _condition = IsGreater;
+                    _conditionEvalutor = IsGreater;
                     break;
                 case Condition.LESS_THAN:
-                    _condition = IsLess;
+                    _conditionEvalutor = IsLess;
                     break;
                 case Condition.EQUALS:
-                    _condition = IsEqual;
+                    _conditionEvalutor = IsEqual;
                     break;
                 default:
                     throw new InvalidConditionException("Invalid condition.\r\nCondition should be '<', '>', or '='");
@@ -48,22 +52,23 @@ namespace OperatorApplication.Commands {
         public override TupleMessage Execute(TupleMessage inputTuple) {
             String tupleElement = inputTuple[_fieldNumber];
 
-            if (!_condition(tupleElement)) {
+            if (!_conditionEvalutor(tupleElement)) {
                 return null;
             }
 
             return inputTuple;
         }
 
-		public override ConcurrentDictionary<string, string> Status() {
+		public override List<KeyValuePair<string, string>> Status() {
 
-			ConcurrentDictionary<string, string> status = new ConcurrentDictionary<string, string>();
+			List<KeyValuePair<string, string>> status = new List<KeyValuePair<string, string>>();
 
-			status.TryAdd("Field Number", "wim away");
-			status.TryAdd("Condition", "wim away");
-			status.TryAdd("Value", "wim away");
+			status.Add(new KeyValuePair<string, string>("Field Number", "" + _fieldNumber));
+			status.Add(new KeyValuePair<string, string>("Condition", "" + _condition));
+			status.Add(new KeyValuePair<string, string>("Value", "" + _value));
 
 			return status;
 		}
+
 	}
 }

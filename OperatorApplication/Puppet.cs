@@ -35,9 +35,11 @@ namespace OperatorApplication
         private LogStatus _logStatus;
 
         private int _sleepBetweenEvents;
+		private string _state;
 
-        public void SubmitAsPuppet()
-        {
+        public void SubmitAsPuppet() {
+			_state = "ready";
+
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
 
@@ -60,6 +62,7 @@ namespace OperatorApplication
 
         public void Start() {
             _waitHandle.Set();
+			_state = "running";
         }
 
         public void Interval(Milliseconds milliseconds) {
@@ -72,8 +75,9 @@ namespace OperatorApplication
 			//Cant do that right now
 
 			Console.WriteLine("sTATUS :");
-			Console.WriteLine("\t Operator type : " + _command.ToString());
-			Console.WriteLine("\t State: " + "running");
+			Console.WriteLine("\t Operator type: " + _command.ToString());
+			Console.WriteLine("\t State: " + _state);
+			Console.WriteLine("\t Waiting interval: " + _sleepBetweenEvents);
 
 			foreach (KeyValuePair<string,string> pair in _command.Status()) {
                 Console.WriteLine("\t " + pair.Key + ": " + pair.Value);
@@ -83,29 +87,26 @@ namespace OperatorApplication
 
         }
 
-        public void Crash()
-        {
+        public void Crash() {
             Environment.Exit(0);
         }
 
-        public void Freeze()
-        {
+        public void Freeze() {
+			_state = "freezed";
             _listener = StoreMessage;
             _send = StoreReply;
         }
 
-        public void Unfreeze()
-        {
+        public void Unfreeze() {
+			_state = "running";
             LoadStoredMessages();
         }
 
-        public void Semantics(String semantics)
-        {
+        public void Semantics(String semantics) {
             //TODO: by default and on first release, the semantic is at-most-once
         }
 
-        public void LoggingLevel(String loggingLevel)
-        {
+        public void LoggingLevel(String loggingLevel) {
             if (loggingLevel.Equals("full")) {
                 _logStatus = LogStatus.FULL;
             } else if (loggingLevel.Equals("light")) {
