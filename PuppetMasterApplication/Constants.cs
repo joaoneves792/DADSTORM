@@ -68,14 +68,14 @@ namespace PuppetMasterApplication
                                                                                                 DUP + OR +
                                                                                                 FILTER + OR +
                                                                                                 CUSTOM + CLOSE + END,
-                                START_COMMAND = START + @"Start" + SPACE + GROUP_INT + END,
-                                INTERVAL_COMMAND = START + @"Interval" + SPACE + GROUP_INT + SPACE + GROUP_INT + END,
-                                STATUS_COMMAND = START + @"Status" + END,
-                                CRASH_COMMAND = START + @"Crash" + SPACE + GROUP_URL + END,
-                                FREEZE_COMMAND = START + @"Freeze" + SPACE + GROUP_URL + END,
-                                UNFREEZE_COMMAND = START + @"Unfreeze" + SPACE + GROUP_URL + END,
-                                WAIT_COMMAND = START + @"Wait" + SPACE + GROUP_INT + END,
-                                SEMANTICS_COMMAND = START + @"Semantics" + SPACE + "((?:at-most-once)|(?:at-least-once)|(?:exactly-once))" + END,
-                                LOGGING_LEVEL_COMMAND = START + @"LoggingLevel" + SPACE + "((?:full)|(?:light))" + END;
+                                START_COMMAND = START + @"(?:S|s)tart" + SPACE + GROUP_INT + END,
+                                INTERVAL_COMMAND = START + @"(?:I|i)nterval" + SPACE + GROUP_INT + SPACE + GROUP_INT + END,
+                                STATUS_COMMAND = START + @"(?:S|s)tatus" + END,
+                                CRASH_COMMAND = START + @"(?:C|c)rash" + SPACE + GROUP_URL + END,
+                                FREEZE_COMMAND = START + @"(?:F|f)reeze" + SPACE + GROUP_URL + END,
+                                UNFREEZE_COMMAND = START + @"(?:U|u)nfreeze" + SPACE + GROUP_URL + END,
+                                WAIT_COMMAND = START + @"(?:W|w)ait" + SPACE + GROUP_INT + END,
+                                SEMANTICS_COMMAND = START + @"(?:S|s)emantics" + SPACE + "((?:at-most-once)|(?:at-least-once)|(?:exactly-once))" + END,
+                                LOGGING_LEVEL_COMMAND = START + @"(?:L|l)ogging(?:L|l)evel" + SPACE + "((?:full)|(?:light))" + END;
     }
 }
