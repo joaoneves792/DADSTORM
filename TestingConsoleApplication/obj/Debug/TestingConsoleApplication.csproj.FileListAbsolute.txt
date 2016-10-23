@@ -36,3 +36,19 @@ C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplicati
 C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.csprojResolveAssemblyReference.cache
 C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.exe
 C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.pdb
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\TestingConsoleApplication.exe.config
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\TestingConsoleApplication.exe
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\TestingConsoleApplication.pdb
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\CommonTypesLibrary.dll
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\OperatorApplication.exe
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\ProcessCreationServiceApplication.exe
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\CommonTypesLibrary.pdb
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\OperatorApplication.pdb
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\ProcessCreationServiceApplication.pdb
+D:\projects\dad\project\TestingConsoleApplication\bin\Debug\SecondaryConsoleApplication.pdb
+D:\projects\dad\project\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.csprojResolveAssemblyReference.cache
+D:\projects\dad\project\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.exe
+D:\projects\dad\project\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.pdb

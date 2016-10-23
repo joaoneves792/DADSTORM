@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetMasterApplication
-{
-    internal partial class PuppetMaster
-    {
+namespace PuppetMasterLibrary {
+
+	// internal -> public
+	public partial class PuppetMaster {
         //Constants
         private const int PORT = 10001;
         private const String SERVICE_NAME = "PuppetMaster",

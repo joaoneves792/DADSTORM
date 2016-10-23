@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingConsoleApplication",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondaryConsoleApplication", "SecondaryConsoleApplication\SecondaryConsoleApplication.csproj", "{4889FE8E-13AC-48FF-80BB-989EE3D791E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetMasterApplication", "PuppetMasterApplication\PuppetMasterApplication.csproj", "{70CD1EF9-F11D-4341-B459-319BEE583855}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorApplication", "OperatorApplication\OperatorApplication.csproj", "{5158F507-7F3C-48E5-978E-6DF75D750464}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F3865353-6943-47EB-895E-93D1ECBE94D7} = {F3865353-6943-47EB-895E-93D1ECBE94D7}
@@ -21,6 +19,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonTypesLibrary", "CommonTypesLibrary\CommonTypesLibrary.csproj", "{8AA90885-C630-4770-814C-1C03726936D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomOperatorExamplaes", "CustomOperatorExamplaes\CustomOperatorExamplaes.csproj", "{F3865353-6943-47EB-895E-93D1ECBE94D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetMasterForm", "PuppetMasterForm\PuppetMasterForm.csproj", "{390313FE-8202-4E88-8565-99984DF41445}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetMasterClient", "PuppetMasterClient\PuppetMasterClient.csproj", "{7A32B900-6E1A-415D-99B8-CDF8B7BB4489}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetMasterLibrary", "PuppetMasterLibrary\PuppetMasterLibrary.csproj", "{BEB2BF2D-656E-464A-A96F-D3D5F3C034EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,10 +44,6 @@ Global
 		{4889FE8E-13AC-48FF-80BB-989EE3D791E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4889FE8E-13AC-48FF-80BB-989EE3D791E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4889FE8E-13AC-48FF-80BB-989EE3D791E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70CD1EF9-F11D-4341-B459-319BEE583855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70CD1EF9-F11D-4341-B459-319BEE583855}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70CD1EF9-F11D-4341-B459-319BEE583855}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70CD1EF9-F11D-4341-B459-319BEE583855}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5158F507-7F3C-48E5-978E-6DF75D750464}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5158F507-7F3C-48E5-978E-6DF75D750464}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5158F507-7F3C-48E5-978E-6DF75D750464}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,6 +60,18 @@ Global
 		{F3865353-6943-47EB-895E-93D1ECBE94D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3865353-6943-47EB-895E-93D1ECBE94D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3865353-6943-47EB-895E-93D1ECBE94D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{390313FE-8202-4E88-8565-99984DF41445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{390313FE-8202-4E88-8565-99984DF41445}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{390313FE-8202-4E88-8565-99984DF41445}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{390313FE-8202-4E88-8565-99984DF41445}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A32B900-6E1A-415D-99B8-CDF8B7BB4489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A32B900-6E1A-415D-99B8-CDF8B7BB4489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A32B900-6E1A-415D-99B8-CDF8B7BB4489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A32B900-6E1A-415D-99B8-CDF8B7BB4489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEB2BF2D-656E-464A-A96F-D3D5F3C034EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEB2BF2D-656E-464A-A96F-D3D5F3C034EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEB2BF2D-656E-464A-A96F-D3D5F3C034EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEB2BF2D-656E-464A-A96F-D3D5F3C034EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,3 +9,7 @@ C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsCla
 C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
 C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.dll
 C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.pdb
+D:\projects\dad\project\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+D:\projects\dad\project\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+D:\projects\dad\project\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.dll
+D:\projects\dad\project\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.pdb

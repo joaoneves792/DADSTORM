@@ -71,10 +71,6 @@
       <Project>{01a83f12-7a09-4c42-8164-d0fd28f8ad5d}</Project>
       <Name>ProcessCreationServiceApplication</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PuppetMasterApplication\PuppetMasterApplication.csproj">
-      <Project>{70cd1ef9-f11d-4341-b459-319bee583855}</Project>
-      <Name>PuppetMasterApplication</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SecondaryConsoleApplication\SecondaryConsoleApplication.csproj">
       <Project>{4889fe8e-13ac-48ff-80bb-989ee3d791e0}</Project>
       <Name>SecondaryConsoleApplication</Name>
