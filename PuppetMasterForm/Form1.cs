@@ -33,6 +33,8 @@ namespace PuppetMasterForm {
 
 		private void RunAll_Click(object sender, EventArgs e) {
 
+			Output.Text = Path.GetFullPath(".");
+
 			_pm.ExecuteConfigurationFile("..\\..\\scripts\\" + ScriptFile.Text);
 			ScriptFile.Text = "";
 

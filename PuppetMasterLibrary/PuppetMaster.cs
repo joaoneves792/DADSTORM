@@ -80,6 +80,9 @@ namespace PuppetMasterLibrary {
 					Console.WriteLine(exception.Message);
 					Console.ReadLine();
 				}
+
+				Console.WriteLine(Path.GetFullPath("."));
+
 			}
 		}
 
