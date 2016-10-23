@@ -21,10 +21,16 @@ namespace PuppetMasterForm {
 			InitializeComponent();
 
 			_pm = new PuppetMaster();
-			// FIXME finish eventhandler
-			_pm.Print += PrintToOutput;
+			_pm.PrintEvent += PrintToOutput;
+
+
+			this.KeyPreview = true;
+			this.KeyDown += new KeyEventHandler(StartForm_KeyDown);
+
 
 			DisplayHelp();
+			// FIXME missing function in puppetmaster
+			AvailableScripts.Text = "FIXME";
 		}
 
 
@@ -32,11 +38,23 @@ namespace PuppetMasterForm {
 		// global events //
 
 		// FIXME Alt+F4 to abort
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+			if (keyData == Keys.F4) {
+				return true;
+			}
+
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 
 		private void StartForm_KeyDown(object sender, KeyEventArgs e) {
 			if (Control.ModifierKeys == Keys.Control) {
 				if (e.KeyCode == Keys.H) {
 					DisplayHelp();
+				}
+			} else if (Control.ModifierKeys == Keys.Alt) {
+				if (e.KeyCode == Keys.F4) {
+					PrintToOutput("FIXME alt+f4 -> abort");
 				}
 			}
 		}
@@ -44,10 +62,10 @@ namespace PuppetMasterForm {
 		private void DisplayHelp() {
 
 			string str = "help:\r\n"
-				+ "display help \t\t Ctrl+H" + "\r\n"
-				+ "run step by step \t\t Return" + "\r\n"
-				+ "run all \t\t\t Ctrl+Return" + "\r\n"
-				+ "execute command \t\t Return";
+				+ "\t display help \t\t Ctrl+H" + "\r\n"
+				+ "\t run step by step \t\t Return" + "\r\n"
+				+ "\t run all \t\t\t Ctrl+Return" + "\r\n"
+				+ "\t execute command \t\t Ctrl+Return";
 
 			PrintToOutput(str);
 		}
@@ -63,9 +81,10 @@ namespace PuppetMasterForm {
 				} else if (e.KeyCode == Keys.Return) {
 					PrintToOutput("Runnig all from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
 					RunAll_Click(this, null);
-				} else if (e.KeyCode == Keys.H) {
-					DisplayHelp();
-				}
+				} 
+				//else if (e.KeyCode == Keys.H) {
+				//	DisplayHelp();
+				//}
 
 			} else if (e.KeyCode == Keys.Return) {
 				PrintToOutput("Runnig step from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
@@ -93,19 +112,18 @@ namespace PuppetMasterForm {
 
 		private void Command_KeyDown(object sender, KeyEventArgs e) {
 			if (Control.ModifierKeys == Keys.Control) {
-				if (e.KeyCode == Keys.H) {
-					DisplayHelp();
+				if (e.KeyCode == Keys.Return) {
+					RunCommand_Click(this, null);
 				}
-
-			} else if (e.KeyCode == Keys.Return) {
-				PrintToOutput("manual command: " + Command.Text);
-				RunCommand_Click(this, null);
 			}
 		}
 
 		private void RunCommand_Click(object sender, EventArgs e) {
-			_pm.ParseLineAndExecuteCommand(Command.Text);
-			Command.Text = "";
+			string cmd = Command.Text.Replace(System.Environment.NewLine, " ");
+			PrintToOutput("manual command: " + cmd);
+			_pm.ParseLineAndExecuteCommand(cmd);
+			//Command.Text = "";
+			Command.Clear();
 		}
 
 		private void Command_TextChanged(object sender, EventArgs e) {

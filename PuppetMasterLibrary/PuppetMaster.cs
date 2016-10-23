@@ -24,10 +24,10 @@ namespace PuppetMasterLibrary {
 	public partial class PuppetMaster {
 
 		public delegate void PrintToOutputHandler(object sender, TextEventArgs args);
-		public event PrintToOutputHandler Print;
+		public event PrintToOutputHandler PrintEvent;
 
-		protected virtual void OnPrint(string text) {
-			Print?.Invoke(this, new TextEventArgs(text));
+		protected virtual void Print(string text) {
+			PrintEvent?.Invoke(this, new TextEventArgs(text));
 		}
 
 
@@ -49,8 +49,8 @@ namespace PuppetMasterLibrary {
 					ParseLineAndExecuteCommand(line);
 
 				} catch (Exception exception) {
-					Console.WriteLine(exception.Message);
-					Console.ReadLine();
+					Print(exception.Message);
+					//Console.ReadLine();
 				}
 			}
 
@@ -142,6 +142,7 @@ namespace PuppetMasterLibrary {
 				ExecuteLoggingLevelCommand(groupCollection[1].Value);
 
 			} else if (line.ToLower().Equals("abort")) {
+				//FIXME regexpr match for abort as well
 				CloseProcesses();
 			}
 		}
@@ -171,12 +172,10 @@ namespace PuppetMasterLibrary {
 
 				if (!File.Exists(dir + "\\" + fileName)) {
 					//get a list of scripts inside the folder
-					Console.WriteLine("Available scripts: ");
-					OnPrint("Available scripts: ");
+					Print("Available scripts: ");
 
 					foreach (string file in Directory.GetFiles(dir)) {
-						Console.WriteLine(" " + Path.GetFileName(file));
-						OnPrint(" " + Path.GetFileName(file));
+						Print(" " + Path.GetFileName(file));
 					}
 
 					return;
