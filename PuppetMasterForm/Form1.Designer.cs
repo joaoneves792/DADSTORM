@@ -183,7 +183,8 @@
 			this.Controls.Add(this.ScriptFileLable);
 			this.Name = "StartForm";
 			this.Text = "PuppetMasterForm";
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.StartForm_KeyDown);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StartForm_FormClosing);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.StartForm_KeyUp);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -8,8 +8,7 @@ namespace CommonTypesLibrary
 {
     using Milliseconds = Int32;
 
-    public interface IPuppet
-    {
+    public interface IPuppet {
         void Start();
         void Interval(Milliseconds milliseconds);
         void Status();

@@ -88,7 +88,6 @@ namespace PuppetMasterLibrary {
                 w.Flush();
                 w.Close();
 
-                Console.WriteLine(message);
 				Print(message);
             }
         }
@@ -183,14 +182,16 @@ namespace PuppetMasterLibrary {
 
 
         private void ExecuteStartCommand(OperatorId operatorId) {
-            Console.WriteLine("ExecuteStartCommand: " + operatorId);
+            Print("ExecuteStartCommand: " + operatorId);
             IList<Url> urlList = _operatorResolutionCache[operatorId];
-            foreach (Url url in urlList) {
-                IPuppet puppet = _puppetTable[url];
-                Task.Run(() => {
-                    puppet.Start();
-                });
-            }
+
+			foreach (Url url in urlList) {
+				Print(url);
+				IPuppet puppet = _puppetTable[url];
+				Task.Run(() => {
+					puppet.Start();
+				});
+			}
         }
 
 

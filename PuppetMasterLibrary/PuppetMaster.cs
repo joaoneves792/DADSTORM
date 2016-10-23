@@ -33,8 +33,30 @@ namespace PuppetMasterLibrary {
 
 		private bool isConfiguring;
 
+		private List<string> _cmdList = new List<string>();
 
-		// FIXME implement executable line by line
+
+		public void ReadFile(string configFile) {
+			string line = null;
+			StreamReader file = new StreamReader(configFile);
+			while ((line = file.ReadLine()) != null) {
+				_cmdList.Add(line);
+			}
+		}
+
+		public void ExecuteSingleCommand() {
+			ParseLineAndExecuteCommand(_cmdList.First());
+			_cmdList.RemoveAt(0);
+		}
+
+		public void ExecuteAllCommands() {
+			foreach (string cmd in _cmdList) {
+				ParseLineAndExecuteCommand(cmd);
+			}
+		}
+
+
+		// FIXME change for executable line by line
 		public void ExecuteConfigurationFile(String configurationFileName) {
 			String line;
 			StreamReader file = new StreamReader(configurationFileName);
@@ -141,8 +163,8 @@ namespace PuppetMasterLibrary {
 				Log(line);
 				ExecuteLoggingLevelCommand(groupCollection[1].Value);
 
-			} else if (line.ToLower().Equals("abort")) {
-				//FIXME regexpr match for abort as well
+			} else if (line.Trim().ToLower().Equals("abort")) {
+				//FIXME consider regexpr match for abort as well
 				CloseProcesses();
 			}
 		}
