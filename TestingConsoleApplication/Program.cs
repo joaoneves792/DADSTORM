@@ -53,7 +53,7 @@ namespace TestingConsoleApplication
         static void test2()
         {
             Process.Start("ProcessCreationServiceApplication.exe");
-            Process.Start("PuppetMasterApplication.exe");
+            Process.Start("PuppetMasterForm.exe");
         }
 
         static void test3()

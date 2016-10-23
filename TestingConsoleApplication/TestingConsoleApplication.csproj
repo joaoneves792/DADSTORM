@@ -59,6 +59,10 @@
       <Project>{8aa90885-c630-4770-814c-1c03726936d4}</Project>
       <Name>CommonTypesLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CustomOperatorExamplaes\CustomOperatorExamplaes.csproj">
+      <Project>{f3865353-6943-47eb-895e-93d1ecbe94d7}</Project>
+      <Name>CustomOperatorExamplaes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DistributedAlgoritmsClassLibrary\DistributedAlgoritmsClassLibrary.csproj">
       <Project>{c9866e0e-b986-46b0-a80b-45f8971b29c7}</Project>
       <Name>DistributedAlgoritmsClassLibrary</Name>
@@ -70,6 +74,18 @@
     <ProjectReference Include="..\ProcessCreationServiceApplication\ProcessCreationServiceApplication.csproj">
       <Project>{01a83f12-7a09-4c42-8164-d0fd28f8ad5d}</Project>
       <Name>ProcessCreationServiceApplication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PuppetMasterClient\PuppetMasterClient.csproj">
+      <Project>{7a32b900-6e1a-415d-99b8-cdf8b7bb4489}</Project>
+      <Name>PuppetMasterClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PuppetMasterForm\PuppetMasterForm.csproj">
+      <Project>{390313fe-8202-4e88-8565-99984df41445}</Project>
+      <Name>PuppetMasterForm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PuppetMasterLibrary\PuppetMasterLibrary.csproj">
+      <Project>{beb2bf2d-656e-464a-a96f-d3d5f3c034ea}</Project>
+      <Name>PuppetMasterLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\SecondaryConsoleApplication\SecondaryConsoleApplication.csproj">
       <Project>{4889fe8e-13ac-48ff-80bb-989ee3d791e0}</Project>
