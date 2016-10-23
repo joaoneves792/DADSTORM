@@ -12,6 +12,8 @@ using System.Runtime.Remoting.Channels;
 using System.Text.RegularExpressions;
 using System.Threading;
 
+using CommonTypesLibrary;
+
 namespace PuppetMasterLibrary {
 
 	//Aliases
@@ -19,20 +21,20 @@ namespace PuppetMasterLibrary {
 	using OperatorId = String;
 	using ProcessName = String;
 
-	///<summary>
-	/// Puppet Master CLI
-	///</summary>
 
-	// internal -> public
 	public partial class PuppetMaster {
+
+		public delegate void PrintToOutputHandler(object sender, TextEventArgs args);
+		public event PrintToOutputHandler PrintToOutput;
+
+		protected virtual void OnPrint(string text) {
+			PrintToOutput?.Invoke(this, new TextEventArgs(text));
+		}
+
 
 		private bool isConfiguring;
 
-		//<summary>
-		// Reads configuration file
-		//</summary>
 
-		// internal -> public
 		// FIXME implement executable line by line
 		public void ExecuteConfigurationFile(String configurationFileName) {
 			String line;
@@ -57,9 +59,6 @@ namespace PuppetMasterLibrary {
 		}
 
 
-		//<summary>
-		// Creates CLI interface for user interaction with Puppet Master Service
-		//</summary>
 		internal void StartCLI() {
 			String command;
 			while (true) {
@@ -86,9 +85,7 @@ namespace PuppetMasterLibrary {
 			}
 		}
 
-		//<summary>
-		// Match string using regex patterns
-		//</summary>
+
 		private bool Matches(String pattern, String line, out GroupCollection groupCollection) {
 			Regex regex = new Regex(pattern, RegexOptions.Compiled);
 
@@ -102,9 +99,7 @@ namespace PuppetMasterLibrary {
 			return true;
 		}
 
-		//<summary>
-		// Change to execution mode
-		//</summary>
+
 		private void ToggleToExecutionMode() {
 			if (isConfiguring) {
 				isConfiguring = false;
@@ -112,18 +107,12 @@ namespace PuppetMasterLibrary {
 			}
 		}
 
-		//<summary>
-		// Change to configuration mode
-		//</summary>
+
 		private void ToggleToConfigurationMode() {
 			isConfiguring = true;
 		}
 
-		//<summary>
-		// Converts string input into command
-		//</summary>
 
-		// private -> public
 		public void ParseLineAndExecuteCommand(String line) {
 			GroupCollection groupCollection;
 
@@ -185,7 +174,7 @@ namespace PuppetMasterLibrary {
 			}
 		}
 
-		// private -> public
+
 		public string GetScriptsDir() {
 
 			string dir = Directory.GetCurrentDirectory();
@@ -225,7 +214,33 @@ namespace PuppetMasterLibrary {
 			CloseProcesses();
 		}
 	}
+}
 
+	// REMOVED //
+
+	//<summary>
+	// Reads configuration file
+	//</summary>
+
+	//<summary>
+	// Creates CLI interface for user interaction with Puppet Master Service
+	//</summary>
+
+	//<summary>
+	// Match string using regex patterns
+	//</summary>
+
+	//<summary>
+	// Change to execution mode
+	//</summary>
+
+	//<summary>
+	// Change to configuration mode
+	//</summary>
+
+	//<summary>
+	// Converts string input into command
+	//</summary>
 
 	////<summary>
 	//// Project @event point class
@@ -247,4 +262,3 @@ namespace PuppetMasterLibrary {
 	//		}
 	//	}
 	//}
-}

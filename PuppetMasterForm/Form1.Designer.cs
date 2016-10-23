@@ -52,6 +52,7 @@
 			this.ScriptFile.Size = new System.Drawing.Size(420, 20);
 			this.ScriptFile.TabIndex = 1;
 			this.ScriptFile.TextChanged += new System.EventHandler(this.ScriptFile_TextChanged);
+			this.ScriptFile.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScriptFile_KeyDown);
 			// 
 			// RunStepByStep
 			// 
@@ -90,6 +91,7 @@
 			this.Command.Size = new System.Drawing.Size(523, 20);
 			this.Command.TabIndex = 5;
 			this.Command.TextChanged += new System.EventHandler(this.Command_TextChanged);
+			this.Command.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Command_KeyDown);
 			// 
 			// RunCommand
 			// 
@@ -113,12 +115,17 @@
 			// 
 			// Output
 			// 
+			this.Output.AllowDrop = true;
+			this.Output.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.Output.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.Output.ForeColor = System.Drawing.SystemColors.ControlLightLight;
 			this.Output.Location = new System.Drawing.Point(51, 256);
 			this.Output.Multiline = true;
 			this.Output.Name = "Output";
+			this.Output.ReadOnly = true;
+			this.Output.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.Output.Size = new System.Drawing.Size(622, 314);
 			this.Output.TabIndex = 8;
-			this.Output.TextChanged += new System.EventHandler(this.Output_TextChanged);
 			// 
 			// StartForm
 			// 
@@ -136,6 +143,7 @@
 			this.Controls.Add(this.ScriptFileLable);
 			this.Name = "StartForm";
 			this.Text = "PuppetMasterForm";
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.StartForm_KeyDown);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

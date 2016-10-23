@@ -80,6 +80,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonTypesLibrary\CommonTypesLibrary.csproj">
+      <Project>{8aa90885-c630-4770-814c-1c03726936d4}</Project>
+      <Name>CommonTypesLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PuppetMasterLibrary\PuppetMasterLibrary.csproj">
       <Project>{beb2bf2d-656e-464a-a96f-d3d5f3c034ea}</Project>
       <Name>PuppetMasterLibrary</Name>

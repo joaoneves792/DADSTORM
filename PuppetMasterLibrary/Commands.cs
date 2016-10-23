@@ -19,8 +19,8 @@ using ProcessCreationServiceApplication;
 using CommonTypesLibrary;
 
 namespace PuppetMasterLibrary {
-    //Aliases
-    using Url = String;
+
+	using Url = String;
     using OperatorId = String;
     using Milliseconds = String;
     using ProcessName = String;
@@ -30,9 +30,8 @@ namespace PuppetMasterLibrary {
     using Address = String;
     using OperatorSpec = String;
 
-	// internal -> public
-    public partial class PuppetMaster : MarshalByRefObject, IPuppetMaster
-    {
+
+	public partial class PuppetMaster : MarshalByRefObject, IPuppetMaster {
         //Tables
         private IDictionary<OperatorId, IList<Url>> _operatorResolutionCache;
         private IDictionary<Url, IPuppet> _puppetTable;
@@ -43,10 +42,6 @@ namespace PuppetMasterLibrary {
         private const String PUPPET_NAME = "Puppet";
 
         private String _semantic, _loggingLevel;
-
-        ///<summary>
-        /// Puppet Master CLI constructor
-        ///</summary>
 
 		// internal -> public
         public PuppetMaster() {
@@ -185,6 +180,7 @@ namespace PuppetMasterLibrary {
             }
         }
 
+
         private void ExecuteStartCommand(OperatorId operatorId) {
             Console.WriteLine("ExecuteStartCommand: " + operatorId);
             IList<Url> urlList = _operatorResolutionCache[operatorId];
@@ -195,6 +191,7 @@ namespace PuppetMasterLibrary {
                 });
             }
         }
+
 
         private void ExecuteIntervalCommand(OperatorId operatorId, Milliseconds milliseconds) {
             IList<Url> urlList = _operatorResolutionCache[operatorId];
@@ -207,6 +204,7 @@ namespace PuppetMasterLibrary {
             
         }
 
+
         private void ExecuteStatusCommand() {
             foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
                 IPuppet puppet = entry.Value;
@@ -215,6 +213,7 @@ namespace PuppetMasterLibrary {
                 });
             }
         }
+
 
         private void ExecuteCrashCommand(ProcessName processName) {
             processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
@@ -226,6 +225,7 @@ namespace PuppetMasterLibrary {
 
         }
 
+
         private void ExecuteFreezeCommand(ProcessName processName) {
             processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
 
@@ -236,6 +236,7 @@ namespace PuppetMasterLibrary {
 
         }
 
+
         private void ExecuteUnfreezeCommand(ProcessName processName) {
             processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
             IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
@@ -245,10 +246,12 @@ namespace PuppetMasterLibrary {
 
         }
 
+
         private void ExecuteWaitCommand(Milliseconds milliseconds) {
             //TODO: double-check this
             Thread.Sleep(Int32.Parse(milliseconds));
         }
+
 
         private void ExecuteSemanticsCommand(String semantic) {
             _semantic = semantic;
@@ -260,6 +263,7 @@ namespace PuppetMasterLibrary {
                 });
             }
         }
+
 
         private void ExecuteLoggingLevelCommand(String loggingLevel) {
             _loggingLevel = loggingLevel;
@@ -273,16 +277,11 @@ namespace PuppetMasterLibrary {
         }
 
 
-        //<summary>
-        // Close processes
-        //</summary>
         public void CloseProcesses(object sender, ConsoleCancelEventArgs args) {
             CloseProcesses();
         }
 
-        //<summary>
-        // Close processes
-        //</summary>
+
         public void CloseProcesses() {
             foreach (IPuppet puppet in _puppetTable.Values) {
                 try {
@@ -296,3 +295,19 @@ namespace PuppetMasterLibrary {
         }
     }
 }
+
+
+// REMOVED //
+
+//<summary>
+// Close processes
+//</summary>
+
+///<summary>
+/// Puppet Master CLI constructor
+///</summary>
+
+//<summary>
+// Close processes
+//</summary>
+
