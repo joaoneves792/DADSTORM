@@ -89,6 +89,7 @@ namespace PuppetMasterLibrary {
                 w.Close();
 
                 Console.WriteLine(message);
+				OnPrint(message);
             }
         }
 

@@ -16,7 +16,6 @@ using CommonTypesLibrary;
 
 namespace PuppetMasterLibrary {
 
-	//Aliases
 	using Url = String;
 	using OperatorId = String;
 	using ProcessName = String;
@@ -25,10 +24,10 @@ namespace PuppetMasterLibrary {
 	public partial class PuppetMaster {
 
 		public delegate void PrintToOutputHandler(object sender, TextEventArgs args);
-		public event PrintToOutputHandler PrintToOutput;
+		public event PrintToOutputHandler Print;
 
 		protected virtual void OnPrint(string text) {
-			PrintToOutput?.Invoke(this, new TextEventArgs(text));
+			Print?.Invoke(this, new TextEventArgs(text));
 		}
 
 
@@ -56,33 +55,6 @@ namespace PuppetMasterLibrary {
 			}
 
 			file.Close();
-		}
-
-
-		internal void StartCLI() {
-			String command;
-			while (true) {
-				System.Console.Write("PuppetMaster> ");
-				command = System.Console.ReadLine();
-				if (command.ToLower().Equals("abort")) {
-					return;
-				}
-
-				if (command.Equals("")) {
-					continue;
-				}
-
-				try {
-					ParseLineAndExecuteCommand(command);
-
-				} catch (Exception exception) {
-					Console.WriteLine(exception.Message);
-					Console.ReadLine();
-				}
-
-				Console.WriteLine(Path.GetFullPath("."));
-
-			}
 		}
 
 
@@ -200,8 +172,11 @@ namespace PuppetMasterLibrary {
 				if (!File.Exists(dir + "\\" + fileName)) {
 					//get a list of scripts inside the folder
 					Console.WriteLine("Available scripts: ");
+					OnPrint("Available scripts: ");
+
 					foreach (string file in Directory.GetFiles(dir)) {
 						Console.WriteLine(" " + Path.GetFileName(file));
+						OnPrint(" " + Path.GetFileName(file));
 					}
 
 					return;
@@ -212,6 +187,33 @@ namespace PuppetMasterLibrary {
 
 			StartCLI();
 			CloseProcesses();
+		}
+
+		// FIXME legacy
+		internal void StartCLI() {
+			String command;
+			while (true) {
+				System.Console.Write("PuppetMaster> ");
+				command = System.Console.ReadLine();
+				if (command.ToLower().Equals("abort")) {
+					return;
+				}
+
+				if (command.Equals("")) {
+					continue;
+				}
+
+				try {
+					ParseLineAndExecuteCommand(command);
+
+				} catch (Exception exception) {
+					Console.WriteLine(exception.Message);
+					Console.ReadLine();
+				}
+
+				Console.WriteLine(Path.GetFullPath("."));
+
+			}
 		}
 	}
 }

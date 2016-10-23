@@ -11,6 +11,9 @@ namespace PuppetMasterClient {
 	class PuppetMasterClient {
 		static void Main(string[] args) {
 
+			// FIXME puppetmaster now requires events to print
+			// just copy from form
+
 			PuppetMaster pm = new PuppetMaster();
 			String fileNames = string.Join("", args);
 

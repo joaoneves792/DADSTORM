@@ -21,10 +21,10 @@ namespace PuppetMasterForm {
 			InitializeComponent();
 
 			_pm = new PuppetMaster();
-			DisplayHelp();
-
 			// FIXME finish eventhandler
+			_pm.Print += PrintToOutput;
 
+			DisplayHelp();
 		}
 
 
@@ -42,11 +42,14 @@ namespace PuppetMasterForm {
 		}
 
 		private void DisplayHelp() {
-			Output.Text += "\r\n"
+
+			string str = "help:\r\n"
 				+ "display help \t\t Ctrl+H" + "\r\n"
 				+ "run step by step \t\t Return" + "\r\n"
 				+ "run all \t\t\t Ctrl+Return" + "\r\n"
-				+ "execute command \t\t Return"+ "\r\n";
+				+ "execute command \t\t Return";
+
+			PrintToOutput(str);
 		}
 
 
@@ -58,21 +61,21 @@ namespace PuppetMasterForm {
 				if (e.KeyCode == Keys.Back) {
 					ScriptFile.Text = "";
 				} else if (e.KeyCode == Keys.Return) {
-					Output.Text = "Runnig all from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text;
+					PrintToOutput("Runnig all from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
 					RunAll_Click(this, null);
 				} else if (e.KeyCode == Keys.H) {
 					DisplayHelp();
 				}
 
 			} else if (e.KeyCode == Keys.Return) {
-				Output.Text += "Runnig step from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text;
+				PrintToOutput("Runnig step from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
 				RunStepByStep_Click(this, null);
 			}
 		}
 
 		private void RunStepByStep_Click(object sender, EventArgs e) {
 			// FIXME step by step execution
-			Output.Text += "\r\n" + "FIXME step by step execution" + "\r\n";
+			PrintToOutput("FIXME step by step execution");
 		}
 
 		private void RunAll_Click(object sender, EventArgs e) {
@@ -89,8 +92,13 @@ namespace PuppetMasterForm {
 		// command handling //
 
 		private void Command_KeyDown(object sender, KeyEventArgs e) {
-			if (e.KeyCode == Keys.Return) {
-				Output.Text = "command.\r\n";
+			if (Control.ModifierKeys == Keys.Control) {
+				if (e.KeyCode == Keys.H) {
+					DisplayHelp();
+				}
+
+			} else if (e.KeyCode == Keys.Return) {
+				PrintToOutput("manual command: " + Command.Text);
 				RunCommand_Click(this, null);
 			}
 		}
@@ -108,8 +116,12 @@ namespace PuppetMasterForm {
 
 		// command handling //
 
-		private void Print(object sender, TextEventArgs e) {
-			Output.Text = e.Text + "\r\n" + Output.Text;
+		private void PrintToOutput(string text) {
+			Output.Text = text + "\r\n\r\n" + Output.Text;
+		}
+
+		private void PrintToOutput(object sender, TextEventArgs e) {
+			Output.Text = e.Text + "\r\n\r\n" + Output.Text;
 		}
 
 
