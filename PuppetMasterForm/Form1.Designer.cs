@@ -104,7 +104,6 @@
 			// 
 			// RunCommand
 			// 
-			this.RunCommand.Enabled = false;
 			this.RunCommand.Location = new System.Drawing.Point(344, 675);
 			this.RunCommand.Name = "RunCommand";
 			this.RunCommand.Size = new System.Drawing.Size(75, 23);

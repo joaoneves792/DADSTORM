@@ -11,7 +11,6 @@ namespace OperatorApplication.Commands {
     abstract class Command {
         public abstract TupleMessage Execute(TupleMessage inputTuple);
 
-		// FIXME: dictionary is a stupid idea
 		public abstract List<KeyValuePair<string, string>> Status();
 	}
 }

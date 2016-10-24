@@ -6,20 +6,17 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DistributedAlgoritmsClassLibrary
-{
+namespace DistributedAlgoritmsClassLibrary {
     using Message = Object;
 
-    public class RetransmitForever : StubbornPointToPointLink
-    {
+    public class RetransmitForever : StubbornPointToPointLink {
         private Action<Process, Message> _listener;
         private FairLossPointToPointLink _fairLossPointToPointLink;
         private const int TIMER = 5000;
 
         private IProducerConsumerCollection<Tuple<Process, Message>> _sent;
 
-        public RetransmitForever(Process process, Action<Process, Message> listener)
-        {
+        public RetransmitForever(Process process, Action<Process, Message> listener) {
             _listener = listener;
             _fairLossPointToPointLink = new RemotingNode(process, Deliver);
 

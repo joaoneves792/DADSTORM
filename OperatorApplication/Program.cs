@@ -11,8 +11,7 @@ using System.Threading;
 
 using DistributedAlgoritmsClassLibrary;
 
-namespace OperatorApplication
-{
+namespace OperatorApplication {
     using Message = Object;
     using OperatorId = String;
     using Url = String;

@@ -51,9 +51,9 @@ namespace PuppetMasterLibrary {
 			if (_cmdList.Count > 0) {
 				ParseLineAndExecuteCommand(_cmdList.First());
 				_cmdList.RemoveAt(0);
+				// FIXME if empty list trigger form event to disable running from file
 
 			} else {
-				// FIXME throw empty list exception
 				Print("No more commands.");
 			}
 		}
