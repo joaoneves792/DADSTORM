@@ -77,33 +77,41 @@ namespace PuppetMasterForm {
 
 		// script file handling //
 
+		private void LoadFile_Click(object sender, EventArgs e) {
+			_pm.LoadFile("..\\..\\scripts\\" + ScriptFile.Text);
+			ScriptFile.Clear();
+		}
+
 		private void ScriptFile_KeyDown(object sender, KeyEventArgs e) {
 			if (Control.ModifierKeys == Keys.Control) {
 				if (e.KeyCode == Keys.Back) {
 					ScriptFile.Text = "";
 
-				} else if (e.KeyCode == Keys.Return) {
-					PrintToOutput("Runnig all from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
-					RunAll_Click(this, null);
+				} else if (e.KeyCode == Keys.S) {
+					//PrintToOutput("Runnig all from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
+					RunStepByStep_Click(this, null);
 
-				} else if (e.KeyCode == Keys.H) {
-					//DisplayHelp();
+				} else if (e.KeyCode == Keys.A) {
+					//PrintToOutput("Runnig all from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
+					RunAll_Click(this, null);
 				}
 
 			} else if (e.KeyCode == Keys.Return) {
-				PrintToOutput("Runnig step from: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
-				RunStepByStep_Click(this, null);
+				PrintToOutput("Loaded: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
+				LoadFile_Click(this, null);
 			}
 		}
 
+
+		// file execution handling //
+
 		private void RunStepByStep_Click(object sender, EventArgs e) {
-			// FIXME step by step execution
-			PrintToOutput("FIXME step by step execution");
+			_pm.ExecuteSingleCommand();
 		}
 
 		private void RunAll_Click(object sender, EventArgs e) {
-			_pm.ExecuteConfigurationFile("..\\..\\scripts\\" + ScriptFile.Text);
-			ScriptFile.Text = "";
+			//_pm.ExecuteConfigurationFile("..\\..\\scripts\\" + ScriptFile.Text);
+			_pm.ExecuteAllCommands();
 		}
 
 		private void ScriptFile_TextChanged(object sender, EventArgs e) {
@@ -118,9 +126,6 @@ namespace PuppetMasterForm {
 			if (Control.ModifierKeys == Keys.Control) {
 				if (e.KeyCode == Keys.Return) {
 					RunCommand_Click(this, null);
-
-				} else if (e.KeyCode == Keys.H) {
-					//DisplayHelp();
 				}
 			}
 		}
@@ -139,7 +144,7 @@ namespace PuppetMasterForm {
 
 
 
-		// command handling //
+		// output handling //
 
 		private void PrintToOutput(string text) {
 			Output.Text = text + "\r\n\r\n" + Output.Text;

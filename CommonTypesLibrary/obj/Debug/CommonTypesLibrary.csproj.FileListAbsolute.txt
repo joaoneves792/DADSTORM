@@ -10,5 +10,6 @@ C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\CommonTypesLibrary\obj\
 C:\Users\talos\Documents\Visual Studio 2015\Projects\dad\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.pdb
 D:\projects\dad\project\CommonTypesLibrary\bin\Debug\CommonTypesLibrary.dll
 D:\projects\dad\project\CommonTypesLibrary\bin\Debug\CommonTypesLibrary.pdb
+D:\projects\dad\project\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.csprojResolveAssemblyReference.cache
 D:\projects\dad\project\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.dll
 D:\projects\dad\project\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.pdb

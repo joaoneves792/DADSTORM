@@ -70,17 +70,26 @@ namespace OperatorApplication
         }
 
         public void Status() {
-			//TODO: Implement me
-			// We need to display status of the rest of the system from our point of view
-			//Cant do that right now
 
-			Console.WriteLine("sTATUS :");
-			Console.WriteLine("\t Operator type: " + _command.ToString());
-			Console.WriteLine("\t State: " + _state);
-			Console.WriteLine("\t Waiting interval: " + _sleepBetweenEvents);
+			Console.WriteLine("status:");
+			Console.WriteLine("\t Operator type: \t" + _command.ToString());
+			Console.WriteLine("\t State: \t\t" + _state);
+			Console.WriteLine("\t Waiting interval: \t" + _sleepBetweenEvents);
+
+			//FIXME list of destinations, other stuff
+			Console.Write("\r\n\t Recievers: \t");
+			int count = 0;
+			foreach (Process receiver in _outputReceivers) {
+				Console.Write("\t" + receiver.ServiceName +"  at " + receiver.Url);
+				Console.Write("\r\n\t\t\t");
+				count++;
+			}
+
+			if (count == 0) { Console.Write("\r\n"); }
+			Console.Write("\r\n");
 
 			foreach (KeyValuePair<string,string> pair in _command.Status()) {
-                Console.WriteLine("\t " + pair.Key + ": " + pair.Value);
+                Console.WriteLine("\t " + pair.Key + ": \t\t" + pair.Value);
             }
 
             Log(_logStatus, _command.ToString());

@@ -35,6 +35,8 @@
 			this.AvailableScripts = new System.Windows.Forms.TextBox();
 			this.AvailableScriptsLable = new System.Windows.Forms.Label();
 			this.ControlLable = new System.Windows.Forms.Label();
+			this.LoadFile = new System.Windows.Forms.Button();
+			this.ExecuteLable = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// ScriptFileLable
@@ -59,7 +61,7 @@
 			// 
 			// RunStepByStep
 			// 
-			this.RunStepByStep.Location = new System.Drawing.Point(266, 313);
+			this.RunStepByStep.Location = new System.Drawing.Point(30, 362);
 			this.RunStepByStep.Name = "RunStepByStep";
 			this.RunStepByStep.Size = new System.Drawing.Size(75, 23);
 			this.RunStepByStep.TabIndex = 2;
@@ -69,7 +71,7 @@
 			// 
 			// RunAll
 			// 
-			this.RunAll.Location = new System.Drawing.Point(347, 313);
+			this.RunAll.Location = new System.Drawing.Point(111, 362);
 			this.RunAll.Name = "RunAll";
 			this.RunAll.Size = new System.Drawing.Size(75, 23);
 			this.RunAll.TabIndex = 3;
@@ -81,7 +83,7 @@
 			// 
 			this.ManualCommandLable.AutoSize = true;
 			this.ManualCommandLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ManualCommandLable.Location = new System.Drawing.Point(30, 385);
+			this.ManualCommandLable.Location = new System.Drawing.Point(30, 427);
 			this.ManualCommandLable.Name = "ManualCommandLable";
 			this.ManualCommandLable.Size = new System.Drawing.Size(332, 32);
 			this.ManualCommandLable.TabIndex = 4;
@@ -89,7 +91,7 @@
 			// 
 			// Command
 			// 
-			this.Command.Location = new System.Drawing.Point(30, 420);
+			this.Command.Location = new System.Drawing.Point(30, 462);
 			this.Command.Multiline = true;
 			this.Command.Name = "Command";
 			this.Command.Size = new System.Drawing.Size(389, 207);
@@ -99,7 +101,7 @@
 			// 
 			// RunCommand
 			// 
-			this.RunCommand.Location = new System.Drawing.Point(344, 633);
+			this.RunCommand.Location = new System.Drawing.Point(344, 675);
 			this.RunCommand.Name = "RunCommand";
 			this.RunCommand.Size = new System.Drawing.Size(75, 23);
 			this.RunCommand.TabIndex = 6;
@@ -164,11 +166,33 @@
 			this.ControlLable.TabIndex = 11;
 			this.ControlLable.Text = "Control                                                                  ";
 			// 
+			// LoadFile
+			// 
+			this.LoadFile.Location = new System.Drawing.Point(347, 314);
+			this.LoadFile.Name = "LoadFile";
+			this.LoadFile.Size = new System.Drawing.Size(75, 23);
+			this.LoadFile.TabIndex = 12;
+			this.LoadFile.Text = "Load";
+			this.LoadFile.UseVisualStyleBackColor = true;
+			this.LoadFile.Click += new System.EventHandler(this.LoadFile_Click);
+			// 
+			// ExecuteLable
+			// 
+			this.ExecuteLable.AutoSize = true;
+			this.ExecuteLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ExecuteLable.Location = new System.Drawing.Point(30, 343);
+			this.ExecuteLable.Name = "ExecuteLable";
+			this.ExecuteLable.Size = new System.Drawing.Size(66, 16);
+			this.ExecuteLable.TabIndex = 13;
+			this.ExecuteLable.Text = "Execution";
+			// 
 			// StartForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1364, 774);
+			this.Controls.Add(this.ExecuteLable);
+			this.Controls.Add(this.LoadFile);
 			this.Controls.Add(this.ControlLable);
 			this.Controls.Add(this.AvailableScriptsLable);
 			this.Controls.Add(this.AvailableScripts);
@@ -204,6 +228,8 @@
 		private System.Windows.Forms.TextBox AvailableScripts;
 		private System.Windows.Forms.Label AvailableScriptsLable;
 		private System.Windows.Forms.Label ControlLable;
+		private System.Windows.Forms.Button LoadFile;
+		private System.Windows.Forms.Label ExecuteLable;
 	}
 }
 

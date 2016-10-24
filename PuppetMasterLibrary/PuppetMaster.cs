@@ -36,48 +36,36 @@ namespace PuppetMasterLibrary {
 		private List<string> _cmdList = new List<string>();
 
 
-		public void ReadFile(string configFile) {
+		// FIXME don't add wrong lines
+		public void LoadFile(string configFile) {
 			string line = null;
 			StreamReader file = new StreamReader(configFile);
 			while ((line = file.ReadLine()) != null) {
+				if (line.Trim().Equals("")) { continue; }
+
 				_cmdList.Add(line);
 			}
 		}
 
 		public void ExecuteSingleCommand() {
-			ParseLineAndExecuteCommand(_cmdList.First());
-			_cmdList.RemoveAt(0);
+			if (_cmdList.Count > 0) {
+				ParseLineAndExecuteCommand(_cmdList.First());
+				_cmdList.RemoveAt(0);
+
+			} else {
+				// FIXME throw empty list exception
+				Print("No more commands.");
+			}
 		}
 
 		public void ExecuteAllCommands() {
 			foreach (string cmd in _cmdList) {
 				ParseLineAndExecuteCommand(cmd);
 			}
+			_cmdList.Clear();
 		}
 
 
-		// FIXME change for executable line by line
-		public void ExecuteConfigurationFile(String configurationFileName) {
-			String line;
-			StreamReader file = new StreamReader(configurationFileName);
-
-			while ((line = file.ReadLine()) != null) {
-				//Check line ignorability
-				if (line.Equals("") || line[0].Equals('-') || line[0].Equals('/')) {
-					continue;
-				}
-
-				try {
-					ParseLineAndExecuteCommand(line);
-
-				} catch (Exception exception) {
-					Print(exception.Message);
-					//Console.ReadLine();
-				}
-			}
-
-			file.Close();
-		}
 
 
 		private bool Matches(String pattern, String line, out GroupCollection groupCollection) {
@@ -109,6 +97,8 @@ namespace PuppetMasterLibrary {
 
 		public void ParseLineAndExecuteCommand(String line) {
 			GroupCollection groupCollection;
+
+			Print(line);
 
 			if (Matches(OPERATOR_ID_COMMAND, line, out groupCollection)) {
 				Log(line);
@@ -203,7 +193,10 @@ namespace PuppetMasterLibrary {
 					return;
 				}
 
-				ExecuteConfigurationFile(dir + "\\" + fileName);
+				LoadFile(dir + "\\" + fileName);
+				ExecuteAllCommands();
+
+				//ExecuteConfigurationFile(dir + "\\" + fileName);
 			}
 
 			StartCLI();
@@ -239,49 +232,71 @@ namespace PuppetMasterLibrary {
 	}
 }
 
-	// REMOVED //
+// REMOVED //
 
-	//<summary>
-	// Reads configuration file
-	//</summary>
+//<summary>
+// Reads configuration file
+//</summary>
 
-	//<summary>
-	// Creates CLI interface for user interaction with Puppet Master Service
-	//</summary>
+//<summary>
+// Creates CLI interface for user interaction with Puppet Master Service
+//</summary>
 
-	//<summary>
-	// Match string using regex patterns
-	//</summary>
+//<summary>
+// Match string using regex patterns
+//</summary>
 
-	//<summary>
-	// Change to execution mode
-	//</summary>
+//<summary>
+// Change to execution mode
+//</summary>
 
-	//<summary>
-	// Change to configuration mode
-	//</summary>
+//<summary>
+// Change to configuration mode
+//</summary>
 
-	//<summary>
-	// Converts string input into command
-	//</summary>
+//<summary>
+// Converts string input into command
+//</summary>
 
-	////<summary>
-	//// Project @event point class
-	////</summary>
-	//public static class Program {
-	//	//<summary>
-	//	// Project @event point method
-	//	//</summary>
-	//	public static void Main(string[] args) {
-	//		PuppetMaster puppetMaster = new PuppetMaster();
-	//		String fileNames = string.Join("", args);
+////<summary>
+//// Project @event point class
+////</summary>
+//public static class Program {
+//	//<summary>
+//	// Project @event point method
+//	//</summary>
+//	public static void Main(string[] args) {
+//		PuppetMaster puppetMaster = new PuppetMaster();
+//		String fileNames = string.Join("", args);
 
-	//		// Close all processes when ctrl+c is pressed
-	//		Console.CancelKeyPress += new ConsoleCancelEventHandler(puppetMaster.CloseProcesses);
+//		// Close all processes when ctrl+c is pressed
+//		Console.CancelKeyPress += new ConsoleCancelEventHandler(puppetMaster.CloseProcesses);
 
-	//		while (true) {
-	//			puppetMaster.Run(fileNames);
-	//			fileNames = Console.ReadLine();
-	//		}
-	//	}
-	//}
+//		while (true) {
+//			puppetMaster.Run(fileNames);
+//			fileNames = Console.ReadLine();
+//		}
+//	}
+//}
+
+//public void ExecuteConfigurationFile(String configurationFileName) {
+//	String line;
+//	StreamReader file = new StreamReader(configurationFileName);
+
+//	while ((line = file.ReadLine()) != null) {
+//		//Check line ignorability
+//		if (line.Equals("") || line[0].Equals('-') || line[0].Equals('/')) {
+//			continue;
+//		}
+
+//		try {
+//			ParseLineAndExecuteCommand(line);
+
+//		} catch (Exception exception) {
+//			Print(exception.Message);
+//			//Console.ReadLine();
+//		}
+//	}
+
+//	file.Close();
+//}
