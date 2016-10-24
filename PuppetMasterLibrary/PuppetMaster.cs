@@ -66,8 +66,6 @@ namespace PuppetMasterLibrary {
 		}
 
 
-
-
 		private bool Matches(String pattern, String line, out GroupCollection groupCollection) {
 			Regex regex = new Regex(pattern, RegexOptions.Compiled);
 
@@ -153,9 +151,6 @@ namespace PuppetMasterLibrary {
 				Log(line);
 				ExecuteLoggingLevelCommand(groupCollection[1].Value);
 
-			} else if (line.Trim().ToLower().Equals("abort")) {
-				//FIXME consider regexpr match for abort as well
-				CloseProcesses();
 			}
 		}
 

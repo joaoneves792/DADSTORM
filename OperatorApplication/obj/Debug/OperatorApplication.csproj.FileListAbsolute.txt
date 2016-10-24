@@ -30,3 +30,13 @@ D:\projects\dad\project\OperatorApplication\bin\Debug\DistributedAlgoritmsClassL
 D:\projects\dad\project\OperatorApplication\obj\Debug\OperatorApplication.csprojResolveAssemblyReference.cache
 D:\projects\dad\project\OperatorApplication\obj\Debug\OperatorApplication.exe
 D:\projects\dad\project\OperatorApplication\obj\Debug\OperatorApplication.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\OperatorApplication.exe.config
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\OperatorApplication.exe
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\OperatorApplication.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\CommonTypesLibrary.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\obj\Debug\OperatorApplication.csprojResolveAssemblyReference.cache
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\obj\Debug\OperatorApplication.exe
+C:\Users\luisribeirogomes\documents\visual studio 2015\Projects\DAD\OperatorApplication\obj\Debug\OperatorApplication.pdb

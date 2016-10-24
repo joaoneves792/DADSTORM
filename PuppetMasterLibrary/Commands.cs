@@ -45,6 +45,8 @@ namespace PuppetMasterLibrary {
 
 		// internal -> public
         public PuppetMaster() {
+            ToggleToConfigurationMode();
+
             _operatorResolutionCache = new Dictionary<OperatorId, IList<Url>>();
             _puppetTable = new Dictionary<Url, IPuppet>();
             _processCreationServiceTable = new Dictionary<Url, IProcessCreationService>();
@@ -182,11 +184,9 @@ namespace PuppetMasterLibrary {
 
 
         private void ExecuteStartCommand(OperatorId operatorId) {
-            Print("ExecuteStartCommand: " + operatorId);
             IList<Url> urlList = _operatorResolutionCache[operatorId];
 
 			foreach (Url url in urlList) {
-				Print(url);
 				IPuppet puppet = _puppetTable[url];
 				Task.Run(() => {
 					puppet.Start();
@@ -292,6 +292,7 @@ namespace PuppetMasterLibrary {
                 catch (Exception) { }
             }
 
+            ToggleToConfigurationMode();
             _operatorResolutionCache = new Dictionary<OperatorId, IList<Url>>();
             _puppetTable = new Dictionary<Url, IPuppet>();
         }
