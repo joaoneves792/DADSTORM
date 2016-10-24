@@ -16887,3 +16887,11 @@ Start 1
 1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
 2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
 5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll", "Basic", "Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1

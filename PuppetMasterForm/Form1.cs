@@ -48,6 +48,9 @@ namespace PuppetMasterForm {
 
 				} else if (e.KeyCode == Keys.L) {
 					Output.Clear();
+
+				} else if (e.KeyCode == Keys.C) {
+					_pm.ParseLineAndExecuteCommand("abort");
 				}
 
 			} else if (Control.ModifierKeys == Keys.Alt) {
@@ -65,10 +68,12 @@ namespace PuppetMasterForm {
 
 			string str = "help:\r\n"
 				+ "\t display help \t\t Ctrl+H" + "\r\n"
-				+ "\t run step by step \t\t Return" + "\r\n"
-				+ "\t run all \t\t\t Ctrl+Return" + "\r\n"
+				+ "\t clear console \t\t Ctrl+L" + "\r\n"
+				+ "\t load file \t\t\t Return" + "\r\n"
+				+ "\t run step by step \t\t Ctrl+S" + "\r\n"
+				+ "\t run all \t\t\t Ctrl+A" + "\r\n"
 				+ "\t execute command \t\t Ctrl+Return" + "\r\n"
-				+ "\t clear console \t\t Ctrl+L";
+				+ "\t quick abort \t\t Ctrl+C";
 
 			PrintToOutput(str);
 		}

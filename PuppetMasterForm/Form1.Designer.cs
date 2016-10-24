@@ -61,7 +61,7 @@
 			// 
 			// RunStepByStep
 			// 
-			this.RunStepByStep.Location = new System.Drawing.Point(30, 362);
+			this.RunStepByStep.Location = new System.Drawing.Point(111, 362);
 			this.RunStepByStep.Name = "RunStepByStep";
 			this.RunStepByStep.Size = new System.Drawing.Size(75, 23);
 			this.RunStepByStep.TabIndex = 2;
@@ -71,7 +71,7 @@
 			// 
 			// RunAll
 			// 
-			this.RunAll.Location = new System.Drawing.Point(111, 362);
+			this.RunAll.Location = new System.Drawing.Point(30, 362);
 			this.RunAll.Name = "RunAll";
 			this.RunAll.Size = new System.Drawing.Size(75, 23);
 			this.RunAll.TabIndex = 3;
