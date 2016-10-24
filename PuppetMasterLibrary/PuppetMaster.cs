@@ -96,8 +96,6 @@ namespace PuppetMasterLibrary {
 		public void ParseLineAndExecuteCommand(String line) {
 			GroupCollection groupCollection;
 
-			Print(line);
-
 			if (Matches(OPERATOR_ID_COMMAND, line, out groupCollection)) {
 				Log(line);
 				ExecuteOperatorIdCommand(
