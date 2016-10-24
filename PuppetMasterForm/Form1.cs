@@ -37,10 +37,10 @@ namespace PuppetMasterForm {
 		// global events //
 
 		// FIXME Alt+F4 to abort before closing
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-			if (keyData == Keys.F4) { return true; }
-			return base.ProcessCmdKey(ref msg, keyData);
-		}
+		//protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+		//	if (keyData == Keys.F4) { return true; }
+		//	return base.ProcessCmdKey(ref msg, keyData);
+		//}
 
 
 		private void StartForm_KeyUp(object sender, KeyEventArgs e) {
@@ -94,8 +94,8 @@ namespace PuppetMasterForm {
         }
 
 		private void LoadFile_Click(object sender, EventArgs e) {
-            LoadFile.Enabled = false;
-            ScriptFile.Enabled = false;
+            //LoadFile.Enabled = false;
+            //ScriptFile.Enabled = false;
 
             _worker = new BackgroundWorker();
             _worker.DoWork += new DoWorkEventHandler((doWorkEventSender, doWorkEventArgs) => {
@@ -108,12 +108,12 @@ namespace PuppetMasterForm {
         private void LoadFile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             ScriptFile.Clear();
 
-            LoadFile.Enabled = true;
-            ScriptFile.Enabled = true;
+            //LoadFile.Enabled = true;
+            //ScriptFile.Enabled = true;
             RunStepByStep.Enabled = true;
             RunAll.Enabled = true;
-            RunCommand.Enabled = true;
-            Command.Enabled = true;
+            //RunCommand.Enabled = true;
+            //Command.Enabled = true;
         }
 
         private void ScriptFile_KeyDown(object sender, KeyEventArgs e) {
@@ -140,37 +140,39 @@ namespace PuppetMasterForm {
             RunAbort.Enabled = false;
             RunStepByStep.Enabled = false;
             RunAll.Enabled = false;
-            LoadFile.Enabled = false;
-            ScriptFile.Enabled = false;
+            //LoadFile.Enabled = false;
+            //ScriptFile.Enabled = false;
             RunCommand.Enabled = false;
             Command.Enabled = false;
 
-            _worker.CancelAsync();
+            //_worker.CancelAsync();
 
             _worker = new BackgroundWorker();
             _worker.DoWork += new DoWorkEventHandler((doWorkEventSender, doWorkEventArgs) => {
                 _pm.CloseProcesses();
             });
             _worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunAbort_RunWorkerCompleted);
-            _worker.RunWorkerAsync();
-        }
+			_worker.RunWorkerAsync();
+		}
 
         private void RunAbort_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            Output.Text = "";
-            DisplayHelp();
+            //Output.Text = "";
+            //DisplayHelp();
 
-            LoadFile.Enabled = true;
-            ScriptFile.Enabled = true;
+			PrintToOutput("Closed operators.");
+
+            //LoadFile.Enabled = true;
+            //ScriptFile.Enabled = true;
         }
 
         private void RunStepByStep_Click(object sender, EventArgs e) {
             RunAbort.Enabled = true;
             RunStepByStep.Enabled = false;
             RunAll.Enabled = false;
-            LoadFile.Enabled = false;
-            ScriptFile.Enabled = false;
-            RunCommand.Enabled = false;
-            Command.Enabled = false;
+            //LoadFile.Enabled = false;
+            //ScriptFile.Enabled = false;
+            //RunCommand.Enabled = false;
+            //Command.Enabled = false;
 
             _worker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
             _worker.ProgressChanged += new ProgressChangedEventHandler(RunStepByStep_ProgressChanged);
@@ -178,14 +180,14 @@ namespace PuppetMasterForm {
                 _pm.ExecuteSingleCommand();
             });
             _worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunStepByStep_RunWorkerCompleted);
-            _worker.RunWorkerAsync();
-        }
+			_worker.RunWorkerAsync();
+		}
 
         private void RunStepByStep_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             RunStepByStep.Enabled = true;
             RunAll.Enabled = true;
-            RunCommand.Enabled = true;
-            Command.Enabled = true;
+            //RunCommand.Enabled = true;
+            //Command.Enabled = true;
         }
 
         private void RunStepByStep_ProgressChanged(object sender, ProgressChangedEventArgs e) {
@@ -196,10 +198,10 @@ namespace PuppetMasterForm {
             RunAbort.Enabled = true;
             RunStepByStep.Enabled = false;
             RunAll.Enabled = false;
-            LoadFile.Enabled = false;
-            ScriptFile.Enabled = false;
-            RunCommand.Enabled = false;
-            Command.Enabled = false;
+            //LoadFile.Enabled = false;
+            //ScriptFile.Enabled = false;
+            //RunCommand.Enabled = false;
+            //Command.Enabled = false;
 
             _worker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
             _worker.ProgressChanged += new ProgressChangedEventHandler(RunAll_ProgressChanged);
@@ -207,12 +209,12 @@ namespace PuppetMasterForm {
                 _pm.ExecuteAllCommands();
             });
             _worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunAll_RunWorkerCompleted);
-            _worker.RunWorkerAsync();
+			_worker.RunWorkerAsync();
 		}
 
         private void RunAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            RunCommand.Enabled = true;
-            Command.Enabled = true;
+            //RunCommand.Enabled = true;
+            //Command.Enabled = true;
         }
 
         private void RunAll_ProgressChanged(object sender, ProgressChangedEventArgs e) {
@@ -237,10 +239,10 @@ namespace PuppetMasterForm {
 
 		private void RunCommand_Click(object sender, EventArgs e) {
             RunAbort.Enabled = true;
-            LoadFile.Enabled = false;
-            ScriptFile.Enabled = false;
-            RunCommand.Enabled = false;
-            Command.Enabled = false;
+            //LoadFile.Enabled = false;
+            //ScriptFile.Enabled = false;
+            //RunCommand.Enabled = false;
+            //Command.Enabled = false;
 
             String cmd = Command.Text.Replace(System.Environment.NewLine, " ");
 			PrintToOutput("manual command: " + cmd);
@@ -251,12 +253,12 @@ namespace PuppetMasterForm {
                 _pm.ParseLineAndExecuteCommand((String)doWorkEventArgs.Argument);
             });
             _worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunCommand_RunWorkerCompleted);
-            _worker.RunWorkerAsync(cmd);
+			_worker.RunWorkerAsync(cmd);
 		}
 
         private void RunCommand_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            RunCommand.Enabled = true;
-            Command.Enabled = true;
+            //RunCommand.Enabled = true;
+            //Command.Enabled = true;
 
             Command.Clear();
         }
@@ -287,6 +289,8 @@ namespace PuppetMasterForm {
             }
 		}
 
+
+		// FIXME this is only viable if related to events
         private void PrintToAvailableScripts(string text) {
             AvailableScripts.Text = text;
         }
