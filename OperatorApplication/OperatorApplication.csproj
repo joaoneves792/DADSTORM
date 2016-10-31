@@ -52,6 +52,7 @@
     <Compile Include="Commands\DUPCommand.cs" />
     <Compile Include="Commands\FILTERCommand.cs" />
     <Compile Include="Exceptions\InvalidConditionException.cs" />
+    <Compile Include="Exceptions\InvalidOperatorException.cs" />
     <Compile Include="Exceptions\NonExistentMethodException.cs" />
     <Compile Include="Exceptions\NonExistentClassException.cs" />
     <Compile Include="Listener.cs" />

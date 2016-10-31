@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using OperatorApplication.Commands;
 using DistributedAlgoritmsClassLibrary;
+using OperatorApplication.Exceptions;
 
 namespace OperatorApplication {
 	using Message = Object;
@@ -48,7 +49,7 @@ namespace OperatorApplication {
 				_command = new CUSTOMCommand(operatorSpecList[1], operatorSpecList[2], operatorSpecList[3]);
 
 			} else {
-				// FIXME throw exception
+				throw new InvalidOperatorException(operatorSpecList[0]);
 			}
 		}
 

@@ -45,6 +45,11 @@ namespace PuppetMasterLibrary {
 
 				_cmdList.Add(line);
 			}
+
+			foreach(string cmd in _cmdList) {
+				Print(cmd);
+			}
+
 		}
 
 		public void ExecuteSingleCommand() {
@@ -196,7 +201,7 @@ namespace PuppetMasterLibrary {
 			CloseProcesses();
 		}
 
-		// FIXME legacy
+		// LEGACY
 		internal void StartCLI() {
 			String command;
 			while (true) {

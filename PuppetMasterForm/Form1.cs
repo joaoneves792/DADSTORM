@@ -66,7 +66,7 @@ namespace PuppetMasterForm {
 
 		#region Global Events
 
-			// FIXME Alt+F4 to abort before closing
+			// TODO prevent closing by Alt+F4
 			//protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
 			//	if (keyData == Keys.F4) { return true; }
 			//	return base.ProcessCmdKey(ref msg, keyData);
@@ -141,8 +141,8 @@ namespace PuppetMasterForm {
 					}
 
 				} else if (e.KeyCode == Keys.Return) {
-					PrintToOutput("Loaded: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
 					LoadFile_Click(this, null);
+					PrintToOutput("Loaded: " + Path.GetFullPath(".") + "\\" + ScriptFile.Text);
 				}
 			}
 
