@@ -58,11 +58,6 @@ namespace PuppetMasterLibrary {
 
 				_cmdList.Add(line);
 			}
-
-			foreach(string cmd in _cmdList) {
-				Print(cmd);
-			}
-
 		}
 
 		public void ExecuteSingleCommand() {
@@ -71,7 +66,6 @@ namespace PuppetMasterLibrary {
 				_cmdList.RemoveAt(0);
 
 			} else {
-				// FIXME if empty list trigger form event to disable running from file
 				DisableExecution();
 				Print("No more commands.");
 			}
