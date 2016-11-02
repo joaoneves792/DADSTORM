@@ -30,13 +30,26 @@ namespace PuppetMasterLibrary {
 			PrintEvent?.Invoke(this, new TextEventArgs(text));
 		}
 
+		public delegate void DisableExecutionHandler(object sender, EventArgs args);
+		public event DisableExecutionHandler DisableExecutionEvent;
+
+		protected virtual void DisableExecution() {
+			DisableExecutionEvent?.Invoke(this, new EventArgs());
+		}
+
+		//public delegate void EnableExecutionHandler(object sender, EventArgs args);
+		//public event EnableExecutionHandler EnableExecutionEvent;
+
+		//protected virtual void EnableExecution() {
+		//	EnableExecutionEvent?.Invoke(this, new EventArgs());
+		//}
 
 		private bool isConfiguring;
 
 		private List<string> _cmdList = new List<string>();
 
 
-		// FIXME don't add wrong lines
+		// FIXME parsing should be done here to avoid having wrong or empty lines
 		public void LoadFile(string configFile) {
 			string line = null;
 			StreamReader file = new StreamReader(configFile);
@@ -56,9 +69,10 @@ namespace PuppetMasterLibrary {
 			if (_cmdList.Count > 0) {
 				ParseLineAndExecuteCommand(_cmdList.First());
 				_cmdList.RemoveAt(0);
-				// FIXME if empty list trigger form event to disable running from file
 
 			} else {
+				// FIXME if empty list trigger form event to disable running from file
+				DisableExecution();
 				Print("No more commands.");
 			}
 		}

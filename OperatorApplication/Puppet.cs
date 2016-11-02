@@ -43,10 +43,10 @@ namespace OperatorApplication
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
 
-            /*IDictionary RemoteChannelProperties = new Hashtable();
-            RemoteChannelProperties["name"] = PUPPET_SERVICE_NAME;
-            TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
-            ChannelServices.RegisterChannel(channel, true);*/
+            //IDictionary RemoteChannelProperties = new Hashtable();
+            //RemoteChannelProperties["name"] = PUPPET_SERVICE_NAME;
+            //TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
+            //ChannelServices.RegisterChannel(channel, true);
 
             ObjRef objRef = RemotingServices.Marshal(
                 this,
@@ -61,8 +61,8 @@ namespace OperatorApplication
         }
 
         public void Start() {
-            _waitHandle.Set();
 			_state = "running";
+            _waitHandle.Set();
         }
 
         public void Interval(Milliseconds milliseconds) {
@@ -76,7 +76,7 @@ namespace OperatorApplication
 			Console.WriteLine("\t State: \t\t" + _state);
 			Console.WriteLine("\t Waiting interval: \t" + _sleepBetweenEvents);
 
-			//FIXME list of destinations, other stuff
+			//TODO display more stuff in status?
 			Console.Write("\r\n\t Recievers: \t");
 			int count = 0;
 			foreach (Process receiver in _outputReceivers) {
