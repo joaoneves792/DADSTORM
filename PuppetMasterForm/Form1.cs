@@ -76,7 +76,7 @@ namespace PuppetMasterForm {
 				} else if (e.KeyCode == Keys.L) {
 					Output.Clear();
 
-				} else if (e.KeyCode == Keys.C) {
+				} else if (e.KeyCode == Keys.C && RunAbort.Enabled) {
 					RunAbort_Click(this, null);
 				}
 
@@ -157,7 +157,7 @@ namespace PuppetMasterForm {
 			RunCommand.Enabled = false;
 			Command.Enabled = false;
 
-			//_worker?.CancelAsync();
+			_worker?.CancelAsync();
 
 			_worker = new BackgroundWorker();
 			_worker.DoWork += new DoWorkEventHandler((doWorkEventSender, doWorkEventArgs) => {
@@ -182,7 +182,6 @@ namespace PuppetMasterForm {
 		#region File execution control
 
 		private void RunStepByStep_Click(object sender, EventArgs e) {
-			RunAbort.Enabled = true;
 			RunStepByStep.Enabled = false;
 			RunAll.Enabled = false;
 			LoadFile.Enabled = false;
@@ -197,6 +196,8 @@ namespace PuppetMasterForm {
 			});
 			_worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunStepByStep_RunWorkerCompleted);
 			_worker.RunWorkerAsync();
+
+			RunAbort.Enabled = true;
 		}
 
 		private void RunStepByStep_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -211,7 +212,6 @@ namespace PuppetMasterForm {
 		}
 
 		private void RunAll_Click(object sender, EventArgs e) {
-			RunAbort.Enabled = true;
 			RunStepByStep.Enabled = false;
 			RunAll.Enabled = false;
 
@@ -222,6 +222,8 @@ namespace PuppetMasterForm {
 			});
 			_worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunAll_RunWorkerCompleted);
 			_worker.RunWorkerAsync();
+
+			RunAbort.Enabled = true;
 		}
 
 		private void RunAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -273,7 +275,6 @@ namespace PuppetMasterForm {
 		}
 
 		private void RunCommand_Click(object sender, EventArgs e) {
-			RunAbort.Enabled = true;
 			//LoadFile.Enabled = false;
 			//ScriptFile.Enabled = false;
 			//RunCommand.Enabled = false;
@@ -289,6 +290,8 @@ namespace PuppetMasterForm {
 			});
 			_worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunCommand_RunWorkerCompleted);
 			_worker.RunWorkerAsync(cmd);
+
+            RunAbort.Enabled = true;
 		}
 
 		private void RunCommand_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -337,5 +340,10 @@ namespace PuppetMasterForm {
 		private void PrintToAvailableScripts(object sender, TextEventArgs e) {
 			PrintToAvailableScripts(e.Text);
 		}
-	}
+
+        private void AvailableScripts_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

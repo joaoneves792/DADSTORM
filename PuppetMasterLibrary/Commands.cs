@@ -285,6 +285,8 @@ namespace PuppetMasterLibrary {
 
 
         public void CloseProcesses() {
+            Thread.Sleep(2000);
+
             foreach (IPuppet puppet in _puppetTable.Values) {
                 try {
                     puppet.Crash();
