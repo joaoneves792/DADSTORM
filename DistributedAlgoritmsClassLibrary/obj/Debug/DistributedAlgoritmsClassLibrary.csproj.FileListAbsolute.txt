@@ -13,8 +13,3 @@ D:\projects\dad\project\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAl
 D:\projects\dad\project\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
 D:\projects\dad\project\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.dll
 D:\projects\dad\project\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.pdb
-C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.dll
-C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
-C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.csprojResolveAssemblyReference.cache
-C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.dll
-C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.pdb

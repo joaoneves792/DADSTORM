@@ -24,11 +24,3 @@ D:\projects\dad\project\SecondaryConsoleApplication\bin\Debug\DistributedAlgorit
 D:\projects\dad\project\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.csprojResolveAssemblyReference.cache
 D:\projects\dad\project\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.exe
 D:\projects\dad\project\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.pdb
-C:\Users\joao\workspace\dad\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe.config
-C:\Users\joao\workspace\dad\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.exe
-C:\Users\joao\workspace\dad\SecondaryConsoleApplication\bin\Debug\SecondaryConsoleApplication.pdb
-C:\Users\joao\workspace\dad\SecondaryConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
-C:\Users\joao\workspace\dad\SecondaryConsoleApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
-C:\Users\joao\workspace\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.csprojResolveAssemblyReference.cache
-C:\Users\joao\workspace\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.exe
-C:\Users\joao\workspace\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.pdb

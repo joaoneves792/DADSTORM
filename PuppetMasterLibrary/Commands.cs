@@ -103,9 +103,11 @@ namespace PuppetMasterLibrary {
             OperatorSpec operatorSpec) {
             IList<Url> urlList;
 
+
             MatchCollection inputOpList = new Regex(GROUP_INPUT_OP, RegexOptions.Compiled).Matches(inputOps),
                             addressList = new Regex(GROUP_URL, RegexOptions.Compiled).Matches(addresses);
             //operatorSpecList = new Regex(GROUP_OPERATOR_SPEC, RegexOptions.Compiled).Matches(operatorSpec);
+
 
             GroupCollection operatorSpecList;
             Matches(GROUP_OPERATOR_SPEC, operatorSpec, out operatorSpecList);
@@ -114,7 +116,9 @@ namespace PuppetMasterLibrary {
             //Assumption: the process creation is made downstream-wise
             String sources = "", inputOp;
             foreach (Match inputOpMatch in inputOpList) {
-                inputOp = inputOpMatch.Value;
+                GroupCollection groups;
+                Matches(GROUP_INPUT_OP, inputOpMatch.Value, out groups);
+                inputOp = groups[1].Value;
                 if (_operatorResolutionCache.TryGetValue(inputOp, out urlList)) {
                     //FIXME: after checkpoint
                     sources += urlList.First() + ",";
@@ -135,6 +139,7 @@ namespace PuppetMasterLibrary {
                 replicas = replicas.Remove(replicas.Length - 1, 1);
             }
 
+
             //Organize operator spec list
             String operatorSpecs = "";
             if (operatorSpecList[1].Value.Equals("UNIQ")) {
@@ -153,11 +158,11 @@ namespace PuppetMasterLibrary {
                 operatorSpecs += operatorSpecList[7].Value + ",";
                 operatorSpecs += operatorSpecList[8].Value;
             }
-            if (operatorSpecList[9].Value.Equals("CUSTOM")) {
-                operatorSpecs += operatorSpecList[9].Value + ",";
-                operatorSpecs += operatorSpecList[10].Value + ".dll,";
-                operatorSpecs += operatorSpecList[10].Value + "." + operatorSpecList[11].Value + ",";
-                operatorSpecs += operatorSpecList[12].Value;
+            if (operatorSpecList[10].Value.Equals("CUSTOM")) {
+                operatorSpecs += operatorSpecList[10].Value + ",";
+                operatorSpecs += operatorSpecList[11].Value + ".dll,";
+                operatorSpecs += operatorSpecList[11].Value + "." + operatorSpecList[12].Value + ",";
+                operatorSpecs += operatorSpecList[13].Value;
             }
 
             foreach (Match address in addressList) {
@@ -167,7 +172,6 @@ namespace PuppetMasterLibrary {
                 String processCreationServiceUrl = groupCollection[1].Value + ":10000/";
                 _processCreationServiceTable[processCreationServiceUrl].CreateProcess(
                     operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs);
-
 
                 //Add operator id into operator resolution cache
                 if (_operatorResolutionCache.TryGetValue(operatorId, out urlList)) {
@@ -217,34 +221,42 @@ namespace PuppetMasterLibrary {
         }
 
 
-        private void ExecuteCrashCommand(ProcessName processName) {
-            processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
-
-            IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
-            Task.Run(() => {
-                puppet.Crash();
-            });
-
-        }
-
-
-        private void ExecuteFreezeCommand(ProcessName processName) {
-            processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
-
-            IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
-            Task.Run(() => {
-                puppet.Freeze();
-            });
+        private void ExecuteCrashCommand(OperatorId operatorId) {
+            IList<Url> urlList = _operatorResolutionCache[operatorId];
+            foreach (Url url in urlList)
+            {
+                IPuppet puppet = _puppetTable[url];
+                Task.Run(() => {
+                    puppet.Crash();
+                });
+            }
 
         }
 
 
-        private void ExecuteUnfreezeCommand(ProcessName processName) {
-            processName = processName.Replace(OPERATOR_NAME, PUPPET_NAME);
-            IPuppet puppet = (IPuppet)Activator.GetObject(typeof(IPuppet), processName);
-            Task.Run(() => {
-                puppet.Unfreeze();
-            });
+        private void ExecuteFreezeCommand(OperatorId operatorId){
+            IList<Url> urlList = _operatorResolutionCache[operatorId];
+            foreach (Url url in urlList)
+            {
+                IPuppet puppet = _puppetTable[url];
+                Task.Run(() => {
+                    puppet.Freeze();
+                });
+            }
+
+        }
+
+
+        private void ExecuteUnfreezeCommand(OperatorId operatorId)
+        {
+            IList<Url> urlList = _operatorResolutionCache[operatorId];
+            foreach (Url url in urlList)
+            {
+                IPuppet puppet = _puppetTable[url];
+                Task.Run(() => {
+                    puppet.Unfreeze();
+                });
+            }
 
         }
 

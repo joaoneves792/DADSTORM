@@ -108,10 +108,9 @@ namespace PuppetMasterLibrary {
 
 		public void ParseLineAndExecuteCommand(String line) {
 			GroupCollection groupCollection;
-
 			if (Matches(OPERATOR_ID_COMMAND, line, out groupCollection)) {
 				Log(line);
-				ExecuteOperatorIdCommand(
+                ExecuteOperatorIdCommand(
 					groupCollection[1].Value,
 					groupCollection[2].Value,
 					groupCollection[3].Value,
@@ -162,7 +161,7 @@ namespace PuppetMasterLibrary {
 				Log(line);
 				ExecuteLoggingLevelCommand(groupCollection[1].Value);
 
-			}
+            }
 		}
 
 
