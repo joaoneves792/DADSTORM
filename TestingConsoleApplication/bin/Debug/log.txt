@@ -1602,3 +1602,182 @@ tuple tcp://localhost:11006/op OperatorApplication.Commands.COUNTCommand
 tuple tcp://localhost:11003/op OperatorApplication.Commands.CUSTOMCommand
 tuple tcp://localhost:11004/op OperatorApplication.Commands.UNIQCommand
 tuple tcp://localhost:11002/op OperatorApplication.Commands.CUSTOMCommand
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll","Basic","Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+tuple tcp://localhost:1025/Operator pear - orange - grape
+Start 2
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+tuple tcp://localhost:1026/Operator apple - apple - banana
+Start 5
+tuple tcp://localhost:1029/Operator pear - orange - grape
+tuple tcp://localhost:1029/Operator apple - apple - banana
+tuple tcp://localhost:1029/Operator ball - cube - pyramid
+Start 3
+tuple tcp://localhost:1027/Operator apple - apple - banana
+tuple tcp://localhost:1027/Operator pear - orange - grape
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+Start 4
+Status
+tuple tcp://localhost:1029/Operator OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:1026/Operator OperatorApplication.Commands.DUPCommand
+tuple tcp://localhost:1028/Operator OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:1025/Operator OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:1027/Operator OperatorApplication.Commands.FILTERCommand
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops tweeters.data rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM "CustomOperatorExamplaes.dll","Basic","Repeat"
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+tuple tcp://localhost:11003/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11006/op OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:11002/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11005/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11004/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11001/op OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:11000/op OperatorApplication.Commands.FILTERCommand
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+tuple tcp://localhost:11001/op OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:11004/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11002/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11003/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11006/op OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:11005/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11000/op OperatorApplication.Commands.FILTERCommand
+Crash OP1 0
+Freeze OP2 1
+Wait 10000
+Unfreeze OP2 1
+Status
+tuple tcp://localhost:11005/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11003/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11006/op OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:11004/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11002/op OperatorApplication.Commands.CUSTOMCommand
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll","Basic","Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator pear - orange - grape
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1025/Operator ball - cube - pyramid
+Start 2
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator apple - apple - banana
+tuple tcp://localhost:1026/Operator ball - cube - pyramid
+Start 5
+tuple tcp://localhost:1029/Operator apple - apple - banana
+tuple tcp://localhost:1029/Operator ball - cube - pyramid
+tuple tcp://localhost:1029/Operator pear - orange - grape
+Start 3
+tuple tcp://localhost:1027/Operator apple - apple - banana
+tuple tcp://localhost:1027/Operator ball - cube - pyramid
+tuple tcp://localhost:1027/Operator pear - orange - grape
+Start 4
+Status
+tuple tcp://localhost:1029/Operator OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:1026/Operator OperatorApplication.Commands.DUPCommand
+tuple tcp://localhost:1028/Operator OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:1025/Operator OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:1027/Operator OperatorApplication.Commands.FILTERCommand
+Status
+tuple tcp://localhost:1028/Operator OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:1029/Operator OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:1025/Operator OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:1027/Operator OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:1026/Operator OperatorApplication.Commands.DUPCommand
+1 INPUT_OPS Scripts/3.txt , Scripts/4.txt , Scripts/5.txt REP_FACT 1 ROUTING primary ADDRESS tcp://localhost:1025/Operator OPERATOR_SPEC UNIQ 0
+2 INPUT_OPS 1 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1026/Operator OPERATOR_SPEC DUP
+5 INPUT_OPS 2 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1029/Operator OPERATOR_SPEC CUSTOM "CustomOperatorExamplaes.dll","Basic","Repeat"
+3 INPUT_OPS 2 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1027/Operator OPERATOR_SPEC FILTER 0,>,10000
+4 INPUT_OPS 3 REP_FACT 1 ROUTING hashing(1) ADDRESS tcp://localhost:1028/Operator OPERATOR_SPEC COUNT
+LoggingLevel full
+Semantics at-most-once
+Start 1
+tuple tcp://localhost:1025/Operator pear - orange - grape
+tuple tcp://localhost:1025/Operator apple - apple - banana
+tuple tcp://localhost:1025/Operator ball - ball - cube
+Start 2
+tuple tcp://localhost:1026/Operator pear - orange - grape
+tuple tcp://localhost:1026/Operator ball - ball - cube
+tuple tcp://localhost:1026/Operator apple - apple - banana
+Start 5
+tuple tcp://localhost:1029/Operator ball - ball - cube
+tuple tcp://localhost:1029/Operator apple - apple - banana
+tuple tcp://localhost:1029/Operator pear - orange - grape
+Start 3
+tuple tcp://localhost:1027/Operator ball - ball - cube
+tuple tcp://localhost:1027/Operator apple - apple - banana
+tuple tcp://localhost:1027/Operator pear - orange - grape
+Start 4
+Status
+tuple tcp://localhost:1029/Operator OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:1027/Operator OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:1025/Operator OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:1028/Operator OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:1026/Operator OperatorApplication.Commands.DUPCommand
+Crash 1 0
+Crash 2 0
+Crash 3 0
+Crash 4 0
+Crash 5 0
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops tweeters.data rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM "CustomOperatorExamplaes.dll","Basic","Repeat"
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+tuple tcp://localhost:11003/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11005/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11004/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11006/op OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:11002/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11001/op OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:11000/op OperatorApplication.Commands.FILTERCommand
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+tuple tcp://localhost:11003/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11002/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11004/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11005/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11006/op OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:11000/op OperatorApplication.Commands.FILTERCommand
+tuple tcp://localhost:11001/op OperatorApplication.Commands.FILTERCommand
+Crash OP1 0
+Freeze OP2 1
+Wait 10000
+Unfreeze OP2 1
+Status
+tuple tcp://localhost:11003/op OperatorApplication.Commands.CUSTOMCommand
+tuple tcp://localhost:11006/op OperatorApplication.Commands.COUNTCommand
+tuple tcp://localhost:11005/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11004/op OperatorApplication.Commands.UNIQCommand
+tuple tcp://localhost:11002/op OperatorApplication.Commands.CUSTOMCommand
+Crash OP1 0
+Crash OP2 0
+Crash OP3 0
+Crash OP4 0

@@ -84,7 +84,3 @@ D:\projects\dad\project\TestingConsoleApplication\bin\Debug\SecondaryConsoleAppl
 D:\projects\dad\project\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.csprojResolveAssemblyReference.cache
 D:\projects\dad\project\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.exe
 D:\projects\dad\project\TestingConsoleApplication\obj\Debug\TestingConsoleApplication.pdb
-C:\Users\joao\workspace\dad\TestingConsoleApplication\bin\Debug\CommonTypesLibrary.dll
-C:\Users\joao\workspace\dad\TestingConsoleApplication\bin\Debug\ProcessCreationServiceApplication.exe
-C:\Users\joao\workspace\dad\TestingConsoleApplication\bin\Debug\PuppetMasterForm.exe
-C:\Users\joao\workspace\dad\TestingConsoleApplication\bin\Debug\PuppetMasterLibrary.dll

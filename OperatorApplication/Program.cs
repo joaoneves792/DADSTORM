@@ -131,7 +131,7 @@ namespace OperatorApplication {
 
             //Process files
             foreach (StreamReader currentInputFile in inputFiles) {
-                new Thread((inputFileObject) => {
+                ThreadPool.QueueUserWorkItem((inputFileObject) => {
                     StreamReader inputFile = (StreamReader)inputFileObject;
 
                     String currentLine;
@@ -144,7 +144,7 @@ namespace OperatorApplication {
                         }).Start((Object)currentLine);
                     }
                     inputFile.Close();
-                }).Start((Object)currentInputFile);
+                },(Object)currentInputFile);
             }
         }
     }

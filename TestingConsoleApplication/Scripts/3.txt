@@ -20,3 +20,8 @@ Start 5
 Start 3
 Start 4
 Status
+Crash 1 0
+Crash 2 0
+Crash 3 0
+Crash 4 0
+Crash 5 0
