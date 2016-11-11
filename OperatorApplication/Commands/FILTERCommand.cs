@@ -50,8 +50,7 @@ namespace OperatorApplication.Commands {
         }
 
         public override TupleMessage Execute(TupleMessage inputTuple) {
-            String tupleElement = inputTuple[_fieldNumber-1];
-
+            String tupleElement = inputTuple[_fieldNumber-1].Replace("\"", "");
             if (!_conditionEvalutor(tupleElement)) {
                 return null;
             }
