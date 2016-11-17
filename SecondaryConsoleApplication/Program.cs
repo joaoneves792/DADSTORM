@@ -26,20 +26,25 @@ namespace SecondaryConsoleApplication
                 Thread.Sleep(20000);
             }
 
-            RetransmitForever node = new RetransmitForever(process1, listener.Deliver/*, process2, process3*/);
-
-            node.Connect(process2);
+            BestEffortBroadcast broadcast = new BasicBroadcast(process1, listener.Deliver/*, process2, process3*/);
+            EventualLeaderDetector detector = new MonarchicalEventualLeaderDetection(process1, listener.Trust/*, process2, process3*/);
 
             if (!args[0].Equals("Teste1"))
             {
                 Thread.Sleep(20000);
             }
+            else {
 
-            node.Connect(process3);
+            }
+
+            broadcast.Connect(process2);
+            broadcast.Connect(process3);
+            detector.Connect(process2);
+            detector.Connect(process3);
 
             Thread.Sleep(1000);
 
-            node.Send(process2, "to " + process2.Name);
+            broadcast.Broadcast("to " + process2.Name);
 
             Console.ReadLine();
         }
@@ -49,6 +54,11 @@ namespace SecondaryConsoleApplication
             internal void Deliver(Process process, Message message)
             {
                 Console.WriteLine("From " + process.Name + " " + (String)message);
+            }
+
+            internal void Trust(Process process)
+            {
+                Console.WriteLine("The King has died. Long live the King " + process.Name + "!");
             }
         }
     }
