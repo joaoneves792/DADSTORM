@@ -3,12 +3,13 @@ using System.Text.RegularExpressions;
 
 namespace DistributedAlgoritmsClassLibrary
 {
-    public class Process : MarshalByRefObject
+    public class Process : MarshalByRefObject, IComparable
     {
         private readonly String _name,
                                 _url,
                                 _serviceName;
         private readonly int _port;
+        private int _rank;
 
         public Process(String name, String url) {
             _name = name;
@@ -18,6 +19,9 @@ namespace DistributedAlgoritmsClassLibrary
             Match match = Regex.Match(url, @"^tcp://[\w\.]+:(\d{4,5})/(\w+)$");
             _port = int.Parse(match.Groups[1].Value);
             _serviceName = match.Groups[2].Value;
+
+            //TODO: Generate a more accurate rank
+            _rank = 10;
         }
 
         public String Name {
@@ -34,6 +38,11 @@ namespace DistributedAlgoritmsClassLibrary
 
         public int Port {
             get { return _port; }
+        }
+
+        public int Rank {
+            get { return _rank; }
+            set { _rank = value; }
         }
 
         public override string ToString() {
@@ -55,9 +64,11 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public override int GetHashCode() {
-            //todo: get better hash code system
-            return _name.GetHashCode() +
-                   _url.GetHashCode();
+            return (_name + _url + _serviceName +  _port + _rank).GetHashCode();
+        }
+
+        public int CompareTo(Object process) {
+            return _rank - ((Process)process).Rank;
         }
     }
 }
