@@ -35,13 +35,16 @@ namespace DistributedAlgoritmsClassLibrary
 
             IDictionary RemoteChannelProperties = new Hashtable();
             RemoteChannelProperties["port"] = process.Port;
-            TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
-            ChannelServices.RegisterChannel(channel, true);
+            try {
+                TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
+                ChannelServices.RegisterChannel(channel, true);
 
-            RemotingServices.Marshal(
-                this,
-                process.ServiceName,
-                typeof(FairLossPointToPointLink));
+                RemotingServices.Marshal(
+                    this,
+                    process.ServiceName,
+                    typeof(FairLossPointToPointLink));
+            }
+            catch (SocketException) { }
         }
 
         public RemotingNode(Process process, Action<Process, Message> listener, params Process[] otherProcesses) : this(process, listener) {
