@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
+    using Value = String;
+
     public interface EpochConsensus
     {
+        void Propose(Value value);
+        void Abort();
     }
 }

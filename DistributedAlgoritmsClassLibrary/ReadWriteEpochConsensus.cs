@@ -11,7 +11,7 @@ namespace DistributedAlgoritmsClassLibrary
     using Timestamp = Int32;
     using Value = String;
 
-    public class ReadWriteEpochConsensus {
+    public class ReadWriteEpochConsensus : EpochConsensus {
         private Action<Value> _decideListener;
         private Action<Tuple<Timestamp, Value>> _abortedListener;
 
