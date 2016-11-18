@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
-    using Value = String;
+    using Value = IList<String>;
 
     public interface EpochConsensus
     {

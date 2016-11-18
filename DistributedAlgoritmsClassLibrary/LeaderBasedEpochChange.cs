@@ -21,19 +21,20 @@ namespace DistributedAlgoritmsClassLibrary
         private int _lastts;
 
         public LeaderBasedEpochChange(Process process,
+                                      Process leader,
                                       Action<NewTimestamp, Process> listener) {
             _listener = listener;
             _perfectPointToPointLink = new EliminateDuplicates(process, Deliver);
             _bestEffortBroadcast = new BasicBroadcast(process, Deliver);
             _eventualLeaderDetector = new MonarchicalEventualLeaderDetection(process, Trust);
 
-            //FIXME: Anarchic first epoch alert!!!!!
-            _trusted = process;
+            _trusted = leader;
             _self = process;
             _lastts = 0;
         }
 
         public LeaderBasedEpochChange(Process process,
+                                      Process leader,
                                       Action<NewTimestamp, Process> listener,
                                       params Process[] otherProcesses) {
             _listener = listener;
@@ -41,8 +42,7 @@ namespace DistributedAlgoritmsClassLibrary
             _bestEffortBroadcast = new BasicBroadcast(process, Deliver, otherProcesses);
             _eventualLeaderDetector = new MonarchicalEventualLeaderDetection(process, Trust, otherProcesses);
 
-            //FIXME: Anarchic first epoch alert!!!!!
-            _trusted = process;
+            _trusted = leader;
             _self = process;
             _lastts = 0;
         }

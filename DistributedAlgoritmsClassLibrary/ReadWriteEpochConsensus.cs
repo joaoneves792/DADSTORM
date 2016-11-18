@@ -9,7 +9,7 @@ namespace DistributedAlgoritmsClassLibrary
 {
     using Message = Object;
     using Timestamp = Int32;
-    using Value = String;
+    using Value = IList<String>;
 
     public class ReadWriteEpochConsensus : EpochConsensus {
         private Action<Value> _decideListener;
@@ -19,13 +19,15 @@ namespace DistributedAlgoritmsClassLibrary
         private BestEffortBroadcast _bestEffortBroadcast;
 
         private Tuple<Timestamp, Value> _state;
-        private String _tmpval;
+        private Value _tmpval;
         private IDictionary<Process, Tuple<Timestamp, Value>> _states;
         private int _accepted, _replicationFactor;
+        private Timestamp _ets;
 
         public ReadWriteEpochConsensus (Process process,
                                         Tuple<Timestamp, Value> state,
                                         int replicationFactor,
+                                        Timestamp ets,
                                         Action<Value> decideListener,
                                         Action<Tuple<Timestamp, Value>> abortedListener) {
             _decideListener = decideListener;
@@ -38,11 +40,13 @@ namespace DistributedAlgoritmsClassLibrary
             _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
             _accepted = 0;
             _replicationFactor = replicationFactor;
+            _ets = ets;
         }
 
         public ReadWriteEpochConsensus (Process process,
                                         Tuple<Timestamp, Value> state,
                                         int replicationFactor,
+                                        Timestamp ets,
                                         Action<Value> decideListener,
                                         Action<Tuple<Timestamp, Value>> abortedListener,
                                         params Process[] otherProcesses) {
@@ -56,6 +60,7 @@ namespace DistributedAlgoritmsClassLibrary
             _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
             _accepted = 0;
             _replicationFactor = replicationFactor;
+            _ets = ets;
         }
 
         public void Propose(Value value) {
@@ -83,13 +88,13 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Deliver(Process process, Tuple<State, Tuple<Timestamp, Value>> message) {
             _states[process] = message.Item2;
-            TryWrite();
+            Task.Run(() => { TryWrite(); });
         }
 
         private void TryWrite() {
             if (_states.Count > _replicationFactor / 2) {
                 _state = Highest(_states);
-                if (!_state.Item2.Equals("")) {
+                if (!_state.Item2.Equals(null)) {
                     _tmpval = _state.Item2;
                 }
                 _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
@@ -98,7 +103,7 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         private Tuple<Timestamp, Value> Highest(IDictionary<Process, Tuple<Timestamp, Value>> states) {
-            Tuple<Timestamp, Value> state = new Tuple<Timestamp, Value>(-1, ""),
+            Tuple<Timestamp, Value> state = new Tuple<Timestamp, Value>(-1, null),
                                     keyValuePairValue;
             foreach(KeyValuePair<Process, Tuple<Timestamp, Value>> keyValuePair in states) {
                 keyValuePairValue = keyValuePair.Value;
@@ -110,14 +115,13 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Deliver(Process process, Tuple<Write, Value> message) {
-            //FIXME: define timestamp
-            _state = new Tuple<Timestamp, Value>(/*FIXME:*/ 0, message.Item2);
+            _state = new Tuple<Timestamp, Value>(_ets, message.Item2);
             _bestEffortBroadcast.Broadcast((Message)new Accept());
         }
 
         public void Deliver(Process process, Accept accept) {
             _accepted++;
-            TryDecide();
+            Task.Run(() => { TryDecide(); });
         }
 
         private void TryDecide() {

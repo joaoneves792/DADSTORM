@@ -40,12 +40,12 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Suspect(Process process) {
             _suspected.Add(process);
-            TryTrust();
+            Task.Run(() => { TryTrust(); });
         }
 
         public void Restore(Process process) {
             _suspected.Remove(process);
-            TryTrust();
+            Task.Run(() => { TryTrust(); });
         }
 
         public void TryTrust() {
