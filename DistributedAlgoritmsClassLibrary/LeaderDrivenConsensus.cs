@@ -10,7 +10,7 @@ namespace DistributedAlgoritmsClassLibrary
     using Value = IList<String>;
     using Timestamp = Int32;
 
-    public class LeaderDrivenConsensus {
+    public class LeaderDrivenConsensus : UniformConsensus {
         private readonly EventWaitHandle _waitHandle;
 
         private Action<Value> _listener;

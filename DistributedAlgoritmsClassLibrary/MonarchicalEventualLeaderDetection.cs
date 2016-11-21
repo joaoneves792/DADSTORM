@@ -30,6 +30,7 @@ namespace DistributedAlgoritmsClassLibrary
                                                   params Process[] otherProcesses) {
             _listener = listener;
             _eventuallyPerfectFailureDetector = new IncreasingTimeout(process, Suspect, Restore);
+            _processes = new ConcurrentBag<Process>();
             foreach (Process otherProcess in otherProcesses) {
                 _processes.TryAdd(otherProcess);
             }
