@@ -11,7 +11,10 @@ namespace DistributedAlgoritmsClassLibrary
     public interface BestEffortBroadcast
     {
         void Broadcast(Message message);
-        void Deliver(Process process, Message message);
+
+        //Indicator
+        //void Deliver(Process process, Message message);
+
         void Connect(Process process);
     }
 }

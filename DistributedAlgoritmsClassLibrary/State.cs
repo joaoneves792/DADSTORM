@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
-    public class State
+    public class State : MarshalByRefObject
     {
     }
 }

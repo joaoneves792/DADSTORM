@@ -9,7 +9,7 @@ namespace DistributedAlgoritmsClassLibrary
     using Message = Object;
     using NewTimestamp = Int32;
 
-    class LeaderBasedEpochChange : EpochChange {
+    public class LeaderBasedEpochChange : EpochChange {
         private Action<NewTimestamp, Process> _listener;
         private PerfectPointToPointLink _perfectPointToPointLink;
         private BestEffortBroadcast _bestEffortBroadcast;
@@ -19,19 +19,6 @@ namespace DistributedAlgoritmsClassLibrary
         private Process _trusted,
                         _self;
         private int _lastts;
-
-        public LeaderBasedEpochChange(Process process,
-                                      Process leader,
-                                      Action<NewTimestamp, Process> listener) {
-            _listener = listener;
-            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver);
-            _bestEffortBroadcast = new BasicBroadcast(process, Deliver);
-            _eventualLeaderDetector = new MonarchicalEventualLeaderDetection(process, Trust);
-
-            _trusted = leader;
-            _self = process;
-            _lastts = 0;
-        }
 
         public LeaderBasedEpochChange(Process process,
                                       Process leader,
@@ -78,12 +65,6 @@ namespace DistributedAlgoritmsClassLibrary
                 _self.Rank += N;
                 _bestEffortBroadcast.Broadcast((Message)new Tuple<NewEpoch, NewTimestamp>(new NewEpoch(), _self.Rank));
             }
-        }
-
-        public void Connect(Process process) {
-            _perfectPointToPointLink.Connect(process);
-            _bestEffortBroadcast.Connect(process);
-            _eventualLeaderDetector.Connect(process);
         }
     }
 }

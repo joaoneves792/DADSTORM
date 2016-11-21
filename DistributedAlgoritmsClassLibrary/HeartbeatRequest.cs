@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
-    public class HeartbeatRequest
+    public class HeartbeatRequest : MarshalByRefObject
     {
     }
 }

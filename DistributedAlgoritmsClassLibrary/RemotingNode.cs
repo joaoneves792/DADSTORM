@@ -109,6 +109,7 @@ namespace DistributedAlgoritmsClassLibrary
             }).ContinueWith(task => {
                 //Handles remote exception
                 task.Exception.Handle(ex => {
+                    Console.WriteLine(ex);
                     Reconnect(process);
                     return true;
                 });

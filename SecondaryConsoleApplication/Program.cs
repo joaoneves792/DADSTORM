@@ -27,9 +27,12 @@ namespace SecondaryConsoleApplication
             //}
 
             //BestEffortBroadcast broadcast = new BasicBroadcast(process1, listener.Deliver/*, process2, process3*/);
-            //EventualLeaderDetector detector = new MonarchicalEventualLeaderDetection(process1, listener.Trust/*, process2, process3*/);
+            //EventualLeaderDetector detector = new MonarchicalEventualLeaderDetection(process1, listener.Trust, process2, process3);
+            Console.WriteLine(args[0]);
 
-            UniformConsensus paxos = new LeaderDrivenConsensus(process1, 3, listener.Decide, process2, process3);
+            //UniformConsensus paxos = new LeaderDrivenConsensus(process1, 3, listener.Decide, process2, process3);
+
+            EpochChange change = new LeaderBasedEpochChange(process1, process1, listener.StartEpoch, process2, process3);
 
             //if (!args[0].Equals("Teste1"))
             //{
@@ -39,19 +42,17 @@ namespace SecondaryConsoleApplication
 
             //}
 
-            if (args[0].Equals("Teste1"))
-            {
-                IList<String> proposal = new List<String>();
-                proposal.Add("a");
-                proposal.Add("b");
-                proposal.Add("c");
-                paxos.Propose(proposal);
-            }
+            //if (args[0].Equals("Teste1"))
+            //{
+            //    IList<String> proposal = new List<String>();
+            //    proposal.Add("a");
+            //    proposal.Add("b");
+            //    proposal.Add("c");
+            //    paxos.Propose(proposal);
+            //}
 
             //broadcast.Connect(process2);
             //broadcast.Connect(process3);
-            //detector.Connect(process2);
-            //detector.Connect(process3);
 
             //Thread.Sleep(1000);
 
@@ -74,6 +75,19 @@ namespace SecondaryConsoleApplication
 
             internal void Decide(IList<String> tuples) {
                 Console.WriteLine(String.Join(" - ", tuples));
+            }
+
+            internal void StartEpoch(int timestamp, Process leader) {
+                Console.WriteLine("Timestamp: " + timestamp);
+                Console.WriteLine("Leader:    " + leader);
+            }
+
+            internal void Suspect(Process process) {
+                Console.WriteLine("Suspect " + process.Name);
+            }
+
+            internal void Restore(Process process) {
+                Console.WriteLine("Restore " + process.Name);
             }
         }
     }

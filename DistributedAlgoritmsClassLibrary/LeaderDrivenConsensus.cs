@@ -37,14 +37,15 @@ namespace DistributedAlgoritmsClassLibrary
             _processes = otherProcesses;
             _listener = listener;
             _epochChange = new LeaderBasedEpochChange(_self, _self, StartEpoch, _processes);
-            _waitHandle.WaitOne();
-            _epochConsensus.Add(new ReadWriteEpochConsensus(process,
+            _epochConsensus = new List<EpochConsensus>();
+            _epochConsensus.Add(new ReadWriteEpochConsensus(_self,
                                                             new Tuple<Timestamp, Value>(0, null),
                                                             _replicationFactor,
                                                             0,
                                                             Decide,
                                                             Aborted,
                                                             _processes));
+            _waitHandle.WaitOne();
 
             _val = null;
             _proposed = false;

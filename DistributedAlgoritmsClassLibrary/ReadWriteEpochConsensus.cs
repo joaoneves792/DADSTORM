@@ -29,25 +29,6 @@ namespace DistributedAlgoritmsClassLibrary
                                         int replicationFactor,
                                         Timestamp ets,
                                         Action<Value> decideListener,
-                                        Action<Tuple<Timestamp, Value>> abortedListener) {
-            _decideListener = decideListener;
-            _abortedListener = abortedListener;
-            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver);
-            _bestEffortBroadcast = new BasicBroadcast(process, Deliver);
-
-            _state = state;
-            _tmpval = null;
-            _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
-            _accepted = 0;
-            _replicationFactor = replicationFactor;
-            _ets = ets;
-        }
-
-        public ReadWriteEpochConsensus (Process process,
-                                        Tuple<Timestamp, Value> state,
-                                        int replicationFactor,
-                                        Timestamp ets,
-                                        Action<Value> decideListener,
                                         Action<Tuple<Timestamp, Value>> abortedListener,
                                         params Process[] otherProcesses) {
             _decideListener = decideListener;

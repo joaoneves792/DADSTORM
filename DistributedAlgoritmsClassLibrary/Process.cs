@@ -20,8 +20,7 @@ namespace DistributedAlgoritmsClassLibrary
             _port = int.Parse(match.Groups[1].Value);
             _serviceName = match.Groups[2].Value;
 
-            //TODO: Generate a more accurate rank
-            _rank = 10;
+            _rank = 0;
         }
 
         public String Name {
@@ -46,13 +45,16 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public override string ToString() {
-            return _name +
-                   _url;
+            return "Name:" + _name + " URL:" + _url + " Service Name:" + _serviceName + " Port:" + _port + " Rank:" + _rank;
         }
 
         public bool Equals(Process process) {
-            return process.Name.Equals(_name) &&
-                   process.Url.Equals(_url);
+            return process == null ? false :
+                   process.Name.Equals(_name) &&
+                   process.Url.Equals(_url) &&
+                   process.ServiceName.Equals(_serviceName) &&
+                   process.Port == _port &&
+                   process.Rank == _rank;
         }
 
         public override bool Equals(object obj) {
@@ -68,7 +70,8 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public int CompareTo(Object process) {
-            return _rank - ((Process)process).Rank;
+            return _rank == ((Process)process).Rank ? - (_port - ((Process)process).Port) :
+                   _rank - ((Process)process).Rank;
         }
     }
 }

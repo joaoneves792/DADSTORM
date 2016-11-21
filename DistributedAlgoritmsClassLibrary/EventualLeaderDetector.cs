@@ -8,6 +8,5 @@ namespace DistributedAlgoritmsClassLibrary
 {
     public interface EventualLeaderDetector
     {
-        void Connect(Process process);
     }
 }

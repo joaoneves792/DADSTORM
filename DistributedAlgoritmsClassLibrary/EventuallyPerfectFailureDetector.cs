@@ -10,6 +10,5 @@ namespace DistributedAlgoritmsClassLibrary
 
     public interface EventuallyPerfectFailureDetector
     {
-        void Connect(Process process);
     }
 }

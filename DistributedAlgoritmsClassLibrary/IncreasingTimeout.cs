@@ -16,24 +16,10 @@ namespace DistributedAlgoritmsClassLibrary
         private PerfectPointToPointLink _perfectPointToPointLink;
         private const int TIMER = 5000;
 
-        private IProducerConsumerCollection<Process> _processes,
-                                                     _alive;
+        private Process[] _processes;
+        private IProducerConsumerCollection<Process> _alive;
         private IList<Process> _suspected;
         private int _delay;
-
-        public IncreasingTimeout(Process process,
-                         Action<Process> suspectListener,
-                         Action<Process> restoreListener) {
-            _suspectListener = suspectListener;
-            _restoreListener = restoreListener;
-            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver);
-            _processes = new ConcurrentBag<Process>();
-
-            _alive = new ConcurrentBag<Process>();
-            _suspected = new List<Process>();
-            _delay = TIMER;
-            StartTimer();
-        }
 
         public IncreasingTimeout(Process process,
                                  Action<Process> suspectListener,
@@ -41,12 +27,13 @@ namespace DistributedAlgoritmsClassLibrary
                                  params Process[] otherProcesses) {
             _suspectListener = suspectListener;
             _restoreListener = restoreListener;
-            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver);
-            foreach (Process otherProcess in otherProcesses) {
-                _processes.TryAdd(otherProcess);
-            }
+            _processes = otherProcesses;
+            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, _processes);
 
-            _alive = _processes;
+            _alive = new ConcurrentBag<Process>();
+            foreach (Process otherProcess in otherProcesses) {
+                _alive.TryAdd(otherProcess);
+            }
             _suspected = new List<Process>();
             _delay = TIMER;
             StartTimer();
@@ -64,9 +51,11 @@ namespace DistributedAlgoritmsClassLibrary
                     _suspected.Remove(process);
                     _restoreListener(process);
                 }
-                _perfectPointToPointLink.Send(process, (Message)new HeartbeatRequest());
             }
             _alive = new ConcurrentBag<Process>();
+            foreach (Process process in _processes) {
+                _perfectPointToPointLink.Send(process, (Message)new HeartbeatRequest());
+            }
             StartTimer();
         }
 
@@ -86,18 +75,11 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Deliver(Process process, HeartbeatRequest heartbeatRequest) {
-            Console.WriteLine("request");
             _perfectPointToPointLink.Send(process, (Message)new HeartbeatReply());
         }
 
         public void Deliver(Process process, HeartbeatReply heartbeatReply) {
-            Console.WriteLine("reply");
-            _alive.TryAdd(process);
-        }
-
-        public void Connect(Process process) {
-            _perfectPointToPointLink.Connect(process);
-            _processes.TryAdd(process);
+            Console.WriteLine("added " + process);
             _alive.TryAdd(process);
         }
     }

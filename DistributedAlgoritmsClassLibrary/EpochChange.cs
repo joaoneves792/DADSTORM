@@ -13,10 +13,9 @@ namespace DistributedAlgoritmsClassLibrary
     {
         void Trust(Process process);
 
-        void Deliver(Process process, Message message);
-        void Deliver(Process process, Tuple<NewEpoch, NewTimestamp> message);
-        void Deliver(Process process, Nack nack);
-
-        void Connect(Process process);
+        //Indicator
+        //void Deliver(Process process, Message message);
+        //void Deliver(Process process, Tuple<NewEpoch, NewTimestamp> message);
+        //void Deliver(Process process, Nack nack);
     }
 }
