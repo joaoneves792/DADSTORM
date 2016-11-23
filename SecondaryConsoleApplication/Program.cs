@@ -10,6 +10,8 @@ using DistributedAlgoritmsClassLibrary;
 namespace SecondaryConsoleApplication
 {
     using Message = Object;
+    using Value = IList<String>;
+    using Timestamp = Int32;
 
     class Program
     {
@@ -21,50 +23,28 @@ namespace SecondaryConsoleApplication
                     process2 = new Process(args[2], args[3]),
                     process3 = new Process(args[4], args[5]);
 
-            //if (args[0].Equals("Teste1"))
-            //{
-            //    Thread.Sleep(20000);
-            //}
+            Console.WriteLine(args[0]);
 
             //BestEffortBroadcast broadcast = new BasicBroadcast(process1, listener.Deliver/*, process2, process3*/);
             //EventualLeaderDetector detector = new MonarchicalEventualLeaderDetection(process1, listener.Trust, process2, process3);
-            Console.WriteLine(args[0]);
-
+            //EpochChange change = new LeaderBasedEpochChange(process1, process1, listener.StartEpoch, process2, process3);
+            EpochConsensus consensus = new ReadWriteEpochConsensus( process1,
+                                                                    new Tuple<Timestamp, Value>(0, null),
+                                                                    3,
+                                                                    0,
+                                                                    listener.Decide,
+                                                                    listener.Aborted,
+                                                                    process2,
+                                                                    process3);
             //UniformConsensus paxos = new LeaderDrivenConsensus(process1, 3, listener.Decide, process2, process3);
 
-            EpochChange change = new LeaderBasedEpochChange(process1, process1, listener.StartEpoch, process2, process3);
-
-            //FairLossPointToPointLink link1 = new RemotingNode(process1, listener.Deliver1, process2, process3);
-            //FairLossPointToPointLink link2 = new RemotingNode(process1, listener.Deliver2, process2, process3);
-
-            Thread.Sleep(1000);
-
-            //link1.Send(process2, "test1");
-            //link2.Send(process2, "test1");
-
-            //if (!args[0].Equals("Teste1"))
-            //{
-            //    Thread.Sleep(20000);
-            //}
-            //else {
-
-            //}
-
-            //if (args[0].Equals("Teste1"))
-            //{
-            //    IList<String> proposal = new List<String>();
-            //    proposal.Add("a");
-            //    proposal.Add("b");
-            //    proposal.Add("c");
-            //    paxos.Propose(proposal);
-            //}
-
-            //broadcast.Connect(process2);
-            //broadcast.Connect(process3);
-
-            //Thread.Sleep(1000);
-
-            //broadcast.Broadcast("to " + process2.Name);
+            if (args[0].Equals("Teste1")) {
+                IList<String> proposal = new List<String>();
+                proposal.Add("a");
+                proposal.Add("b");
+                proposal.Add("c");
+                consensus.Propose(proposal);
+            }
 
             Console.ReadLine();
         }
@@ -86,8 +66,8 @@ namespace SecondaryConsoleApplication
                 Console.WriteLine("The King has died. Long live the King " + process.Name + "!");
             }
 
-            internal void Decide(IList<String> tuples) {
-                Console.WriteLine(String.Join(" - ", tuples));
+            internal void Decide(Value tuples) {
+                Console.WriteLine("Decided: " + String.Join(" - ", tuples));
             }
 
             internal void StartEpoch(int timestamp, Process leader) {
@@ -101,6 +81,10 @@ namespace SecondaryConsoleApplication
 
             internal void Restore(Process process) {
                 Console.WriteLine("Restore " + process.Name);
+            }
+
+            public void Aborted (Tuple<Timestamp, Value> state) {
+                Console.WriteLine("Aborted: " + state.Item1 + ":" + String.Join(" - ", state.Item2));
             }
         }
     }

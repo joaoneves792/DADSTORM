@@ -79,24 +79,26 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void DeliverState(Process process, Tuple<Timestamp, Value> message) {
             _states[process] = message;
-            Task.Run(() => { TryWrite(); });
+            
+            Task.Run(() => { lock (_states) { TryWrite(); } });
         }
 
         private void TryWrite() {
             if (_states.Count > _replicationFactor / 2) {
                 _state = Highest(_states);
-                if (!_state.Item2.Equals(null)) {
+                if (_state.Item2 != null) {
                     _tmpval = _state.Item2;
+                    Console.WriteLine("State: " + String.Join(" - ", _tmpval));
                 }
                 _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
-                _bestEffortBroadcast.Broadcast((Message) new Tuple<Signal, Value>(Signal.WRITE, _tmpval));
+                _bestEffortBroadcast.Broadcast((Message)new Tuple<Signal, Value>(Signal.WRITE, _tmpval));
             }
         }
 
         private Tuple<Timestamp, Value> Highest(IDictionary<Process, Tuple<Timestamp, Value>> states) {
             Tuple<Timestamp, Value> state = new Tuple<Timestamp, Value>(-1, null),
                                     keyValuePairValue;
-            foreach(KeyValuePair<Process, Tuple<Timestamp, Value>> keyValuePair in states) {
+            foreach (KeyValuePair<Process, Tuple<Timestamp, Value>> keyValuePair in states) {
                 keyValuePairValue = keyValuePair.Value;
                 if (keyValuePairValue.Item1 > state.Item1) {
                     state = keyValuePairValue;
@@ -112,7 +114,7 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void DeliverAccept(Process process) {
             _accepted++;
-            Task.Run(() => { TryDecide(); });
+            Task.Run(() => { lock (_states) { TryDecide(); } });
         }
 
         private void TryDecide() {
