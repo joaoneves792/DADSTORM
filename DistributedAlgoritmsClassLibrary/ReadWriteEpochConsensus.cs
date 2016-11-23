@@ -46,29 +46,39 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Propose(Value value) {
             _tmpval = value;
-            _bestEffortBroadcast.Broadcast((Message) new Read());
+            _bestEffortBroadcast.Broadcast(Signal.READ);
         }
 
         public void Deliver(Process process, Message message) {
-            if (message is Read) {
-                Deliver(process, (Read)message);
-            } else if(message is Tuple<State, Tuple<Timestamp, Value>>) {
-                Deliver(process, (Tuple<State, Tuple < Timestamp, Value >>)message);
-            } else if (message is Tuple<Write, Value>) {
-                Deliver(process, (Tuple<Write, Value>)message);
-            } else if (message is Accept) {
-                Deliver(process, (Accept)message);
-            } else if (message is Tuple<Decided, Value>) {
-                Deliver(process, (Tuple<Decided, Value>)message);
+            if (message is Signal) {
+                switch ((Signal)message) {
+                    case Signal.READ:
+                        DeliverRead(process);
+                        break;
+                    case Signal.ACCEPT:
+                        DeliverAccept(process);
+                        break;
+                }
+            } else if (message is Tuple<Signal, Value>) {
+                switch (((Tuple<Signal, Value>)message).Item1) {
+                    case Signal.WRITE:
+                        DeliverWrite(process, ((Tuple<Signal, Value>)message).Item2);
+                        break;
+                    case Signal.DECIDED:
+                        DeliverDecided(process, ((Tuple<Signal, Value>)message).Item2);
+                        break;
+                }
+            } else if(message is Tuple<Signal, Tuple<Timestamp, Value>>) {
+                DeliverState(process, ((Tuple<Signal, Tuple < Timestamp, Value >>)message).Item2);
             }
         }
 
-        public void Deliver(Process process, Read read) {
-            _perfectPointToPointLink.Send(process, (Message) new Tuple<State, Tuple<Timestamp, Value>> (new State(), _state));
+        public void DeliverRead(Process process) {
+            _perfectPointToPointLink.Send(process, (Message) new Tuple<Signal, Tuple<Timestamp, Value>> (Signal.STATE, _state));
         }
 
-        public void Deliver(Process process, Tuple<State, Tuple<Timestamp, Value>> message) {
-            _states[process] = message.Item2;
+        public void DeliverState(Process process, Tuple<Timestamp, Value> message) {
+            _states[process] = message;
             Task.Run(() => { TryWrite(); });
         }
 
@@ -79,7 +89,7 @@ namespace DistributedAlgoritmsClassLibrary
                     _tmpval = _state.Item2;
                 }
                 _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
-                _bestEffortBroadcast.Broadcast((Message) new Tuple<Write, Value>(new Write(), _tmpval));
+                _bestEffortBroadcast.Broadcast((Message) new Tuple<Signal, Value>(Signal.WRITE, _tmpval));
             }
         }
 
@@ -95,12 +105,12 @@ namespace DistributedAlgoritmsClassLibrary
             return state;
         }
 
-        public void Deliver(Process process, Tuple<Write, Value> message) {
-            _state = new Tuple<Timestamp, Value>(_ets, message.Item2);
-            _bestEffortBroadcast.Broadcast((Message)new Accept());
+        public void DeliverWrite(Process process, Value message) {
+            _state = new Tuple<Timestamp, Value>(_ets, message);
+            _bestEffortBroadcast.Broadcast(Signal.ACCEPT);
         }
 
-        public void Deliver(Process process, Accept accept) {
+        public void DeliverAccept(Process process) {
             _accepted++;
             Task.Run(() => { TryDecide(); });
         }
@@ -108,12 +118,12 @@ namespace DistributedAlgoritmsClassLibrary
         private void TryDecide() {
             if (_accepted > _replicationFactor / 2) {
                 _accepted = 0;
-                _bestEffortBroadcast.Broadcast((Message) new Tuple<Decided, Value>(new Decided(), _tmpval));
+                _bestEffortBroadcast.Broadcast((Message) new Tuple<Signal, Value>(Signal.DECIDED, _tmpval));
             }
         }
 
-        public void Deliver(Process process, Tuple<Decided, Value> message) {
-            _decideListener(message.Item2);
+        public void DeliverDecided(Process process, Value message) {
+            _decideListener(message);
         }
 
         public void Abort() {

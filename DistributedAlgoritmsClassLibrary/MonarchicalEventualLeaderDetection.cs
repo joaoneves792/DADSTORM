@@ -46,13 +46,7 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void TryTrust() {
-            //Console.WriteLine("Total:\n" + String.Join("\n", _processes));
-            //Console.WriteLine("Suspected:\n" + String.Join("\n", _suspected));
             Process usurper = _processes.Except(_suspected).Max();
-            //if (_leader != null)
-            //    Console.WriteLine("Leader(" + _leader.Name + ":" + _leader.Rank + ":" + (uint)_leader.GetHashCode() + ") vs Usurper(" + usurper.Name + ":" + _leader.Rank + ":" + (uint)usurper.GetHashCode() + ")");
-            //else
-            //    Console.WriteLine("Usurper(" + usurper.Name + ":" + usurper.Rank + ":" + (uint)usurper.GetHashCode() + ")");
             if (!usurper.Equals(_leader)) {
                 _leader = usurper;
                 _listener(_leader);

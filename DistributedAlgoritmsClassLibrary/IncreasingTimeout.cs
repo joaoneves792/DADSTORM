@@ -14,7 +14,7 @@ namespace DistributedAlgoritmsClassLibrary
         private Action<Process> _suspectListener,
                                 _restoreListener;
         private PerfectPointToPointLink _perfectPointToPointLink;
-        private const int TIMER = 5000;
+        private const int TIMER = 1000;
 
         private Process[] _processes;
         private IProducerConsumerCollection<Process> _alive;
@@ -40,7 +40,7 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         private void Timeout() {
-            if(_alive.Count + _suspected.Count > 0) {
+            if (_alive.Count + _suspected.Count > 0) {
                 _delay += TIMER;
             }
             foreach (Process process in _processes) {
@@ -54,7 +54,7 @@ namespace DistributedAlgoritmsClassLibrary
             }
             _alive = new ConcurrentBag<Process>();
             foreach (Process process in _processes) {
-                _perfectPointToPointLink.Send(process, (Message)new HeartbeatRequest());
+                _perfectPointToPointLink.Send(process, Signal.HEARTBEAT_REQUEST);
             }
             StartTimer();
         }
@@ -67,19 +67,21 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Deliver(Process process, Message message) {
-            if (message is HeartbeatRequest) {
-                Deliver(process, (HeartbeatRequest)message);
-            } else if (message is HeartbeatReply) {
-                Deliver(process, (HeartbeatReply)message);
+            switch((Signal)message) {
+                case Signal.HEARTBEAT_REQUEST:
+                    DeliverHeartbeatRequest(process);
+                    break;
+                case Signal.HEARTBEAT_REPLY:
+                    DeliverHeartbeatReply(process);
+                    break;
             }
         }
 
-        public void Deliver(Process process, HeartbeatRequest heartbeatRequest) {
-            _perfectPointToPointLink.Send(process, (Message)new HeartbeatReply());
+        public void DeliverHeartbeatRequest(Process process) {
+            _perfectPointToPointLink.Send(process, (Message) Signal.HEARTBEAT_REPLY);
         }
 
-        public void Deliver(Process process, HeartbeatReply heartbeatReply) {
-            Console.WriteLine("added " + process);
+        public void DeliverHeartbeatReply(Process process) {
             _alive.TryAdd(process);
         }
     }

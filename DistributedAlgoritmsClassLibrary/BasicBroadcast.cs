@@ -20,6 +20,7 @@ namespace DistributedAlgoritmsClassLibrary
             _perfectPointToPointLink = new EliminateDuplicates(process, Deliver);
 
             _processes = new ConcurrentBag<Process>();
+            _processes.TryAdd(process);
         }
 
         public BasicBroadcast(Process process, Action<Process, Message> listener, params Process[] otherProcesses)
@@ -28,6 +29,7 @@ namespace DistributedAlgoritmsClassLibrary
             _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, otherProcesses);
 
             _processes = new ConcurrentBag<Process>();
+            _processes.TryAdd(process);
             foreach (Process otherProcess in otherProcesses) {
                 _processes.TryAdd(otherProcess);
             }

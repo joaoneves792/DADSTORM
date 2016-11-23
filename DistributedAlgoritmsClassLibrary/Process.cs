@@ -53,8 +53,7 @@ namespace DistributedAlgoritmsClassLibrary
                    process.Name.Equals(_name) &&
                    process.Url.Equals(_url) &&
                    process.ServiceName.Equals(_serviceName) &&
-                   process.Port == _port &&
-                   process.Rank == _rank;
+                   process.Port == _port;
         }
 
         public override bool Equals(object obj) {

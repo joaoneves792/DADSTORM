@@ -6,37 +6,47 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary {
-    using Message = Object;
+    using Message   = Object;
+    using Timestamp = Int32;
 
     public class EliminateDuplicates : PerfectPointToPointLink {
         private Action<Process, Message> _listener;
         private StubbornPointToPointLink _stubbornPointToPointLink;
+        private Process _self;
 
-        private IProducerConsumerCollection<Tuple<Process, Message>> _delivered;
+        private IProducerConsumerCollection<String> _delivered;
+
+        private Timestamp _timestampCounter;
 
         public EliminateDuplicates(Process process, Action<Process, Message> listener) {
             _listener = listener;
             _stubbornPointToPointLink = new RetransmitForever(process, Deliver);
+            _self = process;
 
-            _delivered = new ConcurrentBag<Tuple<Process, Message>>();
+            _delivered = new ConcurrentBag<String>();
+
+            _timestampCounter = 0;
         }
 
         public EliminateDuplicates(Process process, Action<Process, Message> listener, params Process[] otherProcesses) {
             _listener = listener;
             _stubbornPointToPointLink = new RetransmitForever(process, Deliver, otherProcesses);
+            _self = process;
 
-            _delivered = new ConcurrentBag<Tuple<Process, Message>>();
+            _delivered = new ConcurrentBag<String>();
         }
 
         public void Send(Process process, Message message) {
+            message = (Message)new Tuple<String, Message>(_self.Url + _timestampCounter++, message);
             _stubbornPointToPointLink.Send(process, message);
         }
 
         public void Deliver(Process process, Message message) {
-            Tuple<Process, Message> delivered = new Tuple<Process, Message>(process, message);
+            Tuple<String, Message> delivered = (Tuple<String, Message>)message;
 
-            if (!_delivered.Contains(delivered)) {
-                _delivered.TryAdd(delivered);
+            if (!_delivered.Contains(delivered.Item1)) {
+                message = delivered.Item2;
+                _delivered.TryAdd(delivered.Item1);
                 _listener(process, message);
             }
         }

@@ -15,7 +15,7 @@ namespace DistributedAlgoritmsClassLibrary
 
         //Indicator
         //void Deliver(Process process, Message message);
-        //void Deliver(Process process, Tuple<NewEpoch, NewTimestamp> message);
-        //void Deliver(Process process, Nack nack);
+        //void Deliver(Process process, Tuple<Signal, NewTimestamp> message);
+        //void Deliver(Process process, Signal nack);
     }
 }

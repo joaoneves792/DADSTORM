@@ -34,6 +34,14 @@ namespace SecondaryConsoleApplication
 
             EpochChange change = new LeaderBasedEpochChange(process1, process1, listener.StartEpoch, process2, process3);
 
+            //FairLossPointToPointLink link1 = new RemotingNode(process1, listener.Deliver1, process2, process3);
+            //FairLossPointToPointLink link2 = new RemotingNode(process1, listener.Deliver2, process2, process3);
+
+            Thread.Sleep(1000);
+
+            //link1.Send(process2, "test1");
+            //link2.Send(process2, "test1");
+
             //if (!args[0].Equals("Teste1"))
             //{
             //    Thread.Sleep(20000);
@@ -63,9 +71,14 @@ namespace SecondaryConsoleApplication
 
         internal class Listener
         {
-            internal void Deliver(Process process, Message message)
+            internal void Deliver1(Process process, Message message)
             {
-                Console.WriteLine("From " + process.Name + " " + (String)message);
+                Console.WriteLine("[1] From " + process.Name + " " + (String)message);
+            }
+
+            internal void Deliver2(Process process, Message message)
+            {
+                Console.WriteLine("[2] From " + process.Name + " " + (String)message);
             }
 
             internal void Trust(Process process)

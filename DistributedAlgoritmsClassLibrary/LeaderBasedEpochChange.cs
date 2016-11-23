@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
     using Message = Object;
-    using NewTimestamp = Int32;
+    using Timestamp = Int32;
 
     public class LeaderBasedEpochChange : EpochChange {
-        private Action<NewTimestamp, Process> _listener;
+        private Action<Timestamp, Process> _listener;
         private PerfectPointToPointLink _perfectPointToPointLink;
         private BestEffortBroadcast _bestEffortBroadcast;
         private EventualLeaderDetector _eventualLeaderDetector;
-        private const int N = 10;
+        private const int N = 1;
 
         private Process _trusted,
                         _self;
@@ -22,7 +23,7 @@ namespace DistributedAlgoritmsClassLibrary
 
         public LeaderBasedEpochChange(Process process,
                                       Process leader,
-                                      Action<NewTimestamp, Process> listener,
+                                      Action<Timestamp, Process> listener,
                                       params Process[] otherProcesses) {
             _listener = listener;
             _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, otherProcesses);
@@ -37,33 +38,33 @@ namespace DistributedAlgoritmsClassLibrary
         public void Trust(Process process) {
             _trusted = process;
             if (process.Equals(_self)) {
+                Thread.Sleep(1000);
                 _self.Rank += N;
-                _bestEffortBroadcast.Broadcast((Message) new Tuple<NewEpoch, NewTimestamp>(new NewEpoch(), _self.Rank));
+                _bestEffortBroadcast.Broadcast((Message)_self.Rank);
             }
         }
 
         public void Deliver(Process process, Message message) {
-            if (message is Tuple<NewEpoch, NewTimestamp>) {
-                Deliver(process, (Tuple<NewEpoch, NewTimestamp>)message);
-            } else if (message is Nack) {
-                Deliver(process, (Nack)message);
+            if (message is Timestamp) {
+                DeliverNewEpoch(process, (Timestamp)message);
+            } else if (message is Signal) {
+                DeliverNack(process);
             }
         }
 
-        public void Deliver(Process process, Tuple<NewEpoch, NewTimestamp> message) {
-            int newts = message.Item2;
+        public void DeliverNewEpoch(Process process, Timestamp message) {
+            int newts = message;
             if (process.Equals(_trusted) && newts > _lastts) {
                 _lastts = newts;
                 _listener(newts, process);
             } else {
-                _perfectPointToPointLink.Send(process, (Message)new Nack());
             }
         }
 
-        public void Deliver(Process process, Nack nack) {
-            if(_trusted.Equals(_self)) {
+        public void DeliverNack(Process process) {
+            if (_trusted.Equals(_self)) {
                 _self.Rank += N;
-                _bestEffortBroadcast.Broadcast((Message)new Tuple<NewEpoch, NewTimestamp>(new NewEpoch(), _self.Rank));
+                _bestEffortBroadcast.Broadcast((Message)new Tuple<Signal, Timestamp>(Signal.NEW_EPOCH, _self.Rank));
             }
         }
     }

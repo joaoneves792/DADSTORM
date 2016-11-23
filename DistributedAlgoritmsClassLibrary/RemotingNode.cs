@@ -19,15 +19,19 @@ namespace DistributedAlgoritmsClassLibrary
 
     public class RemotingNode : MarshalByRefObject, FairLossPointToPointLink
     {
-        private static int TIMER = 100;
+        private const int TIMER = 100;
+        private static int _channelIdCounter = 0;
 
+        private readonly int _channelId;
         private readonly Process _process;
         private Action<Process, Message> _listener;
         private IDictionary<Process, FairLossPointToPointLink> _fairLossPointToPointLinks;
 
         public RemotingNode(Process process, Action<Process, Message> listener) {
+            _channelId = _channelIdCounter++;
             _process = process;
             _listener = listener;
+
             _fairLossPointToPointLinks = new Dictionary<Process, FairLossPointToPointLink>();
 
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
@@ -38,16 +42,16 @@ namespace DistributedAlgoritmsClassLibrary
             try {
                 TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
                 ChannelServices.RegisterChannel(channel, true);
+            } catch { }
 
-                RemotingServices.Marshal(
-                    this,
-                    process.ServiceName,
-                    typeof(FairLossPointToPointLink));
-            }
-            catch (SocketException) { }
+            RemotingServices.Marshal(
+                this,
+                process.ServiceName + _channelId,
+                typeof(FairLossPointToPointLink));
         }
 
         public RemotingNode(Process process, Action<Process, Message> listener, params Process[] otherProcesses) : this(process, listener) {
+            Thread.Sleep(1000);
             foreach (Process otherProcess in otherProcesses) {
                 Connect(otherProcess);
             }
@@ -56,7 +60,7 @@ namespace DistributedAlgoritmsClassLibrary
         public void Connect(Process process) {
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
-                process.Url);
+                process.Url + _channelId);
 
             if (_fairLossPointToPointLinks.ContainsKey(process)) {
                 _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
@@ -77,7 +81,7 @@ namespace DistributedAlgoritmsClassLibrary
         public void Reconnect(Process process) {
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
-                process.Url);
+                process.Url + _channelId);
 
             if (_fairLossPointToPointLinks.ContainsKey(process)) {
                 _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
@@ -93,7 +97,7 @@ namespace DistributedAlgoritmsClassLibrary
         public void Anchor(Process process) {
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
-                process.Url);
+                process.Url + _channelId);
             //@"tcp://" + serviceURL + ":" + PORT + "/" + SERVICE_NAME);
 
             if (_fairLossPointToPointLinks.ContainsKey(process)) {
@@ -104,12 +108,13 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Send(Process process, Message message) {
+            //Console.WriteLine(_channelId + ": from " + _process.Name + " to " + process.Name);
             Task.Run(() => {
                 _fairLossPointToPointLinks[process].Deliver(_process, message);
             }).ContinueWith(task => {
                 //Handles remote exception
                 task.Exception.Handle(ex => {
-                    Console.WriteLine(ex);
+                    //Console.WriteLine(ex);
                     Reconnect(process);
                     return true;
                 });
@@ -117,6 +122,7 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Deliver(Process process, Message message) {
+            //Console.WriteLine(_channelId + ": from " + process.Name + " to " + _process.Name);
             //try {
                 _listener(process, message);
             //} catch () {
