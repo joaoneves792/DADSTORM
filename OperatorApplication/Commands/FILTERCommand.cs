@@ -7,7 +7,7 @@ using OperatorApplication.Exceptions;
 
 namespace OperatorApplication.Commands {
 	using System.Collections.Concurrent;
-	using TupleMessage = List<String>;
+	using TupleMessage = List<IList<String>>;
 
 	class FILTERCommand : Command {
 
@@ -50,12 +50,18 @@ namespace OperatorApplication.Commands {
         }
 
         public override TupleMessage Execute(TupleMessage inputTuple) {
-            String tupleElement = inputTuple[_fieldNumber-1].Replace("\"", "");
-            if (!_conditionEvalutor(tupleElement)) {
-                return null;
+            TupleMessage result = new TupleMessage();
+
+            foreach (List<String> tuple in inputTuple)
+            {
+                String tupleElement = tuple[_fieldNumber - 1].Replace("\"", "");
+                if (_conditionEvalutor(tupleElement))
+                {
+                    result.Add(tuple);
+                }
             }
 
-            return inputTuple;
+            return (result.Count > 0) ? result : null;
         }
 
 		public override List<KeyValuePair<string, string>> Status() {

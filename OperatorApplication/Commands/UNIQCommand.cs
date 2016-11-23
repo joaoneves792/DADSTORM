@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OperatorApplication.Commands {
-    using TupleMessage = List<String>;
+    using TupleMessage = List<IList<String>>;
 
     class UNIQCommand : Command {
 
@@ -18,17 +18,23 @@ namespace OperatorApplication.Commands {
 		}
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-            String tupleElement = inputTuple[_fieldNumber];
-            TupleMessage result = null;
+            TupleMessage result = new TupleMessage();
 
-            lock (this) {
-                if (!_uniqueId.Contains(tupleElement)) {
-                    _uniqueId.TryAdd(tupleElement);
-                    result = inputTuple;
+            foreach (List<String> tuple in inputTuple)
+            {
+                String tupleElement = tuple[_fieldNumber];
+                lock (this)
+                {
+                    if (!_uniqueId.Contains(tupleElement))
+                    {
+                        _uniqueId.TryAdd(tupleElement);
+                        result.Add(tuple);
+                    }
                 }
             }
+            
 
-            return result;
+            return (result.Count > 0)? result : null;
         }
 
 

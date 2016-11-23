@@ -9,7 +9,7 @@ using OperatorApplication.Exceptions;
 
 namespace OperatorApplication.Commands {
 	using System.Collections.Concurrent;
-	using TupleMessage = List<String>;
+	using TupleMessage = List<IList<String>>;
 
 	class CUSTOMCommand : Command {
 
@@ -29,24 +29,39 @@ namespace OperatorApplication.Commands {
 			_method = customMethod;
 
 			_assembly = Assembly.LoadFrom(@customDll);
-			_type = _assembly.GetType(customClass);
 
-			if (_type == null) {
+            foreach (Type type in _assembly.GetTypes())
+            {
+                if (type.IsClass == true)
+                {
+                    if (type.FullName.EndsWith("." + customClass))
+                    {
+                        // create an instance of the object
+                        _obj = Activator.CreateInstance(type);
+
+                        _methodInfo = type.GetMethod(customMethod);
+                    }
+                }
+            }
+            
+			if (_obj == null) {
 				throw new NonExistentClassException(customClass + " could not be found.");
 			}
 
-			_obj = Activator.CreateInstance(_type);
-			_methodInfo = _type.GetMethod(customMethod);
-
-			if (_method == null) {
+			if (_methodInfo == null) {
 				throw new NonExistentMethodException(customClass + "." + customMethod + " could not be found.");
 			}
 		}
 
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-			return (TupleMessage)_methodInfo.Invoke(_obj, new object[] { inputTuple });
-		}
+            TupleMessage result = new TupleMessage();
+            foreach (List<String> tuple in inputTuple)
+            {
+                result.AddRange((TupleMessage)_methodInfo.Invoke(_obj, new object[] { tuple }));
+            }
+            return (result.Count > 0) ? result : null;
+        }
 
 
 		public override List<KeyValuePair<string, string>> Status() {

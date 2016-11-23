@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OperatorApplication.Commands {
 	using System.Collections.Concurrent;
-	using TupleMessage = List<String>;
+	using TupleMessage = List<IList<String>>;
 
 	class DUPCommand : Command {
 		public override TupleMessage Execute(TupleMessage inputTuple) {

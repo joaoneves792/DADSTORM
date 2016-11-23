@@ -12,7 +12,7 @@ using OperatorApplication.Exceptions;
 
 namespace OperatorApplication {
 	using Message = Object;
-	using TupleMessage = List<String>;
+	using TupleMessage = List<IList<String>>;
 	using OperatorSpec = String;
 
 	internal partial class Operator {
@@ -106,17 +106,20 @@ namespace OperatorApplication {
 			}
 		}
 
-		private void TupleMessageCommand(TupleMessage tupleMessage) {
-			TupleMessage result = _command.Execute(tupleMessage);
+        private void TupleMessageCommand(TupleMessage tupleMessage) {
+            TupleMessage result = _command.Execute(tupleMessage);
 
-			/*Sleep before passing on the results as ordered by the puppetMaster*/
-			System.Threading.Thread.Sleep(_sleepBetweenEvents);
+            /*Sleep before passing on the results as ordered by the puppetMaster*/
+            System.Threading.Thread.Sleep(_sleepBetweenEvents);
 
-			if (result == null) {
-				return;
-			}
+            if (result == null) {
+                return;
+            }
 
-			Log(LogStatus.FULL, String.Join(" - ", result));
+            foreach (List<String> tuple in result)
+            {
+                Log(LogStatus.FULL, String.Join(" - ", tuple));
+            }
 
 			foreach (Process outputReceiver in _outputReceivers) {
 				_send(outputReceiver, (Object) result);

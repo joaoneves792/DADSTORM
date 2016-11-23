@@ -48,3 +48,15 @@ D:\projects\dad\project\ProcessCreationServiceApplication\bin\Debug\DistributedA
 D:\projects\dad\project\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.csprojResolveAssemblyReference.cache
 D:\projects\dad\project\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.exe
 D:\projects\dad\project\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.exe.config
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.exe
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\OperatorApplication.exe
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\DistributedAlgoritmsClassLibrary.dll
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\OperatorApplication.pdb
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\CommonTypesLibrary.pdb
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.csprojResolveAssemblyReference.cache
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.exe
+C:\Users\joao\workspace\dad\ProcessCreationServiceApplication\obj\Debug\ProcessCreationServiceApplication.pdb

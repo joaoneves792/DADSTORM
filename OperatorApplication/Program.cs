@@ -18,7 +18,7 @@ namespace OperatorApplication {
     using InputOps = String;
     using Address = String;
     using OperatorSpec = String;
-    using TupleMessage = List<String>;
+    using TupleMessage = List<IList<String>>;
 
     internal partial class Operator {
         private readonly System.Threading.EventWaitHandle _waitHandle;
@@ -139,7 +139,8 @@ namespace OperatorApplication {
                         new Thread((lineObject) => {
                             //Assumption: all files and lines are valid
                             String line = (String)lineObject;
-                            TupleMessage tupleMessage = line.Split(',').ToList();
+                            TupleMessage tupleMessage = new TupleMessage();
+                            tupleMessage.Add(line.Split(',').ToList());
                             TupleMessageCommand(tupleMessage);
                         }).Start((Object)currentLine);
                     }

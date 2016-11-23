@@ -6,15 +6,19 @@ using System.Threading.Tasks;
 
 namespace OperatorApplication.Commands {
     using System.Collections.Concurrent;
-    using TupleMessage = List<String>;
+    using TupleMessage = List<IList<String>>;
 
     class COUNTCommand : Command {
 
 		int _count = 0;
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
-			lock(this) {
-				_count++;
+            foreach (List<String> tuple in inputTuple)
+            {
+                lock (this)
+                {
+                    _count++;
+                }
             }
 
             return null;

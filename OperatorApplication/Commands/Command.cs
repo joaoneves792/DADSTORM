@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OperatorApplication.Commands {
     using System.Collections.Concurrent;
-    using TupleMessage = List<String>;
+    using TupleMessage = List<IList<String>>;
 
     abstract class Command {
         public abstract TupleMessage Execute(TupleMessage inputTuple);
