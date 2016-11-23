@@ -11,8 +11,6 @@ namespace DistributedAlgoritmsClassLibrary
     using Timestamp = Int32;
 
     public class LeaderDrivenConsensus : UniformConsensus {
-        private readonly EventWaitHandle _waitHandle;
-
         private Action<Value> _listener;
         private EpochChange _epochChange;
         private IList<EpochConsensus> _epochConsensus;
@@ -30,13 +28,19 @@ namespace DistributedAlgoritmsClassLibrary
                               int replicationFactor,
                               Action<Value> listener,
                               params Process[] otherProcesses) {
-            _waitHandle = new AutoResetEvent(false);
 
             _replicationFactor = replicationFactor;
             _self = process;
             _processes = otherProcesses;
             _listener = listener;
-            _epochChange = new LeaderBasedEpochChange(_self, _self, StartEpoch, _processes);
+
+            _val = null;
+            _proposed = false;
+            _decided = false;
+
+            _currentLeader = new Tuple<Timestamp, Process>(0, null);
+            _newLeader = new Tuple<Timestamp, Process>(0, null);
+
             _epochConsensus = new List<EpochConsensus>();
             _epochConsensus.Add(new ReadWriteEpochConsensus(_self,
                                                             new Tuple<Timestamp, Value>(0, null),
@@ -45,15 +49,7 @@ namespace DistributedAlgoritmsClassLibrary
                                                             Decide,
                                                             Aborted,
                                                             _processes));
-            _waitHandle.WaitOne();
-
-            _val = null;
-            _proposed = false;
-            _decided = false;
-
-
-            _currentLeader = new Tuple<Timestamp, Process>(0, null);
-            _newLeader = new Tuple<Timestamp, Process>(0, null);
+            _epochChange = new LeaderBasedEpochChange(_self, _self, StartEpoch, _processes);
         }
 
         public void Propose(Value value) {
@@ -67,10 +63,6 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Aborted (Tuple<Timestamp, Value> state) {
             _currentLeader = _newLeader;
-            Task.Run(() => { TryPropose(); });
-            _proposed = false;
-            _waitHandle.Set();
-
             _epochConsensus.Add(new ReadWriteEpochConsensus(_self,
                                                             state,
                                                             _replicationFactor,
@@ -78,6 +70,8 @@ namespace DistributedAlgoritmsClassLibrary
                                                             Decide,
                                                             Aborted,
                                                             _processes));
+            _proposed = false;
+            Task.Run(() => { TryPropose(); });
         }
 
         private void TryPropose () {

@@ -28,22 +28,23 @@ namespace SecondaryConsoleApplication
             //BestEffortBroadcast broadcast = new BasicBroadcast(process1, listener.Deliver/*, process2, process3*/);
             //EventualLeaderDetector detector = new MonarchicalEventualLeaderDetection(process1, listener.Trust, process2, process3);
             //EpochChange change = new LeaderBasedEpochChange(process1, process1, listener.StartEpoch, process2, process3);
-            EpochConsensus consensus = new ReadWriteEpochConsensus( process1,
-                                                                    new Tuple<Timestamp, Value>(0, null),
-                                                                    3,
-                                                                    0,
-                                                                    listener.Decide,
-                                                                    listener.Aborted,
-                                                                    process2,
-                                                                    process3);
-            //UniformConsensus paxos = new LeaderDrivenConsensus(process1, 3, listener.Decide, process2, process3);
+            //EpochConsensus consensus = new ReadWriteEpochConsensus( process1,
+            //                                                        new Tuple<Timestamp, Value>(0, null),
+            //                                                        3,
+            //                                                        0,
+            //                                                        listener.Decide,
+            //                                                        listener.Aborted,
+            //                                                        process2,
+            //                                                        process3);
+
+            UniformConsensus paxos = new LeaderDrivenConsensus(process1, 3, listener.Decide, process2, process3);
 
             if (args[0].Equals("Teste1")) {
                 IList<String> proposal = new List<String>();
                 proposal.Add("a");
                 proposal.Add("b");
                 proposal.Add("c");
-                consensus.Propose(proposal);
+                paxos.Propose(proposal);
             }
 
             Console.ReadLine();
@@ -84,7 +85,7 @@ namespace SecondaryConsoleApplication
             }
 
             public void Aborted (Tuple<Timestamp, Value> state) {
-                Console.WriteLine("Aborted: " + state.Item1 + ":" + String.Join(" - ", state.Item2));
+                Console.WriteLine("Aborted");
             }
         }
     }

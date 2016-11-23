@@ -70,7 +70,7 @@ namespace DistributedAlgoritmsClassLibrary
 
             try {
                 fairLossPointToPointLink.Anchor(_process);
-            } catch (SocketException) {
+            } catch (Exception) {
                 new Thread(() => {
                     Thread.Sleep(TIMER);
                     Connect(process);

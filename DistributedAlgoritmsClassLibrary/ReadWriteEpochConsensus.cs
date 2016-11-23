@@ -33,7 +33,13 @@ namespace DistributedAlgoritmsClassLibrary
                                         params Process[] otherProcesses) {
             _decideListener = decideListener;
             _abortedListener = abortedListener;
-            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, otherProcesses);
+            try
+            {
+                _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, otherProcesses);
+            }
+            catch (Exception exception) {
+                Console.WriteLine(exception);
+            }
             _bestEffortBroadcast = new BasicBroadcast(process, Deliver, otherProcesses);
 
             _state = state;
@@ -129,8 +135,9 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Abort() {
+            //Halt algorithm operation
+            _replicationFactor *= 3;
             _abortedListener(_state);
-            //TODO: find a way to halt me
         }
     }
 }
