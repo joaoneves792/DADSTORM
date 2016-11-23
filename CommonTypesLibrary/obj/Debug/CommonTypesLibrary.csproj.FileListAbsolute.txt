@@ -17,3 +17,8 @@ D:\projects\dad\project\CommonTypesLibrary\bin\Debug\CommonTypesLibrary.dll
 D:\projects\dad\project\CommonTypesLibrary\bin\Debug\CommonTypesLibrary.pdb
 D:\projects\dad\project\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.dll
 D:\projects\dad\project\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.pdb
+C:\Users\joao\workspace\dad\CommonTypesLibrary\bin\Debug\CommonTypesLibrary.dll
+C:\Users\joao\workspace\dad\CommonTypesLibrary\bin\Debug\CommonTypesLibrary.pdb
+C:\Users\joao\workspace\dad\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.csprojResolveAssemblyReference.cache
+C:\Users\joao\workspace\dad\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.dll
+C:\Users\joao\workspace\dad\CommonTypesLibrary\obj\Debug\CommonTypesLibrary.pdb

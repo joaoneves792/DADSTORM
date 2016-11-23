@@ -31,8 +31,11 @@ namespace PuppetMasterLibrary {
                                 OPERATOR_ID = @"(" + WORD + CLOSE,
 
                                 PARTITION = "(?:[A-Z]:" + DIR + @")?",
-                                DIRNAMES = @"(?:.+" + DIR + @")*",
-                                FILENAME = @".+" + DIR + @"?",
+                                DIRNAMES = @"(?:[^\ ]+" + DIR + @")*",
+                                FILENAME = @"[^\ ]+" + DIR + @"?",
+                                //DIRNAMES = @"(?:.+" + DIR + @")*", #cant use this (explosive backtracking)
+                                //FILENAME = @".+" + DIR + @"?",
+
                                 PATH = OPEN + PARTITION + DIRNAMES + FILENAME + CLOSE,
 
                                 INPUT_OP = OPEN + @"(?:" + WORD + @")" + OR + PATH + CLOSE,
@@ -47,15 +50,15 @@ namespace PuppetMasterLibrary {
                                 COUNT = @"(?:COUNT)",
                                 DUP = @"(?:DUP)",
                                 FILTER = @"(?:FILTER" + SPACE + @"-?\d+" + COMMA + @"(?:>|<|=)" + COMMA + @"-?""?(\w|.)+""?)",
-                                //CUSTOM = @"(?:CUSTOM" + SPACE + @"\w+\.dll" + COMMA + WORD + COMMA + WORD + @")",
-                                CUSTOM = @"(?:CUSTOM" + SPACE + QUOTE + COMMA + QUOTE + COMMA + QUOTE + @")",
+                                CUSTOM = @"(?:CUSTOM" + SPACE + @"\w+\.dll" + COMMA + WORD + COMMA + WORD + @")",
+                                //CUSTOM = @"(?:CUSTOM" + SPACE + QUOTE + COMMA + QUOTE + COMMA + QUOTE + @")",
 
                                 GROUP_UNIQ = @"(?:(UNIQ)" + SPACE + @"(-?\d+))",
                                 GROUP_COUNT = @"(COUNT)",
                                 GROUP_DUP = @"(DUP)",
                                 GROUP_FILTER = @"(?:(FILTER)" + SPACE + @"(-?\d+)" + COMMA + @"(>|<|=)" + COMMA + @"(-?""?(\w|.)+""?))",
-                                //GROUP_CUSTOM = @"(?:(CUSTOM)" + SPACE + @"(\w+\.dll)" + COMMA + @"(\w)" + COMMA + @"(\w)" + @")",
-                                GROUP_CUSTOM = @"(?:(CUSTOM)" + SPACE + GROUP_QUOTE_DLL + COMMA + GROUP_QUOTE + COMMA + GROUP_QUOTE + @")",
+                                GROUP_CUSTOM = @"(?:(CUSTOM)" + SPACE + @"(\w+\.dll)" + COMMA + @"(\w+)" + COMMA + @"(\w+)" + @")",
+                                //GROUP_CUSTOM = @"(?:(CUSTOM)" + SPACE + GROUP_QUOTE_DLL + COMMA + GROUP_QUOTE + COMMA + GROUP_QUOTE + @")",
 
                                 INPUT_OPS = @"(?:" + @"INPUT_OPS" + OR + @"input ops" + CLOSE,
                                 REP_FACT = @"(?:" + @"REP_FACT" + OR + @"rep fact" + CLOSE,

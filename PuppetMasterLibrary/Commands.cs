@@ -108,7 +108,6 @@ namespace PuppetMasterLibrary {
                             addressList = new Regex(GROUP_URL, RegexOptions.Compiled).Matches(addresses);
             //operatorSpecList = new Regex(GROUP_OPERATOR_SPEC, RegexOptions.Compiled).Matches(operatorSpec);
 
-
             GroupCollection operatorSpecList;
             Matches(GROUP_OPERATOR_SPEC, operatorSpec, out operatorSpecList);
 
@@ -160,7 +159,7 @@ namespace PuppetMasterLibrary {
             }
             if (operatorSpecList[10].Value.Equals("CUSTOM")) {
                 operatorSpecs += operatorSpecList[10].Value + ",";
-                operatorSpecs += operatorSpecList[11].Value + ".dll,";
+                operatorSpecs += operatorSpecList[11].Value + ",";
                 operatorSpecs += operatorSpecList[12].Value + ",";
                 //operatorSpecs += operatorSpecList[11].Value + "." + operatorSpecList[12].Value + ",";
                 operatorSpecs += operatorSpecList[13].Value;
