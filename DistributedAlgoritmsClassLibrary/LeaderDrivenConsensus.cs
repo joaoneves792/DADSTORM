@@ -11,6 +11,8 @@ namespace DistributedAlgoritmsClassLibrary
     using Timestamp = Int32;
 
     public class LeaderDrivenConsensus : UniformConsensus {
+        private readonly EventWaitHandle _waitHandle;
+
         private Action<Value> _listener;
         private EpochChange _epochChange;
         private IList<EpochConsensus> _epochConsensus;
@@ -50,10 +52,13 @@ namespace DistributedAlgoritmsClassLibrary
                                                             Aborted,
                                                             _processes));
             _epochChange = new LeaderBasedEpochChange(_self, _self, StartEpoch, _processes);
+            _waitHandle = new AutoResetEvent(false);
+            _waitHandle.WaitOne();
         }
 
         public void Propose(Value value) {
             _val = value;
+            Task.Run(() => { TryPropose(); });
         }
 
         public void StartEpoch (Timestamp timestamp, Process process) {
@@ -72,6 +77,7 @@ namespace DistributedAlgoritmsClassLibrary
                                                             _processes));
             _proposed = false;
             Task.Run(() => { TryPropose(); });
+            _waitHandle.Set();
         }
 
         private void TryPropose () {
