@@ -22,3 +22,5 @@ C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\bin\Debug\Distribut
 C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\bin\Debug\DistributedAlgoritmsClassLibrary.pdb
 C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.dll
 C:\Users\joao\workspace\dad\DistributedAlgoritmsClassLibrary\obj\Debug\DistributedAlgoritmsClassLibrary.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\DistributedAlgoritmsClassLibrary\bin\Debug\CommonTypesLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\DistributedAlgoritmsClassLibrary\bin\Debug\CommonTypesLibrary.pdb

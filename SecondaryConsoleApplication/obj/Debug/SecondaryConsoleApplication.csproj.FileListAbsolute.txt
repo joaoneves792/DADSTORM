@@ -40,3 +40,17 @@ C:\Users\joao\workspace\dad\SecondaryConsoleApplication\bin\Debug\DistributedAlg
 C:\Users\joao\workspace\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.csprojResolveAssemblyReference.cache
 C:\Users\joao\workspace\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.exe
 C:\Users\joao\workspace\dad\SecondaryConsoleApplication\obj\Debug\SecondaryConsoleApplication.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\CommonTypesLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\CustomOperatorExamplaes.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\OperatorApplication.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\ProcessCreationServiceApplication.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\PuppetMasterClient.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\PuppetMasterForm.exe
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\PuppetMasterLibrary.dll
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\CommonTypesLibrary.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\CustomOperatorExamplaes.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\OperatorApplication.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\ProcessCreationServiceApplication.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\PuppetMasterClient.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\PuppetMasterForm.pdb
+C:\Users\luisribeirogomes\Documents\Visual Studio 2015\Projects\DAD\SecondaryConsoleApplication\bin\Debug\PuppetMasterLibrary.pdb

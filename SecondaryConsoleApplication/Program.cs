@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using DistributedAlgoritmsClassLibrary;
+using CommonTypesLibrary;
 
 namespace SecondaryConsoleApplication
 {
@@ -37,15 +38,37 @@ namespace SecondaryConsoleApplication
             //                                                        process2,
             //                                                        process3);
 
-            UniformConsensus paxos = new LeaderDrivenConsensus(process1, 3, listener.Decide, process2, process3);
+            //UniformConsensus paxos = new LeaderDrivenConsensus(process1, 3, listener.Decide, process2, process3);
 
-            if (args[0].Equals("Teste1")) {
-                IList<String> proposal = new List<String>();
-                proposal.Add("a");
-                proposal.Add("b");
-                proposal.Add("c");
-                paxos.Propose(proposal);
+            //if (args[0].Equals("Teste1")) {
+            //    IList<String> proposal = new List<String>();
+            //    proposal.Add("a");
+            //    proposal.Add("b");
+            //    proposal.Add("c");
+            //    paxos.Propose(proposal);
+            //}
+
+            UniformConsensus quorumConsensus = new FloodingUniformConsensus(process1, listener.Decide, process2, process3);
+
+            Thread.Sleep(5000);
+
+            if (args[0].Equals("Teste1"))
+            {
+                IList<String> proposal2 = new List<String>();
+                proposal2.Add("a");
+                proposal2.Add("b");
+                proposal2.Add("c");
+                quorumConsensus.Propose(proposal2);
+            } else {
+                Flag.Frozen = true;
+                //IList<String> proposal2 = new List<String>();
+                //proposal2.Add("d");
+                //proposal2.Add("e");
+                //proposal2.Add("f");
+                //quorumConsensus.Propose(proposal2);
             }
+            Thread.Sleep(100000);
+            Flag.Frozen = false;
 
             Console.ReadLine();
         }

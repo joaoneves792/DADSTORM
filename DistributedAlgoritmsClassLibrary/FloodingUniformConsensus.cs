@@ -10,6 +10,7 @@ namespace DistributedAlgoritmsClassLibrary
     using Message = Object;
     using Value = IList<String>;
     using Round = Int32;
+    using System.Threading;
 
     public class FloodingUniformConsensus : UniformConsensus {
         private Action<Value> _listener;
@@ -33,6 +34,7 @@ namespace DistributedAlgoritmsClassLibrary
             _perfectFailureDetector = new ExcludeOnTimeout(process, Crash, otherProcesses);
 
             _correct = new List<Process>();
+            _correct.Add(process);
             foreach (Process otherProcess in otherProcesses) {
                 _correct.Add(otherProcess);
             }
@@ -60,22 +62,33 @@ namespace DistributedAlgoritmsClassLibrary
             }
 
             _receivedFrom.TryAdd(process);
-            _proposalSet.Concat(tuple.Item2);
+            foreach(Value value in tuple.Item2) {
+                _proposalSet.TryAdd(value);
+            }
             Task.Run(() => { TryDecide(); });
         }
 
         public void TryDecide() {
-            if(_receivedFrom.Intersect(_correct).Any() && _decision == null) {
+            Thread.Sleep(100); //WARNING: Duck-taped code
+            if (_receivedFrom.Intersect(_correct).Any() && _decision == null) {
                 if (_round == N) {
-                    _decision = _proposalSet.GroupBy(value => value)
-                                            .OrderByDescending(group => group.Count())
-                                            .Select(group => group.Key)
-                                            .First();
-                    _listener(_decision);
+                    lock (_proposalSet) { //WARNING: Duck-taped code
+                        if (_decision == null) {
+                            _decision = _proposalSet.GroupBy(value => value)
+                                                .OrderByDescending(group => group.Count())
+                                                .Select(group => group.Key)
+                                                .First();
+                            _listener(_decision);
+                        }
+                    }
                 } else {
-                    _round++;
-                    _receivedFrom = new ConcurrentBag<Process>();
-                    _bestEffortBroadcast.Broadcast((Message)new Tuple<Round, IProducerConsumerCollection<Value>>(_round, _proposalSet));
+                    lock (_receivedFrom) { //WARNING: Duck-taped code
+                        if (_receivedFrom.Any()) {
+                            _round++;
+                            _receivedFrom = new ConcurrentBag<Process>();
+                            _bestEffortBroadcast.Broadcast((Message)new Tuple<Round, IProducerConsumerCollection<Value>>(_round, _proposalSet));
+                        }
+                    }
                 }
             }
         }

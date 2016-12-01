@@ -67,6 +67,12 @@
     <Compile Include="StubbornPointToPointLink.cs" />
     <Compile Include="UniformConsensus.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonTypesLibrary\CommonTypesLibrary.csproj">
+      <Project>{8aa90885-c630-4770-814c-1c03726936d4}</Project>
+      <Name>CommonTypesLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
