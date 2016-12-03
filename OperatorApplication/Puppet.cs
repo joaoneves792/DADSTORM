@@ -66,12 +66,15 @@ namespace OperatorApplication
         }
 
         public void Interval(Milliseconds milliseconds) {
+            Console.WriteLine("?");
             _sleepBetweenEvents = milliseconds;
+            Console.WriteLine("??");
         }
 
         public void Status() {
+            Console.WriteLine("???");
 
-			Console.WriteLine("status:");
+            Console.WriteLine("status:");
 			Console.WriteLine("\t Operator type: \t" + _command.ToString());
 			Console.WriteLine("\t State: \t\t" + _state);
 			Console.WriteLine("\t Waiting interval: \t" + _sleepBetweenEvents);
@@ -92,7 +95,7 @@ namespace OperatorApplication
                 Console.WriteLine("\t " + pair.Key + ": \t\t" + pair.Value);
             }
 
-            Log(_logStatus, _command.ToString());
+            //Log(_logStatus, _command.ToString());
 
         }
 
@@ -104,11 +107,13 @@ namespace OperatorApplication
 			_state = "freezed";
             _listener = StoreMessage;
             _send = StoreReply;
+            Flag.Frozen = true;
         }
 
         public void Unfreeze() {
 			_state = "running";
             LoadStoredMessages();
+            Flag.Frozen = false;
         }
 
         public void Semantics(String semantics) {

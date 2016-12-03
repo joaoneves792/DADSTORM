@@ -14,7 +14,7 @@ namespace DistributedAlgoritmsClassLibrary
         private Action<Process> _listener;
         private PerfectPointToPointLink _perfectPointToPointLink;
         private const int TIMER = 1000;
-
+        private const string CLASSNAME = "ExcludeOnTimeout";
         private Process[] _processes;
         private IProducerConsumerCollection<Process> _alive;
         private IList<Process> _detected;
@@ -23,11 +23,13 @@ namespace DistributedAlgoritmsClassLibrary
                                  Action<Process> listener,
                                  params Process[] otherProcesses) {
             _listener = listener;
-            _processes = otherProcesses;
-            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, _processes);
+            _processes = otherProcesses
+                .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
+                .ToArray();
+            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, _processes);
 
             _alive = new ConcurrentBag<Process>();
-            foreach (Process otherProcess in otherProcesses) {
+            foreach (Process otherProcess in _processes) {
                 _alive.TryAdd(otherProcess);
             }
             _detected = new List<Process>();
@@ -38,7 +40,7 @@ namespace DistributedAlgoritmsClassLibrary
             foreach (Process process in _processes) {
                 if (!_alive.Contains(process) && !_detected.Contains(process)) {
                     _detected.Add(process);
-                    _listener(process);
+                    _listener(process.Unconcat(CLASSNAME));
                 }
             }
             _alive = new ConcurrentBag<Process>();

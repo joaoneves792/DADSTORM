@@ -1,25 +1,29 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 using OperatorApplication.Commands;
 using DistributedAlgoritmsClassLibrary;
 using OperatorApplication.Exceptions;
 
 namespace OperatorApplication {
-	using Message = Object;
-	using TupleMessage = List<IList<String>>;
-	using OperatorSpec = String;
+    using Message = Object;
+    using TupleMessage = List<IList<String>>;
+    using OperatorSpec = String;
 
-	internal partial class Operator {
+    internal partial class Operator {
 
 		private Action<Process, Message> _listener, _send;
-		PointToPointLink _pointToPointLink;
-		Process _process;
+		private PointToPointLink _pointToPointLink;
+		private Process _process;
+
+        private UniformConsensus<TupleMessage> _paxos;
+        private IList<UniformConsensus<TupleMessage>> _quorumConsenti;
+        private Process[] _replications;
 
 		Command _command;
 		private IProducerConsumerCollection<Process> _outputReceivers;
@@ -99,12 +103,19 @@ namespace OperatorApplication {
 		private void ParseMessage(Process process, Message message) {
 			//Parse message
 			if (message is TupleMessage) {
-				TupleMessageCommand((TupleMessage) message);
+                //TupleMessageCommand((TupleMessage) message);
+                Console.WriteLine("ping 1");
+                _paxos.Propose((TupleMessage)message);
 
 			} else if (message is Process) {
 				UrlMessageCommand((Process) message);
 			}
 		}
+
+        private void PaxosDecided(TupleMessage value) {
+            Console.WriteLine("ping 2");
+            TupleMessageCommand(value);
+        }
 
         private void TupleMessageCommand(TupleMessage tupleMessage) {
             TupleMessage result = _command.Execute(tupleMessage);
@@ -121,9 +132,17 @@ namespace OperatorApplication {
                 Log(LogStatus.FULL, String.Join(" - ", tuple));
             }
 
-			foreach (Process outputReceiver in _outputReceivers) {
-				_send(outputReceiver, (Object) result);
-			}
+            UniformConsensus<TupleMessage> quorumConsensus = new FloodingUniformConsensus<TupleMessage>(_process,
+                                                                                                        QuorumConsensusDecided,
+                                                                                                        _replications);
+
+            Thread.Sleep(500);
+            quorumConsensus.Propose(result);
+            _quorumConsenti.Add(quorumConsensus);
+
+			//foreach (Process outputReceiver in _outputReceivers) {
+			//	_send(outputReceiver, (Object) result);
+			//}
 		}
 
 		private void UrlMessageCommand(Process outputReceiver) {
@@ -131,6 +150,12 @@ namespace OperatorApplication {
 			_pointToPointLink.Connect(outputReceiver);
 			_outputReceivers.TryAdd(outputReceiver);
 		}
+
+        private void QuorumConsensusDecided(TupleMessage value) {
+            foreach (Process outputReceiver in _outputReceivers) {
+                _send(outputReceiver, (Object)value);
+            }
+        }
 	}
 }
 

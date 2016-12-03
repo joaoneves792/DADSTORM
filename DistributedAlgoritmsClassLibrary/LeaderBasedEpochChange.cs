@@ -16,7 +16,7 @@ namespace DistributedAlgoritmsClassLibrary
         private BestEffortBroadcast _bestEffortBroadcast;
         private EventualLeaderDetector _eventualLeaderDetector;
         private const int N = 1;
-
+        private const string CLASSNAME = "LeaderBasedEpochChange";
         private Process _trusted,
                         _self;
         private int _lastts;
@@ -25,19 +25,23 @@ namespace DistributedAlgoritmsClassLibrary
                                       Process leader,
                                       Action<Timestamp, Process> listener,
                                       params Process[] otherProcesses) {
+            Process[] suffixedProcesses = otherProcesses
+                .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
+                .ToArray();
+
             _listener = listener;
-            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, otherProcesses);
-            _bestEffortBroadcast = new BasicBroadcast(process, Deliver, otherProcesses);
-            _eventualLeaderDetector = new MonarchicalEventualLeaderDetection(process, Trust, otherProcesses);
+            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
+            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
+            _eventualLeaderDetector = new MonarchicalEventualLeaderDetection(process.Concat(CLASSNAME), Trust, suffixedProcesses);
 
             _trusted = leader;
-            _self = process;
+            _self = process.Concat(CLASSNAME);
             _lastts = 0;
         }
 
         public void Trust(Process process) {
             _trusted = process;
-            if (process.Equals(_self)) {
+            if (_trusted.Equals(_self)) {
                 Thread.Sleep(1000);
                 _self.Rank += N;
                 _bestEffortBroadcast.Broadcast((Message)_self.Rank);
@@ -56,7 +60,7 @@ namespace DistributedAlgoritmsClassLibrary
             int newts = message;
             if (process.Equals(_trusted) && newts > _lastts) {
                 _lastts = newts;
-                _listener(newts, process);
+                _listener(newts, process.Unconcat(CLASSNAME));
             } else {
             }
         }

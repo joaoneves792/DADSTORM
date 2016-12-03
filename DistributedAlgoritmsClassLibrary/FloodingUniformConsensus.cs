@@ -4,19 +4,18 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace DistributedAlgoritmsClassLibrary
 {
     using Message = Object;
-    using Value = IList<String>;
     using Round = Int32;
-    using System.Threading;
 
-    public class FloodingUniformConsensus : UniformConsensus {
+    public class FloodingUniformConsensus<Value> : UniformConsensus<Value> {
         private Action<Value> _listener;
 
         private const int N = 3;
-
+        private const string CLASSNAME = "FloodingUniformConsensus";
         private BestEffortBroadcast _bestEffortBroadcast;
         private PerfectFailureDetector _perfectFailureDetector;
 
@@ -29,17 +28,21 @@ namespace DistributedAlgoritmsClassLibrary
         public FloodingUniformConsensus(Process process,
                                         Action<Value> listener,
                                         params Process[] otherProcesses) {
+            Process[] suffixedProcesses = otherProcesses
+                .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
+                .ToArray();
+
             _listener = listener;
-            _bestEffortBroadcast = new BasicBroadcast(process, Deliver, otherProcesses);
-            _perfectFailureDetector = new ExcludeOnTimeout(process, Crash, otherProcesses);
+            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
+            _perfectFailureDetector = new ExcludeOnTimeout(process.Concat(CLASSNAME), Crash, suffixedProcesses);
 
             _correct = new List<Process>();
-            _correct.Add(process);
-            foreach (Process otherProcess in otherProcesses) {
+            _correct.Add(process.Concat(CLASSNAME));
+            foreach (Process otherProcess in suffixedProcesses) {
                 _correct.Add(otherProcess);
             }
             _round = 1;
-            _decision = null;
+            _decision = default(Value);
             _proposalSet = new ConcurrentBag<Value>();
             _receivedFrom = new ConcurrentBag<Process>();
         }

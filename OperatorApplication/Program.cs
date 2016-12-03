@@ -16,7 +16,7 @@ namespace OperatorApplication {
     using OperatorId = String;
     using Url = String;
     using InputOps = String;
-    using Address = String;
+    using Replicas = String;
     using OperatorSpec = String;
     using TupleMessage = List<IList<String>>;
 
@@ -32,9 +32,11 @@ namespace OperatorApplication {
             _command = null;
             _pointToPointLink = null;
             _outputReceivers = new ConcurrentBag<Process>();
+            _paxos = null;
+            _quorumConsenti = new List<UniformConsensus<TupleMessage>>();
 
-            //Puppet component
-            _logStatus = LogStatus.LIGHT;
+        //Puppet component
+        _logStatus = LogStatus.LIGHT;
             _listener = ParseAndStoreMessage;
             _send = StoreReply;
             _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
@@ -80,12 +82,35 @@ namespace OperatorApplication {
             OperatorId operatorId = args[0];
             Url url = args[1];
             InputOps inputOps = args[2];
-            Address address = args[3];
+            Replicas replicas = args[3];
             OperatorSpec operatorSpec = args[4];
 
             //Define operator
             _process = new Process(operatorId, url);
             DefineOperatorType(operatorSpec);
+
+            //Define redundancy infrastructure
+            String[] replicaList = replicas.Split(',');
+            GroupCollection groupCollection;
+            Process replicaProcess;
+            IList<Process> replicaProcessList = new List<Process>();
+            foreach (String replica in replicaList) {
+                if (Matches(URL, replica, out groupCollection)) {
+                    replicaProcess = new Process(operatorId, replica);
+                    if(replicaProcess.Equals(_process)) {
+                        continue;
+                    }
+                    replicaProcessList.Add(replicaProcess);
+                }
+            }
+            _replications = replicaProcessList.ToArray();
+            Console.WriteLine("Replicas:\n" + String.Join("\n ", replicaProcessList));
+            //Console.ReadLine();
+            _paxos = new LeaderDrivenConsensus<TupleMessage>(_process,
+                                                             _replications.Count() + 1,
+                                                             PaxosDecided,
+                                                             _replications);
+            Console.WriteLine("Not passing");
 
             //Register operator into remoting
             _pointToPointLink = new RemotingNode(_process, Deliver);
@@ -94,15 +119,16 @@ namespace OperatorApplication {
 
             //Get inputOps' sources
             String[] inputOpsList = inputOps.Split(',');
-            GroupCollection groupCollection;
+            //GroupCollection groupCollection;
             FileStream fileStream;
             ICollection<StreamReader> inputFiles = new HashSet<StreamReader>();
             Process inputProcess;
             foreach (String inputOp in inputOpsList) {
-                //Get file data
+                //Or get file data
                 if (Matches(PATH, inputOp, out groupCollection) && File.Exists(inputOp)) {
                     fileStream = File.Open(inputOp, FileMode.Open, FileAccess.Read, FileShare.Read);
                     inputFiles.Add(new StreamReader(fileStream));
+                //Or get upstream Operator
                 } else if (Matches(URL, inputOp, out groupCollection)) {
                     inputProcess = new Process(inputOp, inputOp);
                     _pointToPointLink.Connect(inputProcess);

@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
-    using Value = IList<String>;
-
-    public interface EpochConsensus
+    public interface EpochConsensus<Value>
     {
         void Propose(Value value);
         void Abort();

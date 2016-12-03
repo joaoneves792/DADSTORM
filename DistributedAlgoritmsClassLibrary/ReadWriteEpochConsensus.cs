@@ -9,9 +9,9 @@ namespace DistributedAlgoritmsClassLibrary
 {
     using Message = Object;
     using Timestamp = Int32;
-    using Value = IList<String>;
 
-    public class ReadWriteEpochConsensus : EpochConsensus {
+    public class ReadWriteEpochConsensus<Value> : EpochConsensus<Value> {
+        private const string CLASSNAME = "ReadWriteEpochConsensus";
         private Action<Value> _decideListener;
         private Action<Tuple<Timestamp, Value>> _abortedListener;
 
@@ -31,19 +31,23 @@ namespace DistributedAlgoritmsClassLibrary
                                         Action<Value> decideListener,
                                         Action<Tuple<Timestamp, Value>> abortedListener,
                                         params Process[] otherProcesses) {
+            Process[] suffixedProcesses = otherProcesses
+                .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
+                .ToArray();
+
             _decideListener = decideListener;
             _abortedListener = abortedListener;
             try
             {
-                _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, otherProcesses);
+                _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
             }
             catch (Exception exception) {
                 Console.WriteLine(exception);
             }
-            _bestEffortBroadcast = new BasicBroadcast(process, Deliver, otherProcesses);
+            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
 
             _state = state;
-            _tmpval = null;
+            _tmpval = default(Value);
             _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
             _accepted = 0;
             _replicationFactor = replicationFactor;
@@ -102,7 +106,7 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         private Tuple<Timestamp, Value> Highest(IDictionary<Process, Tuple<Timestamp, Value>> states) {
-            Tuple<Timestamp, Value> state = new Tuple<Timestamp, Value>(-1, null),
+            Tuple<Timestamp, Value> state = new Tuple<Timestamp, Value>(-1, default(Value)),
                                     keyValuePairValue;
             foreach (KeyValuePair<Process, Tuple<Timestamp, Value>> keyValuePair in states) {
                 keyValuePairValue = keyValuePair.Value;

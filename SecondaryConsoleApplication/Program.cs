@@ -13,6 +13,7 @@ namespace SecondaryConsoleApplication
     using Message = Object;
     using Value = IList<String>;
     using Timestamp = Int32;
+    using TupleMessage = IList<String>;
 
     class Program
     {
@@ -29,48 +30,54 @@ namespace SecondaryConsoleApplication
             //BestEffortBroadcast broadcast = new BasicBroadcast(process1, listener.Deliver/*, process2, process3*/);
             //EventualLeaderDetector detector = new MonarchicalEventualLeaderDetection(process1, listener.Trust, process2, process3);
             //EpochChange change = new LeaderBasedEpochChange(process1, process1, listener.StartEpoch, process2, process3);
-            //EpochConsensus consensus = new ReadWriteEpochConsensus( process1,
-            //                                                        new Tuple<Timestamp, Value>(0, null),
-            //                                                        3,
-            //                                                        0,
-            //                                                        listener.Decide,
-            //                                                        listener.Aborted,
-            //                                                        process2,
-            //                                                        process3);
+            //EpochConsensus<TupleMessage> consensus = new ReadWriteEpochConsensus<TupleMessage>(
+            //    process1,
+            //    new Tuple<Timestamp, Value>(0, null),
+            //    3,
+            //    0,
+            //    listener.Decide,
+            //    listener.Aborted,
+            //    process2,
+            //    process3
+            //);
 
-            //UniformConsensus paxos = new LeaderDrivenConsensus(process1, 3, listener.Decide, process2, process3);
+            //UniformConsensus<TupleMessage> consensus = new LeaderDrivenConsensus<TupleMessage>(
+            //    process1,
+            //    3,
+            //    listener.Decide,
+            //    process2,
+            //    process3
+            //);
 
-            //if (args[0].Equals("Teste1")) {
-            //    IList<String> proposal = new List<String>();
-            //    proposal.Add("a");
-            //    proposal.Add("b");
-            //    proposal.Add("c");
-            //    paxos.Propose(proposal);
-            //}
-
-            UniformConsensus quorumConsensus = new FloodingUniformConsensus(process1, listener.Decide, process2, process3);
+            UniformConsensus<TupleMessage> consensus = new FloodingUniformConsensus<TupleMessage>(
+                process1,
+                listener.Decide,
+                process2,
+                process3
+            );
 
             Thread.Sleep(5000);
 
-            if (args[0].Equals("Teste1"))
-            {
-                IList<String> proposal2 = new List<String>();
-                proposal2.Add("a");
-                proposal2.Add("b");
-                proposal2.Add("c");
-                quorumConsensus.Propose(proposal2);
-            } else {
-                Flag.Frozen = true;
-                //IList<String> proposal2 = new List<String>();
-                //proposal2.Add("d");
-                //proposal2.Add("e");
-                //proposal2.Add("f");
-                //quorumConsensus.Propose(proposal2);
+            if (args[0].Equals("Teste1")) {
+                TupleMessage proposal = new List<String>();
+                proposal.Add("a");
+                proposal.Add("b");
+                proposal.Add("c");
+                consensus.Propose(proposal);
             }
-            Thread.Sleep(100000);
-            Flag.Frozen = false;
 
-            Console.ReadLine();
+            // else {
+            //    Flag.Frozen = true;
+            //IList<String> proposal2 = new List<String>();
+            //proposal2.Add("d");
+            //proposal2.Add("e");
+            //proposal2.Add("f");
+            //quorumConsensus.Propose(proposal2);
+            //}
+            //Thread.Sleep(100000);
+            //Flag.Frozen = false;
+
+            //Console.ReadLine();
         }
 
         internal class Listener
@@ -95,8 +102,8 @@ namespace SecondaryConsoleApplication
             }
 
             internal void StartEpoch(int timestamp, Process leader) {
-                Console.WriteLine("Timestamp: " + timestamp);
-                Console.WriteLine("Leader:    " + leader);
+                Console.WriteLine("Timestamp:\n" + timestamp);
+                Console.WriteLine("Leader:\n" + leader);
             }
 
             internal void Suspect(Process process) {

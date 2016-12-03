@@ -15,7 +15,7 @@ namespace DistributedAlgoritmsClassLibrary
                                 _restoreListener;
         private PerfectPointToPointLink _perfectPointToPointLink;
         private const int TIMER = 1000;
-
+        private const string CLASSNAME = "IncreasingTimeout";
         private Process[] _processes;
         private IProducerConsumerCollection<Process> _alive;
         private IList<Process> _suspected;
@@ -25,13 +25,17 @@ namespace DistributedAlgoritmsClassLibrary
                                  Action<Process> suspectListener,
                                  Action<Process> restoreListener,
                                  params Process[] otherProcesses) {
+            Process[] suffixedProcesses = otherProcesses
+                .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
+                .ToArray();
+
             _suspectListener = suspectListener;
             _restoreListener = restoreListener;
-            _processes = otherProcesses;
-            _perfectPointToPointLink = new EliminateDuplicates(process, Deliver, _processes);
+            _processes = suffixedProcesses;
+            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, _processes);
 
             _alive = new ConcurrentBag<Process>();
-            foreach (Process otherProcess in otherProcesses) {
+            foreach (Process otherProcess in suffixedProcesses) {
                 _alive.TryAdd(otherProcess);
             }
             _suspected = new List<Process>();

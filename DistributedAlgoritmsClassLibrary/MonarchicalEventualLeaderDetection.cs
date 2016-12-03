@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace DistributedAlgoritmsClassLibrary
 {
     public class MonarchicalEventualLeaderDetection : EventualLeaderDetector {
+        private const string CLASSNAME = "MonarchicalEventualLeaderDetection";
         private Action<Process> _listener;
         private EventuallyPerfectFailureDetector _eventuallyPerfectFailureDetector;
 
@@ -18,13 +19,17 @@ namespace DistributedAlgoritmsClassLibrary
         public MonarchicalEventualLeaderDetection(Process process,
                                                   Action<Process> listener,
                                                   params Process[] otherProcesses) {
+            Process[] suffixedProcesses = otherProcesses
+                .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
+                .ToArray();
+
             _listener = listener;
-            _eventuallyPerfectFailureDetector = new IncreasingTimeout(process, Suspect, Restore, otherProcesses);
+            _eventuallyPerfectFailureDetector = new IncreasingTimeout(process.Concat(CLASSNAME), Suspect, Restore, suffixedProcesses);
             _processes = new ConcurrentBag<Process>();
-            foreach (Process otherProcess in otherProcesses) {
+            foreach (Process otherProcess in suffixedProcesses) {
                 _processes.TryAdd(otherProcess);
             }
-            _processes.TryAdd(process);
+            _processes.TryAdd(process.Concat(CLASSNAME));
 
             _leader = null;
             _suspected = new List<Process>();
@@ -49,7 +54,7 @@ namespace DistributedAlgoritmsClassLibrary
             Process usurper = _processes.Except(_suspected).Max();
             if (!usurper.Equals(_leader)) {
                 _leader = usurper;
-                _listener(_leader);
+                _listener(_leader.Unconcat(CLASSNAME));
             }
         }
 

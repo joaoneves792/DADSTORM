@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
-    using Value = IList<String>;
-
-    public interface UniformConsensus
+    public interface UniformConsensus<Value>
     {
         void Propose(Value value);
     }

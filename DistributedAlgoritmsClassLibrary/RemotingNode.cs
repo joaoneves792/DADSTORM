@@ -21,18 +21,15 @@ namespace DistributedAlgoritmsClassLibrary
     public class RemotingNode : MarshalByRefObject, FairLossPointToPointLink
     {
         private const int TIMER = 100;
-        private static int _channelIdCounter = 0;
 
-        private readonly int _channelId;
         private readonly Process _process;
         private Action<Process, Message> _listener;
-        private IDictionary<Process, FairLossPointToPointLink> _fairLossPointToPointLinks;
+        private IDictionary<String, FairLossPointToPointLink> _fairLossPointToPointLinks;
 
         private IProducerConsumerCollection<Tuple<Process, Message>> _frozenSends, _frozenDelivers;
         private Action<Process, Message> _freezableSend, _freezableDeliver;
 
         public RemotingNode(Process process, Action<Process, Message> listener) {
-            _channelId = _channelIdCounter++;
             _process = process;
             _listener = listener;
             _freezableSend = FreezableSend;
@@ -41,7 +38,7 @@ namespace DistributedAlgoritmsClassLibrary
             _frozenSends = new ConcurrentBag<Tuple<Process, Message>>();
             _frozenDelivers = new ConcurrentBag<Tuple<Process, Message>>();
 
-            _fairLossPointToPointLinks = new Dictionary<Process, FairLossPointToPointLink>();
+            _fairLossPointToPointLinks = new Dictionary<String, FairLossPointToPointLink>();
 
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
@@ -53,9 +50,14 @@ namespace DistributedAlgoritmsClassLibrary
                 ChannelServices.RegisterChannel(channel, true);
             } catch { }
 
+            //Console.WriteLine("Url:\n" + process.Url);
+            //Console.WriteLine("Service:\n" + process.ServiceName);
+            //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
+            //Thread.Sleep(2000);
+
             RemotingServices.Marshal(
                 this,
-                process.ServiceName + _channelId,
+                process.ServiceName,
                 typeof(FairLossPointToPointLink));
         }
 
@@ -67,14 +69,17 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Connect(Process process) {
+            //Console.WriteLine("Connect to:\n" + process.Url.GetHashCode());
+            //Thread.Sleep(2000);
+
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
-                process.Url + _channelId);
+                process.Url);
 
-            if (_fairLossPointToPointLinks.ContainsKey(process)) {
-                _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
+            if (_fairLossPointToPointLinks.ContainsKey(process.Url)) {
+                _fairLossPointToPointLinks[process.Url] = fairLossPointToPointLink;
             } else {
-                _fairLossPointToPointLinks.Add(process, fairLossPointToPointLink);
+                _fairLossPointToPointLinks.Add(process.Url, fairLossPointToPointLink);
             }
 
             try {
@@ -90,12 +95,12 @@ namespace DistributedAlgoritmsClassLibrary
         public void Reconnect(Process process) {
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
-                process.Url + _channelId);
+                process.Url);
 
-            if (_fairLossPointToPointLinks.ContainsKey(process)) {
-                _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
+            if (_fairLossPointToPointLinks.ContainsKey(process.Url)) {
+                _fairLossPointToPointLinks[process.Url] = fairLossPointToPointLink;
             } else {
-                _fairLossPointToPointLinks.Add(process, fairLossPointToPointLink);
+                _fairLossPointToPointLinks.Add(process.Url, fairLossPointToPointLink);
             }
 
             try {
@@ -104,15 +109,18 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Anchor(Process process) {
+            //Console.WriteLine("Connect by:\n" + process.Url.GetHashCode());
+            //Thread.Sleep(2000);
+
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
-                process.Url + _channelId);
+                process.Url);
             //@"tcp://" + serviceURL + ":" + PORT + "/" + SERVICE_NAME);
 
-            if (_fairLossPointToPointLinks.ContainsKey(process)) {
-                _fairLossPointToPointLinks[process] = fairLossPointToPointLink;
+            if (_fairLossPointToPointLinks.ContainsKey(process.Url)) {
+                _fairLossPointToPointLinks[process.Url] = fairLossPointToPointLink;
             } else {
-                _fairLossPointToPointLinks.Add(process, fairLossPointToPointLink);
+                _fairLossPointToPointLinks.Add(process.Url, fairLossPointToPointLink);
             }
         }
 
@@ -135,12 +143,16 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void FreezableSend(Process process, Message message) {
-            //Console.WriteLine(_channelId + ": from " + _process.Name + " to " + process.Name);
+            //Console.WriteLine("Send to:\n" + process.Url.GetHashCode());
+            //Console.WriteLine("List:\n" + String.Join("\n", _fairLossPointToPointLinks.Keys.Select((aaa) => aaa.GetHashCode())));
+            //Thread.Sleep(2000);
+
             Task.Run(() => {
-                _fairLossPointToPointLinks[process].Deliver(_process, message);
+                _fairLossPointToPointLinks[process.Url].Deliver(_process, message);
             }).ContinueWith(task => {
                 //Handles remote exception
                 task.Exception.Handle(ex => {
+                    //Console.WriteLine("------------------------------------------");
                     //Console.WriteLine(ex);
                     Reconnect(process);
                     return true;

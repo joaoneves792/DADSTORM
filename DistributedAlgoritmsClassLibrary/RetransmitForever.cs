@@ -13,20 +13,24 @@ namespace DistributedAlgoritmsClassLibrary {
         private Action<Process, Message> _listener;
         private FairLossPointToPointLink _fairLossPointToPointLink;
         private const int TIMER = 5000;
-
+        private const string CLASSNAME = "RetransmitForever";
         private IProducerConsumerCollection<Tuple<Process, Message>> _sent;
 
         public RetransmitForever(Process process, Action<Process, Message> listener) {
             _listener = listener;
-            _fairLossPointToPointLink = new RemotingNode(process, Deliver);
+            _fairLossPointToPointLink = new RemotingNode(process.Concat(CLASSNAME), Deliver);
 
             _sent = new ConcurrentBag<Tuple<Process, Message>>();
             StartTimer();
         }
 
         public RetransmitForever(Process process, Action<Process, Message> listener, params Process[] otherProcesses) {
+            Process[] suffixedProcesses = otherProcesses
+                .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
+                .ToArray();
+
             _listener = listener;
-            _fairLossPointToPointLink = new RemotingNode(process, Deliver, otherProcesses);
+            _fairLossPointToPointLink = new RemotingNode(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
 
             _sent = new ConcurrentBag<Tuple<Process, Message>>();
             StartTimer();
@@ -47,18 +51,18 @@ namespace DistributedAlgoritmsClassLibrary {
         }
 
         public void Send(Process process, Message message) {
-            _fairLossPointToPointLink.Send(process, message);
+            _fairLossPointToPointLink.Send(process.Concat(CLASSNAME), message);
 
-            Tuple<Process, Message> sent = new Tuple<Process, Message>(process, message);
+            Tuple<Process, Message> sent = new Tuple<Process, Message>(process.Concat(CLASSNAME), message);
             _sent.TryAdd(sent);
         }
 
         public void Deliver(Process process, Message message) {
-            _listener(process, message);
+            _listener(process.Unconcat(CLASSNAME), message);
         }
 
         public void Connect(Process process) {
-            _fairLossPointToPointLink.Connect(process);
+            _fairLossPointToPointLink.Connect(process.Concat(CLASSNAME));
         }
     }
 }
