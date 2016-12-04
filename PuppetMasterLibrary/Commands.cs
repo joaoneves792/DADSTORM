@@ -32,18 +32,20 @@ namespace PuppetMasterLibrary {
 
 
 	public partial class PuppetMaster : MarshalByRefObject, IPuppetMaster {
+        //Constants
+        private const String OPERATOR_NAME = "Operator";
+        private const String PUPPET_NAME = "Puppet";
+
         //Tables
         private IDictionary<OperatorId, IList<Url>> _operatorResolutionCache;
         private IDictionary<Url, IPuppet> _puppetTable;
         private IDictionary<Url, IProcessCreationService> _processCreationServiceTable;
 
-        //Constants
-        private const String OPERATOR_NAME = "Operator";
-        private const String PUPPET_NAME = "Puppet";
-
         private String _semantic, _loggingLevel;
 
-		// internal -> public
+        private readonly EventWaitHandle _waitHandle;
+
+        // internal -> public
         public PuppetMaster() {
             ToggleToConfigurationMode();
 
@@ -55,6 +57,8 @@ namespace PuppetMasterLibrary {
             _loggingLevel = "light";
 
             String processCreationServiceUrl = "tcp://localhost:10000/";
+
+            _waitHandle = new AutoResetEvent(false);
 
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
@@ -119,8 +123,7 @@ namespace PuppetMasterLibrary {
                 Matches(GROUP_INPUT_OP, inputOpMatch.Value, out groups);
                 inputOp = groups[1].Value;
                 if (_operatorResolutionCache.TryGetValue(inputOp, out urlList)) {
-                    //FIXME: after checkpoint
-                    sources += urlList.First() + ",";
+                    sources += inputOp + "|" + String.Join("," + inputOp + "|", urlList) + ",";
                 } else {
                     sources += inputOp + ",";
                 }
@@ -173,6 +176,8 @@ namespace PuppetMasterLibrary {
                 _processCreationServiceTable[processCreationServiceUrl].CreateProcess(
                     operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs);
 
+                _waitHandle.WaitOne();
+
                 //Add operator id into operator resolution cache
                 if (_operatorResolutionCache.TryGetValue(operatorId, out urlList)) {
                     urlList.Add(groupCollection[0].Value);
@@ -187,6 +192,10 @@ namespace PuppetMasterLibrary {
             Thread.Sleep(1000);
         }
 
+        public void ResetWaitHandle() {
+            _waitHandle.Set();
+            _waitHandle.Reset();
+        }
 
         private void ExecuteStartCommand(OperatorId operatorId) {
             IList<Url> urlList = _operatorResolutionCache[operatorId];

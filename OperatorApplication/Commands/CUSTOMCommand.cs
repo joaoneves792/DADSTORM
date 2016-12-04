@@ -14,7 +14,6 @@ namespace OperatorApplication.Commands {
 	class CUSTOMCommand : Command {
 
 		private Assembly _assembly = null;
-		private Type _type = null;
 		private Object _obj = null;
 		private MethodInfo _methodInfo = null;
 

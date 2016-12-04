@@ -14,5 +14,6 @@ namespace CommonTypesLibrary
     {
         void ReceiveUrl(Url url, ObjRef objRef);
         void Log(String message);
+        void ResetWaitHandle();
     }
 }

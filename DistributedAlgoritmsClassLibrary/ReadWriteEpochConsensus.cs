@@ -37,13 +37,7 @@ namespace DistributedAlgoritmsClassLibrary
 
             _decideListener = decideListener;
             _abortedListener = abortedListener;
-            try
-            {
-                _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
-            }
-            catch (Exception exception) {
-                Console.WriteLine(exception);
-            }
+            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
             _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
 
             _state = state;
@@ -98,7 +92,6 @@ namespace DistributedAlgoritmsClassLibrary
                 _state = Highest(_states);
                 if (_state.Item2 != null) {
                     _tmpval = _state.Item2;
-                    Console.WriteLine("State: " + String.Join(" - ", _tmpval));
                 }
                 _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
                 _bestEffortBroadcast.Broadcast((Message)new Tuple<Signal, Value>(Signal.WRITE, _tmpval));

@@ -40,17 +40,7 @@ namespace DistributedAlgoritmsClassLibrary
 
             _fairLossPointToPointLinks = new Dictionary<String, FairLossPointToPointLink>();
 
-            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
-            provider.TypeFilterLevel = TypeFilterLevel.Full;
-
-            IDictionary RemoteChannelProperties = new Hashtable();
-            RemoteChannelProperties["port"] = process.Port;
-            try {
-                TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
-                ChannelServices.RegisterChannel(channel, true);
-            } catch { }
-
-            //Console.WriteLine("Url:\n" + process.Url);
+            //Console.WriteLine("\nSubmit:");
             //Console.WriteLine("Service:\n" + process.ServiceName);
             //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
             //Thread.Sleep(2000);
@@ -69,7 +59,9 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Connect(Process process) {
-            //Console.WriteLine("Connect to:\n" + process.Url.GetHashCode());
+            //Console.WriteLine("\nConnect to:");
+            //Console.WriteLine("Service:\n" + process.ServiceName);
+            //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
             //Thread.Sleep(2000);
 
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
@@ -86,6 +78,7 @@ namespace DistributedAlgoritmsClassLibrary
                 fairLossPointToPointLink.Anchor(_process);
             } catch (Exception) {
                 new Thread(() => {
+                    //Console.WriteLine("------------------------------------------");
                     Thread.Sleep(TIMER);
                     Connect(process);
                 }).Start();
@@ -109,7 +102,9 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Anchor(Process process) {
-            //Console.WriteLine("Connect by:\n" + process.Url.GetHashCode());
+            //Console.WriteLine("\nConnect by:");
+            //Console.WriteLine("Service:\n" + process.ServiceName);
+            //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
             //Thread.Sleep(2000);
 
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
@@ -143,7 +138,9 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void FreezableSend(Process process, Message message) {
-            //Console.WriteLine("Send to:\n" + process.Url.GetHashCode());
+            //Console.WriteLine("\nSend to:");
+            //Console.WriteLine("Service:\n" + process.ServiceName);
+            //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
             //Console.WriteLine("List:\n" + String.Join("\n", _fairLossPointToPointLinks.Keys.Select((aaa) => aaa.GetHashCode())));
             //Thread.Sleep(2000);
 
@@ -153,7 +150,7 @@ namespace DistributedAlgoritmsClassLibrary
                 //Handles remote exception
                 task.Exception.Handle(ex => {
                     //Console.WriteLine("------------------------------------------");
-                    //Console.WriteLine(ex);
+                    Thread.Sleep(TIMER);
                     Reconnect(process);
                     return true;
                 });
@@ -161,12 +158,7 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void FreezableDeliver(Process process, Message message) {
-            //Console.WriteLine(_channelId + ": from " + process.Name + " to " + _process.Name);
-            //try {
-                _listener(process, message);
-            //} catch () {
-            //    Reconnect(process);
-            //}
+            _listener(process, message);
         }
 
         public void Freeze() {

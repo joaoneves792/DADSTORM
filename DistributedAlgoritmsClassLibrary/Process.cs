@@ -8,7 +8,8 @@ namespace DistributedAlgoritmsClassLibrary
     public class Process : IComparable
     {
         private readonly String _name,
-                                _url;
+                                _url,
+                                _uri;
         private String _serviceName;
         private readonly int _port;
         private int _rank;
@@ -20,6 +21,7 @@ namespace DistributedAlgoritmsClassLibrary
 
             //TODO: needs to check and handle parse faults
             Match match = Regex.Match(url, @"^(tcp://[\w\.]+:(\d{4,5}))/(\w+)$");
+            _uri = match.Groups[1].Value;
             _port = int.Parse(match.Groups[2].Value);
             _serviceName = match.Groups[3].Value;
             _suffixes = new List<String>();
@@ -27,7 +29,7 @@ namespace DistributedAlgoritmsClassLibrary
             _rank = 0;
         }
 
-        private Process(String name, String url, IList<String> suffix) {
+        public Process(String name, String url, IList<String> suffix) {
             _name = name;
             _url = url;
 
@@ -46,6 +48,10 @@ namespace DistributedAlgoritmsClassLibrary
 
         public String Url {
             get { return _url + String.Join("_", _suffixes); }
+        }
+
+        public String Uri {
+            get { return _uri; }
         }
 
         public String ServiceName {

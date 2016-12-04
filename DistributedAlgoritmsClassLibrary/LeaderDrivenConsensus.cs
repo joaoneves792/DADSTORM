@@ -14,6 +14,7 @@ namespace DistributedAlgoritmsClassLibrary
         private readonly EventWaitHandle _waitHandle;
 
         private Action<Value> _listener;
+        private Action<Timestamp, Process> _epochChangeListener;
         private EpochChange _epochChange;
         private IList<EpochConsensus<Value>> _epochConsensus;
         private int _replicationFactor;
@@ -26,10 +27,17 @@ namespace DistributedAlgoritmsClassLibrary
         private Tuple<Timestamp, Process> _currentLeader,
                                           _newLeader;
 
+        private bool _relaxed;
+
         public LeaderDrivenConsensus(Process process,
                               int replicationFactor,
                               Action<Value> listener,
+                              Action<Timestamp, Process> epochChangeListener,
+                              bool relaxed,
                               params Process[] otherProcesses) {
+            _epochChangeListener = epochChangeListener;
+            _relaxed = relaxed;
+
             Process[] suffixedProcesses = otherProcesses
                 .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
                 .ToArray();
@@ -46,6 +54,10 @@ namespace DistributedAlgoritmsClassLibrary
             _currentLeader = new Tuple<Timestamp, Process>(0, null);
             _newLeader = new Tuple<Timestamp, Process>(0, null);
 
+            Process[] suffixedEpochProcesses = _processes
+                .Select((suffixedProcess) => suffixedProcess.Concat(_currentLeader.Item1.ToString()))
+                .ToArray();
+
             _epochConsensus = new List<EpochConsensus<Value>>();
             _epochConsensus.Add(new ReadWriteEpochConsensus<Value>(_self.Concat(_currentLeader.Item1.ToString()),
                                                                    new Tuple<Timestamp, Value>(0, default(Value)),
@@ -53,8 +65,8 @@ namespace DistributedAlgoritmsClassLibrary
                                                                    0,
                                                                    Decide,
                                                                    Aborted,
-                                                                   _processes));
-            _epochChange = new LeaderBasedEpochChange(_self, _self, StartEpoch, _processes);
+                                                                   suffixedEpochProcesses));
+            _epochChange = new LeaderBasedEpochChange(_self, _self, StartEpoch, suffixedProcesses);
             _waitHandle = new AutoResetEvent(false);
             _waitHandle.WaitOne();
         }
@@ -71,6 +83,8 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Aborted (Tuple<Timestamp, Value> state) {
             _currentLeader = _newLeader;
+
+            Task.Run(() => { _epochChangeListener(_currentLeader.Item1, _currentLeader.Item2); });
 
             Process[] suffixedProcesses = _processes
                 .Select((suffixedProcess) => suffixedProcess.Concat(_currentLeader.Item1.ToString()))
@@ -89,7 +103,7 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         private void TryPropose () {
-            if (_currentLeader.Item2.Equals(_self) && _val != null && _proposed == false) {
+            if ((_currentLeader.Item2.Equals(_self) || _relaxed) && _val != null && _proposed == false) {
                 _proposed = true;
                 _epochConsensus[_currentLeader.Item1].Propose(_val);
             }

@@ -1,52 +1,47 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Net.Sockets;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Remoting.Channels;
-using System.Threading;
-using System.Runtime.Serialization.Formatters;
-using System.Runtime.Serialization;
-
+﻿using CommonTypesLibrary;
 using DistributedAlgoritmsClassLibrary;
-using CommonTypesLibrary;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Remoting;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OperatorApplication
 {
     using Message = Object;
-    using Milliseconds = Int32;
+    using TupleMessage = List<IList<String>>;
 
-    internal partial class Operator : MarshalByRefObject, IPuppet
-    {
+    internal partial class Operator : MarshalByRefObject, IPuppet {
         private enum LogStatus {
             FULL,
             LIGHT
         }
 
-        private static String PUPPET_SERVICE_NAME = "Puppet";
-        private IProducerConsumerCollection<Tuple<Process, Message>> _frozenRequests, _frozenReplies;
+        #region Constants
+        private const String PUPPET_SERVICE_NAME = "Puppet";
+        #endregion
+        #region Variables
+        //Puppet variables
         private IPuppetMaster _puppetMaster;
         private LogStatus _logStatus;
-
         private int _sleepBetweenEvents;
 		private string _state;
 
-        public void SubmitAsPuppet() {
+        //Broadcast variables
+        private IProducerConsumerCollection<Message> _frozenInfrastructureRequests,
+                                                     _frozenDownstreamRequests,
+                                                     _frozenUpstreamRequests;
+        private IProducerConsumerCollection<Tuple<RequestType, String>> _frozenInfrastructureReplies;
+        private IProducerConsumerCollection<TupleMessage> _frozenDownstreamReplies;
+        private IProducerConsumerCollection<Process> _frozenUpstreamReplies;
+        #endregion
+
+        #region Constructor
+        public void SubmitOperatorAsPuppetryNode() {
 			_state = "ready";
-
-            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
-            provider.TypeFilterLevel = TypeFilterLevel.Full;
-
-            //IDictionary RemoteChannelProperties = new Hashtable();
-            //RemoteChannelProperties["name"] = PUPPET_SERVICE_NAME;
-            //TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
-            //ChannelServices.RegisterChannel(channel, true);
 
             ObjRef objRef = RemotingServices.Marshal(
                 this,
@@ -59,14 +54,140 @@ namespace OperatorApplication
 
             _puppetMaster.ReceiveUrl(_process.Url, objRef);
         }
+        #endregion
 
-        public void Start() {
-			_state = "running";
-            _waitHandle.Set();
+        #region Frozen Handlers
+        private void FrozenInfrastructureRequestHandler(Message request) {
+            _frozenInfrastructureRequests.TryAdd(request);
         }
 
-        public void Interval(Milliseconds milliseconds) {
-            _sleepBetweenEvents = milliseconds;
+        private void FrozenDownstreamRequestHandler(Message request) {
+            _frozenDownstreamRequests.TryAdd(request);
+        }
+
+        private void FrozenUpstreamRequestHandler(Message request) {
+            _frozenUpstreamRequests.TryAdd(request);
+        }
+
+        private void FrozenInfrastructureReplyHandler(Tuple<RequestType, String> reply) {
+            _frozenInfrastructureReplies.TryAdd(reply);
+        }
+
+        private void FrozenDownstreamReplyHandler(TupleMessage reply) {
+            _frozenDownstreamReplies.TryAdd(reply);
+        }
+
+        private void FrozenUpstreamReplyHandler(Process reply) {
+            _frozenUpstreamReplies.TryAdd(reply);
+        }
+        #endregion
+        #region Commands
+        public void Start() {
+			_state = "running";
+
+            //Process already received tuples
+            Unfreeze();
+
+            //Process files
+            while (_serverType == ServerType.UNDEFINED) {
+                Console.WriteLine("Warning: The server is still undefined.");
+                Thread.Sleep(1000);
+            }
+            if (_serverType == ServerType.REPLICATION) {
+                return;
+            }
+            foreach (StreamReader currentInputFile in _inputFiles) {
+                ThreadPool.QueueUserWorkItem((inputFileObject) => {
+                    StreamReader inputFile = (StreamReader)inputFileObject;
+
+                    String currentLine;
+                    while ((currentLine = inputFile.ReadLine()) != null) {
+                        new Thread((lineObject) => {
+                            //Assumption: all files and lines are valid
+                            String line = (String)lineObject;
+                            TupleMessage tupleMessage = new TupleMessage();
+                            tupleMessage.Add(line.Split(',').ToList());
+                            PaxosRequestHandler(tupleMessage);
+
+                            Console.WriteLine("Reading " + String.Join(" , ", tupleMessage.Select(aa => String.Join("-", aa))));
+                        }).Start((Object)currentLine);
+                    }
+                    inputFile.Close();
+                }, (Object)currentInputFile);
+            }
+        }
+
+        public void Crash() {
+            Environment.Exit(0);
+        }
+
+        public void Freeze() {
+            Flag.Frozen = true;
+			_state = "froze";
+
+            _frozenInfrastructureRequests = new ConcurrentBag<Message>();
+            _frozenDownstreamRequests = new ConcurrentBag<Message>();
+            _frozenUpstreamRequests = new ConcurrentBag<Message>();
+            _frozenInfrastructureReplies = new ConcurrentBag<Tuple<RequestType, String>>();
+            _frozenDownstreamReplies = new ConcurrentBag<TupleMessage>();
+            _frozenUpstreamReplies = new ConcurrentBag<Process>();
+
+            _infrastructureRequestListener = FrozenInfrastructureRequestHandler;
+            _downstreamRequestListener = FrozenDownstreamRequestHandler;
+            _upstreamRequestListener = FrozenUpstreamRequestHandler;
+            _infrastructureReplyListener = FrozenInfrastructureReplyHandler;
+            _downstreamReplyListener = FrozenDownstreamReplyHandler;
+            _upstreamReplyListener = FrozenUpstreamReplyHandler;
+        }
+
+        public void Unfreeze() {
+            Flag.Frozen = false;
+            _state = "running";
+
+            _infrastructureRequestListener = _infrastructureBroadcast.Broadcast;
+            _downstreamRequestListener = _downstreamBroadcast.Broadcast;
+            _upstreamRequestListener = _upstreamBroadcast.Broadcast;
+            _infrastructureReplyListener = InitHandler;
+            _downstreamReplyListener = PaxosRequestHandler;
+            _upstreamReplyListener = _downstreamBroadcast.Connect;
+
+            foreach (Message frozenInfrastructureRequest in _frozenInfrastructureRequests) {
+                new Thread(() => {
+                    _infrastructureRequestListener(frozenInfrastructureRequest);
+                }).Start();
+            }
+            foreach (Message frozenDownstreamRequest in _frozenDownstreamRequests) {
+                new Thread(() => {
+                    _downstreamRequestListener(frozenDownstreamRequest);
+                }).Start();
+            }
+            foreach (Message frozenUpstreamRequest in _frozenUpstreamRequests) {
+                new Thread(() => {
+                    _upstreamRequestListener(frozenUpstreamRequest);
+                }).Start();
+            }
+            foreach (Tuple<RequestType, String> frozenInfrastructureReply in _frozenInfrastructureReplies) {
+                new Thread(() => {
+                    _infrastructureReplyListener(frozenInfrastructureReply);
+                }).Start();
+            }
+            foreach (TupleMessage frozenDownstreamReply in _frozenDownstreamReplies) {
+                new Thread(() => {
+                    _downstreamReplyListener(frozenDownstreamReply);
+                }).Start();
+            }
+            foreach (Process frozenUpstreamReply in _frozenUpstreamReplies) {
+                new Thread(() => {
+                    _upstreamReplyListener(frozenUpstreamReply);
+                }).Start();
+            }
+
+            _frozenInfrastructureRequests = new ConcurrentBag<Message>();
+            _frozenDownstreamRequests = new ConcurrentBag<Message>();
+            _frozenUpstreamRequests = new ConcurrentBag<Message>();
+            _frozenInfrastructureReplies = new ConcurrentBag<Tuple<RequestType, String>>();
+            _frozenDownstreamReplies = new ConcurrentBag<TupleMessage>();
+            _frozenUpstreamReplies = new ConcurrentBag<Process>();
         }
 
         public void Status() {
@@ -78,7 +199,7 @@ namespace OperatorApplication
 			//TODO display more stuff in status?
 			Console.Write("\r\n\t Recievers: \t");
 			int count = 0;
-			foreach (Process receiver in _outputReceivers) {
+			foreach (Process receiver in _downstreamBroadcast.Processes) {
 				Console.Write("\t" + receiver.ServiceName +"  at " + receiver.Url);
 				Console.Write("\r\n\t\t\t");
 				count++;
@@ -90,26 +211,14 @@ namespace OperatorApplication
 			foreach (KeyValuePair<string,string> pair in _command.Status()) {
                 Console.WriteLine("\t " + pair.Key + ": \t\t" + pair.Value);
             }
-
-            //Log(_logStatus, _command.ToString());
-
         }
 
-        public void Crash() {
-            Environment.Exit(0);
+        public void Interval(int milliseconds) {
+            _sleepBetweenEvents = milliseconds;
         }
 
-        public void Freeze() {
-			_state = "freezed";
-            _listener = StoreMessage;
-            _send = StoreReply;
-            Flag.Frozen = true;
-        }
-
-        public void Unfreeze() {
-			_state = "running";
-            LoadStoredMessages();
-            Flag.Frozen = false;
+        public void Routing(String routing) {
+            //TODO: by default and on first release, the semantic is at-most-once
         }
 
         public void Semantics(String semantics) {
@@ -123,7 +232,8 @@ namespace OperatorApplication
                 _logStatus = LogStatus.LIGHT;
             }
         }
-
+        #endregion
+        #region Log
         private void Log(LogStatus logStatus, String message) {
             if (logStatus >= _logStatus) {
                 Task.Run(() => {
@@ -134,5 +244,6 @@ namespace OperatorApplication
                 });
             }
         }
+        #endregion
     }
 }

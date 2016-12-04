@@ -10,6 +10,8 @@ namespace DistributedAlgoritmsClassLibrary
 
     public interface BestEffortBroadcast
     {
+        IList<Process> Processes { get; }
+
         void Broadcast(Message message);
 
         //Indicator

@@ -14,6 +14,10 @@ namespace SecondaryConsoleApplication
     using Value = IList<String>;
     using Timestamp = Int32;
     using TupleMessage = IList<String>;
+    using System.Runtime.Remoting.Channels;
+    using System.Runtime.Serialization.Formatters;
+    using System.Collections;
+    using System.Runtime.Remoting.Channels.Tcp;
 
     class Program
     {
@@ -26,6 +30,13 @@ namespace SecondaryConsoleApplication
                     process3 = new Process(args[4], args[5]);
 
             Console.WriteLine(args[0]);
+
+            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
+            provider.TypeFilterLevel = TypeFilterLevel.Full;
+            IDictionary RemoteChannelProperties = new Hashtable();
+            RemoteChannelProperties["port"] = process1.Port;
+            TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
+            ChannelServices.RegisterChannel(channel, true);
 
             //BestEffortBroadcast broadcast = new BasicBroadcast(process1, listener.Deliver/*, process2, process3*/);
             //EventualLeaderDetector detector = new MonarchicalEventualLeaderDetection(process1, listener.Trust, process2, process3);

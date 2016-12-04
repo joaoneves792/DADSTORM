@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -14,14 +12,18 @@ namespace DistributedAlgoritmsClassLibrary
         private Action<Process, Message> _listener;
         private PerfectPointToPointLink _perfectPointToPointLink;
 
-        private IProducerConsumerCollection<Process> _processes;
+        private IList<Process> _processes;
+
+        public IList<Process> Processes {
+            get { return _processes; }
+        }
 
         public BasicBroadcast(Process process, Action<Process, Message> listener) {
             _listener = listener;
             _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver);
 
-            _processes = new ConcurrentBag<Process>();
-            _processes.TryAdd(process);
+            _processes = new List<Process>();
+            _processes.Add(process.Concat(CLASSNAME));
         }
 
         public BasicBroadcast(Process process, Action<Process, Message> listener, params Process[] otherProcesses)
@@ -33,10 +35,10 @@ namespace DistributedAlgoritmsClassLibrary
             _listener = listener;
             _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
 
-            _processes = new ConcurrentBag<Process>();
-            _processes.TryAdd(process.Concat(CLASSNAME));
+            _processes = new List<Process>();
+            _processes.Add(process.Concat(CLASSNAME));
             foreach (Process otherProcess in suffixedProcesses) {
-                _processes.TryAdd(otherProcess);
+                _processes.Add(otherProcess);
             }
         }
 
@@ -52,7 +54,13 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Connect(Process process) {
             _perfectPointToPointLink.Connect(process.Concat(CLASSNAME));
-            _processes.TryAdd(process.Concat(CLASSNAME));
+            lock (_processes) {
+                IEnumerable<Process> removableProcesses = _processes.Where((oldProcess) => oldProcess.Name.Equals(process.Name));
+                if (removableProcesses.Count() > 0) {
+                    _processes.Remove(removableProcesses.First());
+                }
+                _processes.Add(process.Concat(CLASSNAME));
+            }
         }
     }
 }
