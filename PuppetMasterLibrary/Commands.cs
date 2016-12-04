@@ -184,6 +184,7 @@ namespace PuppetMasterLibrary {
                     _operatorResolutionCache.Add(operatorId, urlList);
                 }
             }
+            Thread.Sleep(1000);
         }
 
 
@@ -207,7 +208,6 @@ namespace PuppetMasterLibrary {
                     puppet.Interval(Int32.Parse(milliseconds));
                 });
             }
-            
         }
 
 

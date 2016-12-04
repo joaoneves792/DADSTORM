@@ -34,9 +34,10 @@ namespace OperatorApplication {
             _outputReceivers = new ConcurrentBag<Process>();
             _paxos = null;
             _quorumConsenti = new List<UniformConsensus<TupleMessage>>();
+            _timestamp = 0;
 
-        //Puppet component
-        _logStatus = LogStatus.LIGHT;
+            //Puppet component
+            _logStatus = LogStatus.LIGHT;
             _listener = ParseAndStoreMessage;
             _send = StoreReply;
             _frozenRequests = new ConcurrentBag<Tuple<Process, Message>>();
@@ -89,6 +90,11 @@ namespace OperatorApplication {
             _process = new Process(operatorId, url);
             DefineOperatorType(operatorSpec);
 
+            //Register operator into remoting
+            _pointToPointLink = new RemotingNode(_process, Deliver);
+            _send = _pointToPointLink.Send;
+            SubmitAsPuppet();
+
             //Define redundancy infrastructure
             String[] replicaList = replicas.Split(',');
             GroupCollection groupCollection;
@@ -104,18 +110,10 @@ namespace OperatorApplication {
                 }
             }
             _replications = replicaProcessList.ToArray();
-            Console.WriteLine("Replicas:\n" + String.Join("\n ", replicaProcessList));
-            //Console.ReadLine();
             _paxos = new LeaderDrivenConsensus<TupleMessage>(_process,
                                                              _replications.Count() + 1,
                                                              PaxosDecided,
                                                              _replications);
-            Console.WriteLine("Not passing");
-
-            //Register operator into remoting
-            _pointToPointLink = new RemotingNode(_process, Deliver);
-            _send = _pointToPointLink.Send;
-            SubmitAsPuppet();
 
             //Get inputOps' sources
             String[] inputOpsList = inputOps.Split(',');

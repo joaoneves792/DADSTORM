@@ -23,6 +23,7 @@ namespace OperatorApplication {
 
         private UniformConsensus<TupleMessage> _paxos;
         private IList<UniformConsensus<TupleMessage>> _quorumConsenti;
+        private int _timestamp;
         private Process[] _replications;
 
 		Command _command;
@@ -104,7 +105,6 @@ namespace OperatorApplication {
 			//Parse message
 			if (message is TupleMessage) {
                 //TupleMessageCommand((TupleMessage) message);
-                Console.WriteLine("ping 1");
                 _paxos.Propose((TupleMessage)message);
 
 			} else if (message is Process) {
@@ -113,7 +113,7 @@ namespace OperatorApplication {
 		}
 
         private void PaxosDecided(TupleMessage value) {
-            Console.WriteLine("ping 2");
+            Console.WriteLine("paxos");
             TupleMessageCommand(value);
         }
 
@@ -132,9 +132,16 @@ namespace OperatorApplication {
                 Log(LogStatus.FULL, String.Join(" - ", tuple));
             }
 
-            UniformConsensus<TupleMessage> quorumConsensus = new FloodingUniformConsensus<TupleMessage>(_process,
-                                                                                                        QuorumConsensusDecided,
-                                                                                                        _replications);
+            int timestamp = _timestamp++;
+
+            Process[] suffixedReplications = _replications
+                .Select((suffixedProcess) => suffixedProcess.Concat(timestamp.ToString()))
+                .ToArray();
+
+            UniformConsensus<TupleMessage> quorumConsensus = new FloodingUniformConsensus<TupleMessage>(
+                _process.Concat(timestamp.ToString()),
+                QuorumConsensusDecided,
+                suffixedReplications);
 
             Thread.Sleep(500);
             quorumConsensus.Propose(result);
@@ -152,6 +159,7 @@ namespace OperatorApplication {
 		}
 
         private void QuorumConsensusDecided(TupleMessage value) {
+            Console.WriteLine("quorum");
             foreach (Process outputReceiver in _outputReceivers) {
                 _send(outputReceiver, (Object)value);
             }

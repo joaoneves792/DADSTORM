@@ -66,14 +66,10 @@ namespace OperatorApplication
         }
 
         public void Interval(Milliseconds milliseconds) {
-            Console.WriteLine("?");
             _sleepBetweenEvents = milliseconds;
-            Console.WriteLine("??");
         }
 
         public void Status() {
-            Console.WriteLine("???");
-
             Console.WriteLine("status:");
 			Console.WriteLine("\t Operator type: \t" + _command.ToString());
 			Console.WriteLine("\t State: \t\t" + _state);

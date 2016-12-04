@@ -45,11 +45,11 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public String Url {
-            get { return _url + "_" + String.Join("_", _suffixes); }
+            get { return _url + String.Join("_", _suffixes); }
         }
 
         public String ServiceName {
-            get { return _serviceName + "_" + String.Join("_", _suffixes); }
+            get { return _serviceName + String.Join("_", _suffixes); }
             set { _serviceName = value; }
         }
 
