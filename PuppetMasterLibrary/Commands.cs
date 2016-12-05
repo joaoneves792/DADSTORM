@@ -1,47 +1,32 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using System.Text.RegularExpressions;
-using System.Net.Sockets;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Remoting.Channels;
 using System.Threading;
 using System.Runtime.Serialization.Formatters;
-using System.Runtime.Serialization;
 using System.IO;
 
 using ProcessCreationServiceApplication;
 using CommonTypesLibrary;
 
-namespace PuppetMasterLibrary {
-
-	using Url = String;
-    using OperatorId = String;
-    using Milliseconds = String;
-    using ProcessName = String;
-    using InputOps = String;
-    using RepFact = String;
-    using Routing = String;
-    using Address = String;
-    using OperatorSpec = String;
-
-
-	public partial class PuppetMaster : MarshalByRefObject, IPuppetMaster {
+namespace PuppetMasterLibrary
+{
+    public partial class PuppetMaster : MarshalByRefObject, IPuppetMaster {
         //Constants
-        private const String OPERATOR_NAME = "Operator";
-        private const String PUPPET_NAME = "Puppet";
+        private const string OPERATOR_NAME = "Operator";
+        private const string PUPPET_NAME = "Puppet";
 
         //Tables
-        private IDictionary<OperatorId, IList<Url>> _operatorResolutionCache;
-        private IDictionary<Url, IPuppet> _puppetTable;
-        private IDictionary<Url, IProcessCreationService> _processCreationServiceTable;
+        private IDictionary<string, IList<string>> _operatorResolutionCache;
+        private IDictionary<string, IPuppet> _puppetTable;
+        private IDictionary<string, IProcessCreationService> _processCreationServiceTable;
 
-        private String _semantic, _loggingLevel;
+        private string _semantic, _loggingLevel;
 
         private readonly EventWaitHandle _waitHandle;
 
@@ -49,14 +34,14 @@ namespace PuppetMasterLibrary {
         public PuppetMaster() {
             ToggleToConfigurationMode();
 
-            _operatorResolutionCache = new Dictionary<OperatorId, IList<Url>>();
-            _puppetTable = new Dictionary<Url, IPuppet>();
-            _processCreationServiceTable = new Dictionary<Url, IProcessCreationService>();
+            _operatorResolutionCache = new Dictionary<string, IList<string>>();
+            _puppetTable = new Dictionary<string, IPuppet>();
+            _processCreationServiceTable = new Dictionary<string, IProcessCreationService>();
 
             _semantic = "at-most-once";
             _loggingLevel = "light";
 
-            String processCreationServiceUrl = "tcp://localhost:10000/";
+            string processCreationServiceUrl = "tcp://localhost:10000/";
 
             _waitHandle = new AutoResetEvent(false);
 
@@ -80,14 +65,14 @@ namespace PuppetMasterLibrary {
             _processCreationServiceTable.Add(processCreationServiceUrl, processCreationService);
         }
 
-        public void ReceiveUrl(Url url, ObjRef objRef) {
+        public void ReceiveUrl(string url, ObjRef objRef) {
             IPuppet puppet = (IPuppet)RemotingServices.Unmarshal(objRef);
             puppet.Semantics(_semantic);
             puppet.LoggingLevel(_loggingLevel);
             _puppetTable.Add(url, puppet);
         }
 
-        public void Log(String message) {
+        public void Log(string message) {
             lock (this) {
                 StreamWriter w = File.AppendText("log.txt");
                 w.WriteLine(message);
@@ -99,13 +84,13 @@ namespace PuppetMasterLibrary {
         }
 
         private void ExecuteOperatorIdCommand(
-            OperatorId operatorId,
-            InputOps inputOps,
-            RepFact repFact,
-            Routing routing,
-            Address addresses,
-            OperatorSpec operatorSpec) {
-            IList<Url> urlList;
+            string operatorId,
+            string inputOps,
+            string repFact,
+            string routing,
+            string addresses,
+            string operatorSpec) {
+            IList<string> urlList;
 
 
             MatchCollection inputOpList = new Regex(GROUP_INPUT_OP, RegexOptions.Compiled).Matches(inputOps),
@@ -117,13 +102,13 @@ namespace PuppetMasterLibrary {
 
             //Organize source list
             //Assumption: the process creation is made downstream-wise
-            String sources = "", inputOp;
+            string sources = "", inputOp;
             foreach (Match inputOpMatch in inputOpList) {
                 GroupCollection groups;
                 Matches(GROUP_INPUT_OP, inputOpMatch.Value, out groups);
                 inputOp = groups[1].Value;
                 if (_operatorResolutionCache.TryGetValue(inputOp, out urlList)) {
-                    sources += inputOp + "|" + String.Join("," + inputOp + "|", urlList) + ",";
+                    sources += inputOp + "|" + string.Join("," + inputOp + "|", urlList) + ",";
                 } else {
                     sources += inputOp + ",";
                 }
@@ -133,7 +118,7 @@ namespace PuppetMasterLibrary {
             }
 
             //Organize replica list
-            String replicas = "";
+            string replicas = "";
             foreach (Match address in addressList) {
                 replicas += address.Value + ",";
             }
@@ -143,7 +128,7 @@ namespace PuppetMasterLibrary {
 
 
             //Organize operator spec list
-            String operatorSpecs = "";
+            string operatorSpecs = "";
             if (operatorSpecList[1].Value.Equals("UNIQ")) {
                 operatorSpecs += operatorSpecList[1].Value + ",";
                 operatorSpecs += operatorSpecList[2].Value;
@@ -172,7 +157,7 @@ namespace PuppetMasterLibrary {
                 GroupCollection groupCollection = new Regex(URL_ADDRESS, RegexOptions.Compiled).Match(address.Value).Groups;
 
                 //Create process
-                String processCreationServiceUrl = groupCollection[1].Value + ":10000/";
+                string processCreationServiceUrl = groupCollection[1].Value + ":10000/";
                 _processCreationServiceTable[processCreationServiceUrl].CreateProcess(
                     operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs);
 
@@ -184,7 +169,7 @@ namespace PuppetMasterLibrary {
                     _operatorResolutionCache.Remove(operatorId);
                     _operatorResolutionCache.Add(operatorId, urlList);
                 } else {
-                    urlList = new List<Url>();
+                    urlList = new List<string>();
                     urlList.Add(groupCollection[0].Value);
                     _operatorResolutionCache.Add(operatorId, urlList);
                 }
@@ -197,10 +182,10 @@ namespace PuppetMasterLibrary {
             _waitHandle.Reset();
         }
 
-        private void ExecuteStartCommand(OperatorId operatorId) {
-            IList<Url> urlList = _operatorResolutionCache[operatorId];
+        private void ExecuteStartCommand(string operatorId) {
+            IList<string> urlList = _operatorResolutionCache[operatorId];
 
-			foreach (Url url in urlList) {
+			foreach (string url in urlList) {
 				IPuppet puppet = _puppetTable[url];
 				Task.Run(() => {
 					puppet.Start();
@@ -209,9 +194,9 @@ namespace PuppetMasterLibrary {
         }
 
 
-        private void ExecuteIntervalCommand(OperatorId operatorId, Milliseconds milliseconds) {
-            IList<Url> urlList = _operatorResolutionCache[operatorId];
-            foreach(Url url in urlList) {
+        private void ExecuteIntervalCommand(string operatorId, string milliseconds) {
+            IList<string> urlList = _operatorResolutionCache[operatorId];
+            foreach(string url in urlList) {
                 IPuppet puppet = _puppetTable[url];
                 Task.Run(() => {
                     puppet.Interval(Int32.Parse(milliseconds));
@@ -221,7 +206,7 @@ namespace PuppetMasterLibrary {
 
 
         private void ExecuteStatusCommand() {
-            foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
+            foreach (KeyValuePair<string, IPuppet> entry in _puppetTable) {
                 IPuppet puppet = entry.Value;
                 Task.Run(() => {
                     puppet.Status();
@@ -230,9 +215,9 @@ namespace PuppetMasterLibrary {
         }
 
 
-        private void ExecuteCrashCommand(OperatorId operatorId) {
-            IList<Url> urlList = _operatorResolutionCache[operatorId];
-            foreach (Url url in urlList)
+        private void ExecuteCrashCommand(string operatorId) {
+            IList<string> urlList = _operatorResolutionCache[operatorId];
+            foreach (string url in urlList)
             {
                 IPuppet puppet = _puppetTable[url];
                 Task.Run(() => {
@@ -243,9 +228,9 @@ namespace PuppetMasterLibrary {
         }
 
 
-        private void ExecuteFreezeCommand(OperatorId operatorId){
-            IList<Url> urlList = _operatorResolutionCache[operatorId];
-            foreach (Url url in urlList)
+        private void ExecuteFreezeCommand(string operatorId){
+            IList<string> urlList = _operatorResolutionCache[operatorId];
+            foreach (string url in urlList)
             {
                 IPuppet puppet = _puppetTable[url];
                 Task.Run(() => {
@@ -256,10 +241,10 @@ namespace PuppetMasterLibrary {
         }
 
 
-        private void ExecuteUnfreezeCommand(OperatorId operatorId)
+        private void ExecuteUnfreezeCommand(string operatorId)
         {
-            IList<Url> urlList = _operatorResolutionCache[operatorId];
-            foreach (Url url in urlList)
+            IList<string> urlList = _operatorResolutionCache[operatorId];
+            foreach (string url in urlList)
             {
                 IPuppet puppet = _puppetTable[url];
                 Task.Run(() => {
@@ -270,16 +255,16 @@ namespace PuppetMasterLibrary {
         }
 
 
-        private void ExecuteWaitCommand(Milliseconds milliseconds) {
+        private void ExecuteWaitCommand(string milliseconds) {
             //TODO: double-check this
             Thread.Sleep(Int32.Parse(milliseconds));
         }
 
 
-        private void ExecuteSemanticsCommand(String semantic) {
+        private void ExecuteSemanticsCommand(string semantic) {
             _semantic = semantic;
 
-            foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
+            foreach (KeyValuePair<string, IPuppet> entry in _puppetTable) {
                 IPuppet puppet = entry.Value;
                 Task.Run(() => {
                     puppet.Semantics(semantic);
@@ -288,10 +273,10 @@ namespace PuppetMasterLibrary {
         }
 
 
-        private void ExecuteLoggingLevelCommand(String loggingLevel) {
+        private void ExecuteLoggingLevelCommand(string loggingLevel) {
             _loggingLevel = loggingLevel;
 
-            foreach (KeyValuePair<Url, IPuppet> entry in _puppetTable) {
+            foreach (KeyValuePair<string, IPuppet> entry in _puppetTable) {
                 IPuppet puppet = entry.Value;
                 Task.Run(() => {
                     puppet.LoggingLevel(loggingLevel);
@@ -316,8 +301,8 @@ namespace PuppetMasterLibrary {
             }
 
             ToggleToConfigurationMode();
-            _operatorResolutionCache = new Dictionary<OperatorId, IList<Url>>();
-            _puppetTable = new Dictionary<Url, IPuppet>();
+            _operatorResolutionCache = new Dictionary<string, IList<string>>();
+            _puppetTable = new Dictionary<string, IPuppet>();
         }
     }
 }

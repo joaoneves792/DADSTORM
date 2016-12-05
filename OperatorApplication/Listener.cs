@@ -10,7 +10,7 @@ namespace OperatorApplication
 {
     using Message = Object;
     using Timestamp = Int32;
-    using TupleMessage = List<IList<String>>;
+    using TupleMessage = List<IList<string>>;
 
     internal partial class Operator {
         private enum ServerType {
@@ -28,12 +28,12 @@ namespace OperatorApplication
 
         //Broadcast variables
         private BestEffortBroadcast _infrastructureBroadcast,
-                                    _upstreamBroadcast,
-                                    _downstreamBroadcast;
+                                    _upstreamBroadcast;
+        private MutableBroadcast _downstreamBroadcast;
         private Action<Message> _infrastructureRequestListener,
                                 _downstreamRequestListener,
                                 _upstreamRequestListener;
-        private Action<Tuple<RequestType, String>> _infrastructureReplyListener;
+        private Action<Tuple<RequestType, string>> _infrastructureReplyListener;
         private Action<TupleMessage> _downstreamReplyListener;
         private Action<Process> _upstreamReplyListener;
 
@@ -44,10 +44,10 @@ namespace OperatorApplication
         #endregion
 
         #region Constructor
-        private void DefineOperator(String operatorId, String url, String operatorSpec) {
+        private void DefineOperator(string operatorId, string url, string operatorSpec) {
 			int fieldNumber = 0;
 			Condition condition = Condition.UNDEFINED;
-			String[] operatorSpecList = operatorSpec.Split(',');
+			string[] operatorSpecList = operatorSpec.Split(',');
 
             _process = new Process(operatorId, url);
             Console.Title = _process.Uri;
@@ -78,7 +78,7 @@ namespace OperatorApplication
         #endregion
 
         #region Init Handlers
-        private void InitHandler(Tuple<RequestType, String> reply) {
+        private void InitHandler(Tuple<RequestType, string> reply) {
             switch(reply.Item1) {
                 case RequestType.PAXOS:
                     PaxosInitHandler(reply.Item2);
@@ -89,7 +89,7 @@ namespace OperatorApplication
             }
         }
 
-        private UniformConsensus<TupleMessage> PaxosInitHandler(String suffix) {
+        private UniformConsensus<TupleMessage> PaxosInitHandler(string suffix) {
             Process[] suffixedReplications = _replications
                 .Select((suffixedProcess) => suffixedProcess.Concat(suffix))
                 .ToArray();
@@ -107,7 +107,7 @@ namespace OperatorApplication
             return paxos;
         }
 
-        private UniformConsensus<TupleMessage> QuorumInitHandler(String suffix) {
+        private UniformConsensus<TupleMessage> QuorumInitHandler(string suffix) {
             Process[] suffixedReplications = _replications
                 .Select((suffixedProcess) => suffixedProcess.Concat(suffix))
                 .ToArray();
@@ -120,31 +120,9 @@ namespace OperatorApplication
 
             return quorum;
         }
-
-        private void QuorumRequestHandler(TupleMessage tupleMessage = null) {
-            String suffix = _process.Url + "_" + _timestamp++;
-            UniformConsensus<TupleMessage> quorum = QuorumInitHandler(suffix);
-            InfrastructureRequestHandler(new Tuple<RequestType, String>(RequestType.QUORUM, suffix));
-            Thread.Sleep(500);
-            if(tupleMessage == null) {
-                return;
-            }
-            quorum.Propose(tupleMessage);
-        }
-
-        private void PaxosRequestHandler(TupleMessage tupleMessage = null) {
-            String suffix = _process.Url + "_" + _timestamp++;
-            UniformConsensus<TupleMessage> paxos = PaxosInitHandler(suffix);
-            InfrastructureRequestHandler(new Tuple<RequestType, String>(RequestType.PAXOS, suffix));
-            Thread.Sleep(500);
-            if (tupleMessage == null) {
-                return;
-            }
-            paxos.Propose(tupleMessage);
-        }
         #endregion
         #region Request Handlers
-        private void InfrastructureRequestHandler(Tuple<RequestType, String> message) {
+        private void InfrastructureRequestHandler(Tuple<RequestType, string> message) {
             _infrastructureRequestListener(message);
         }
 
@@ -155,17 +133,48 @@ namespace OperatorApplication
         private void UpstreamRequestHandler(Process message) {
             _upstreamRequestListener(message);
         }
+
+        private void QuorumRequestHandler(TupleMessage tupleMessage = null) {
+            string suffix = _process.Url + "_" + _timestamp++;
+            UniformConsensus<TupleMessage> quorum = QuorumInitHandler(suffix);
+            InfrastructureRequestHandler(new Tuple<RequestType, string>(RequestType.QUORUM, suffix));
+            Thread.Sleep(500);
+            if(tupleMessage == null) {
+                return;
+            }
+            quorum.Propose(tupleMessage);
+        }
+
+        private void PaxosRequestHandler(TupleMessage tupleMessage = null) {
+            string suffix = _process.Url + "_" + _timestamp++;
+            UniformConsensus<TupleMessage> paxos = PaxosInitHandler(suffix);
+            InfrastructureRequestHandler(new Tuple<RequestType, string>(RequestType.PAXOS, suffix));
+            Thread.Sleep(500);
+            if (tupleMessage == null) {
+                return;
+            }
+            paxos.Propose(tupleMessage);
+        }
         #endregion
         #region Reply Handlers
         private void InfrastructureReplyHandler(Process process, Message message) {
-            _infrastructureReplyListener((Tuple<RequestType, String>)message);
+            if(process.Equals(_process)) {
+                return;
+            }
+            _infrastructureReplyListener((Tuple<RequestType, string>)message);
         }
 
         private void DownstreamReplyHandler(Process process, Message message) {
+            if (process.Equals(_process)) {
+                return;
+            }
             _downstreamReplyListener((TupleMessage)message);
         }
 
         private void UpstreamReplyHandler(Process process, Message message) {
+            if (process.Equals(_process)) {
+                return;
+            }
             _upstreamReplyListener((Process)message);
         }
 
@@ -193,7 +202,7 @@ namespace OperatorApplication
         }
 
         private void PaxosReplyHandler(TupleMessage tupleMessage) {
-            Console.WriteLine("Executing " + String.Join(" , ", tupleMessage.Select(aa => String.Join("-", aa))));
+            Console.WriteLine("Executing " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
 
             TupleMessage result = _command.Execute(tupleMessage);
 
@@ -204,23 +213,30 @@ namespace OperatorApplication
                 return;
             }
 
-            foreach (List<String> tuple in result) {
-                Log(LogStatus.FULL, String.Join(" - ", tuple));
+            foreach (List<string> tuple in result) {
+                Log(LogStatus.FULL, string.Join(" - ", tuple));
             }
 
+            //Share result to downstream nodes if current node has no replications
+            if (_replications.Count() == 0) {
+                QuorumReplyHandler(result);
+                return;
+            }
+
+            //Compare result with replications result
             QuorumRequestHandler(result);
         }
 
         private void QuorumReplyHandler(TupleMessage tupleMessage) {
-            Console.WriteLine("Joining " + String.Join(" , ", tupleMessage.Select(aa => String.Join("-", aa))));
+            Console.WriteLine("Joining " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
             if (_serverType == ServerType.PRIMARY) {
-                Console.WriteLine("Sending " + String.Join(" , ", tupleMessage.Select(aa => String.Join("-", aa))));
+                Console.WriteLine("Sending " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
                 DownstreamRequestHandler(tupleMessage);
             }
         }
         #endregion
         #region Others
-        private bool TryParseCondition(String value, out Condition condition) {
+        private bool TryParseCondition(string value, out Condition condition) {
 			condition = Condition.UNDEFINED;
 
 			//Parse condition

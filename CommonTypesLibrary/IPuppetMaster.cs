@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Runtime.Remoting;
+﻿using System.Runtime.Remoting;
 
 namespace CommonTypesLibrary
 {
-    using Url = String;
-
     public interface IPuppetMaster
     {
-        void ReceiveUrl(Url url, ObjRef objRef);
-        void Log(String message);
+        void ReceiveUrl(string url, ObjRef objRef);
+        void Log(string message);
         void ResetWaitHandle();
     }
 }

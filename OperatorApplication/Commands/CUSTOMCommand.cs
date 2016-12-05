@@ -9,7 +9,7 @@ using OperatorApplication.Exceptions;
 
 namespace OperatorApplication.Commands {
 	using System.Collections.Concurrent;
-	using TupleMessage = List<IList<String>>;
+	using TupleMessage = List<IList<string>>;
 
 	class CUSTOMCommand : Command {
 
@@ -55,7 +55,7 @@ namespace OperatorApplication.Commands {
 
 		public override TupleMessage Execute(TupleMessage inputTuple) {
             TupleMessage result = new TupleMessage();
-            foreach (List<String> tuple in inputTuple)
+            foreach (List<string> tuple in inputTuple)
             {
                 result.AddRange((TupleMessage)_methodInfo.Invoke(_obj, new object[] { tuple }));
             }

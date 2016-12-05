@@ -52,8 +52,8 @@ namespace PuppetMasterForm {
 
 		private void DisplayAvailableScripts() {
 
-			String str = "";
-			String dir = _pm.GetScriptsDir();
+			string str = "";
+			string dir = _pm.GetScriptsDir();
 
 			//get a list of scripts inside the folder
 			foreach (string file in Directory.GetFiles(dir)) {
@@ -107,7 +107,7 @@ namespace PuppetMasterForm {
 
 				_worker = new BackgroundWorker();
 				_worker.DoWork += new DoWorkEventHandler((doWorkEventSender, doWorkEventArgs) => {
-					_pm.LoadFile("..\\..\\scripts\\" + (String) doWorkEventArgs.Argument);
+					_pm.LoadFile("..\\..\\scripts\\" + (string) doWorkEventArgs.Argument);
 				});
 				_worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(LoadFile_RunWorkerCompleted);
 				_worker.RunWorkerAsync(ScriptFile.Text);
@@ -208,7 +208,7 @@ namespace PuppetMasterForm {
 		}
 
 		private void RunStepByStep_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-			PrintToOutput((String) e.UserState);
+			PrintToOutput((string) e.UserState);
 		}
 
 		private void RunAll_Click(object sender, EventArgs e) {
@@ -232,7 +232,7 @@ namespace PuppetMasterForm {
 		}
 
 		private void RunAll_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-			PrintToOutput((String) e.UserState);
+			PrintToOutput((string) e.UserState);
 		}
 
 		private void DisableCommandExecution() {
@@ -280,13 +280,13 @@ namespace PuppetMasterForm {
 			//RunCommand.Enabled = false;
 			//Command.Enabled = false;
 
-			String cmd = Command.Text.Replace(System.Environment.NewLine, " ");
+			string cmd = Command.Text.Replace(System.Environment.NewLine, " ");
 			PrintToOutput("manual command: " + cmd);
 
 			_worker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
 			_worker.ProgressChanged += new ProgressChangedEventHandler(RunCommand_ProgressChanged);
 			_worker.DoWork += new DoWorkEventHandler((doWorkEventSender, doWorkEventArgs) => {
-				_pm.ParseLineAndExecuteCommand((String) doWorkEventArgs.Argument);
+				_pm.ParseLineAndExecuteCommand((string) doWorkEventArgs.Argument);
 			});
 			_worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunCommand_RunWorkerCompleted);
 			_worker.RunWorkerAsync(cmd);
@@ -302,7 +302,7 @@ namespace PuppetMasterForm {
 		}
 
 		private void RunCommand_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-			PrintToOutput((String) e.UserState);
+			PrintToOutput((string) e.UserState);
 		}
 
 		private void Command_TextChanged(object sender, EventArgs e) {
@@ -319,7 +319,7 @@ namespace PuppetMasterForm {
 		}
 
 		private void PrintToOutput(object sender, TextEventArgs e) {
-			String text = e.Text;
+			string text = e.Text;
 
 			if (_worker.IsBusy) {
 				_worker.ReportProgress(0, text);

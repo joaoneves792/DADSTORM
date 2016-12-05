@@ -11,9 +11,9 @@ using CommonTypesLibrary;
 namespace SecondaryConsoleApplication
 {
     using Message = Object;
-    using Value = IList<String>;
+    using Value = IList<string>;
     using Timestamp = Int32;
-    using TupleMessage = IList<String>;
+    using TupleMessage = IList<string>;
     using System.Runtime.Remoting.Channels;
     using System.Runtime.Serialization.Formatters;
     using System.Collections;
@@ -70,7 +70,7 @@ namespace SecondaryConsoleApplication
             Thread.Sleep(5000);
 
             if (args[0].Equals("Teste1")) {
-                TupleMessage proposal = new List<String>();
+                TupleMessage proposal = new List<string>();
                 proposal.Add("a");
                 proposal.Add("b");
                 proposal.Add("c");
@@ -79,7 +79,7 @@ namespace SecondaryConsoleApplication
 
             // else {
             //    Flag.Frozen = true;
-            //IList<String> proposal2 = new List<String>();
+            //IList<string> proposal2 = new List<string>();
             //proposal2.Add("d");
             //proposal2.Add("e");
             //proposal2.Add("f");
@@ -95,12 +95,12 @@ namespace SecondaryConsoleApplication
         {
             internal void Deliver1(Process process, Message message)
             {
-                Console.WriteLine("[1] From " + process.Name + " " + (String)message);
+                Console.WriteLine("[1] From " + process.Name + " " + (string)message);
             }
 
             internal void Deliver2(Process process, Message message)
             {
-                Console.WriteLine("[2] From " + process.Name + " " + (String)message);
+                Console.WriteLine("[2] From " + process.Name + " " + (string)message);
             }
 
             internal void Trust(Process process)
@@ -109,7 +109,7 @@ namespace SecondaryConsoleApplication
             }
 
             internal void Decide(Value tuples) {
-                Console.WriteLine("Decided: " + String.Join(" - ", tuples));
+                Console.WriteLine("Decided: " + string.Join(" - ", tuples));
             }
 
             internal void StartEpoch(int timestamp, Process leader) {

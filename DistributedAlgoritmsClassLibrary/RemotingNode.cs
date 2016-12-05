@@ -24,7 +24,7 @@ namespace DistributedAlgoritmsClassLibrary
 
         private readonly Process _process;
         private Action<Process, Message> _listener;
-        private IDictionary<String, FairLossPointToPointLink> _fairLossPointToPointLinks;
+        private IDictionary<string, FairLossPointToPointLink> _fairLossPointToPointLinks;
 
         private IProducerConsumerCollection<Tuple<Process, Message>> _frozenSends, _frozenDelivers;
         private Action<Process, Message> _freezableSend, _freezableDeliver;
@@ -38,7 +38,7 @@ namespace DistributedAlgoritmsClassLibrary
             _frozenSends = new ConcurrentBag<Tuple<Process, Message>>();
             _frozenDelivers = new ConcurrentBag<Tuple<Process, Message>>();
 
-            _fairLossPointToPointLinks = new Dictionary<String, FairLossPointToPointLink>();
+            _fairLossPointToPointLinks = new Dictionary<string, FairLossPointToPointLink>();
 
             //Console.WriteLine("\nSubmit:");
             //Console.WriteLine("Service:\n" + process.ServiceName);
@@ -141,7 +141,7 @@ namespace DistributedAlgoritmsClassLibrary
             //Console.WriteLine("\nSend to:");
             //Console.WriteLine("Service:\n" + process.ServiceName);
             //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
-            //Console.WriteLine("List:\n" + String.Join("\n", _fairLossPointToPointLinks.Keys.Select((aaa) => aaa.GetHashCode())));
+            //Console.WriteLine("List:\n" + string.Join("\n", _fairLossPointToPointLinks.Keys.Select((aaa) => aaa.GetHashCode())));
             //Thread.Sleep(2000);
 
             Task.Run(() => {

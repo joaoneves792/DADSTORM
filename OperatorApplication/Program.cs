@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace OperatorApplication
 {
-    using TupleMessage = List<IList<String>>;
+    using TupleMessage = List<IList<string>>;
 
     internal partial class Operator {
         private enum RequestType {
@@ -54,7 +54,7 @@ namespace OperatorApplication
         #region Configurator
         internal void Configure(string[] args) {
             //Give names to arguments
-            String operatorId = args[0],
+            string operatorId = args[0],
                    url = args[1],
                    inputOps = args[2],
                    replicas = args[3],
@@ -96,19 +96,19 @@ namespace OperatorApplication
 
         private void SubmitOperatorAsDownstreamNode() {
             //Define downstream broadcast network
-            _downstreamBroadcast = new BasicBroadcast(_process.Concat("Downstream"), DownstreamReplyHandler);
+            _downstreamBroadcast = new PrimaryBroadcast(new EliminateDuplicates(_process.Concat("MutableBroadcast"), DownstreamReplyHandler));
             _downstreamRequestListener = _downstreamBroadcast.Broadcast;
             _upstreamReplyListener = _downstreamBroadcast.Connect;
         }
 
         private void SubmitOperatorAsUpstreamNode(string inputOps) {
-            String[] inputOpsList = inputOps.Split(','), inputOpSource;
+            string[] inputOpsList = inputOps.Split(','), inputOpSource;
             GroupCollection groupCollection;
             Process process;
             IList<Process> processes = new List<Process>();
             FileStream fileStream;
 
-            foreach (String inputOp in inputOpsList) {
+            foreach (string inputOp in inputOpsList) {
                 //Or get file data
                 if (Matches(PATH, inputOp, out groupCollection) && File.Exists(inputOp)) {
                     fileStream = File.Open(inputOp, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -117,7 +117,7 @@ namespace OperatorApplication
                 //Or get upstream Operator
                 } else /*if (Matches(URL, inputOp, out groupCollection)) */{
                     inputOpSource = inputOp.Split('|');
-                    process = new Process(inputOpSource[0], inputOpSource[1], new List<String> { "Upstream" });
+                    process = new Process(inputOpSource[0], inputOpSource[1], new List<string> { "Upstream" });
                     processes.Add(process);
                 }
             }
@@ -137,12 +137,12 @@ namespace OperatorApplication
         }
 
         private void SubmitOperatorAsInfrastructureNode(string operatorId, string replicas) {
-            String[] replicaList = replicas.Split(',');
+            string[] replicaList = replicas.Split(',');
             GroupCollection groupCollection;
             Process process;
             IList<Process> processes = new List<Process>();
 
-            foreach (String replica in replicaList) {
+            foreach (string replica in replicaList) {
                 if (Matches(URL, replica, out groupCollection)) {
                     process = new Process(operatorId, replica);
                     if (process.Equals(_process)) {
@@ -161,7 +161,7 @@ namespace OperatorApplication
         }
         #endregion
         #region Others
-        private bool Matches(String pattern, String line, out GroupCollection groupCollection) {
+        private bool Matches(string pattern, string line, out GroupCollection groupCollection) {
             Regex regex = new Regex(pattern, RegexOptions.Compiled);
 
             Match match = regex.Match(line);

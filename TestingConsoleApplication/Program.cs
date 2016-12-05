@@ -32,7 +32,7 @@ namespace TestingConsoleApplication
 
         static void test1()
         {
-            String arguments;
+            string arguments;
 
             arguments = "Teste1" + " " + "tcp://localhost:53001/teste" + " " +
                         "Teste2" + " " + "tcp://localhost:54002/teste" + " " +
@@ -69,11 +69,11 @@ namespace TestingConsoleApplication
         }
 
         static void test4() {
-            String[] inputOpsList = {"Scripts/1.txt", "Scripts/2.txt", "Scripts/3.txt", "Scripts/4.txt" };
+            string[] inputOpsList = {"Scripts/1.txt", "Scripts/2.txt", "Scripts/3.txt", "Scripts/4.txt" };
 
             FileStream fileStream;
             ICollection<StreamReader> inputFiles = new HashSet<StreamReader>();
-            foreach (String inputOp in inputOpsList)
+            foreach (string inputOp in inputOpsList)
             {
                 Console.WriteLine("Identified path " + inputOp);
 
@@ -87,7 +87,7 @@ namespace TestingConsoleApplication
                 new Thread(() => {
                     StreamReader inputFile = currentInputFile;
 
-                    String line;
+                    string line;
                     while ((line = inputFile.ReadLine()) != null)
                     {
                         new Thread(() => {
@@ -120,7 +120,7 @@ namespace TestingConsoleApplication
                 typeof(IPuppetMaster));
         }
 
-        public void ReceiveUrl(String url, ObjRef objRef)
+        public void ReceiveUrl(string url, ObjRef objRef)
         {
             TestFreeze(objRef);
         }

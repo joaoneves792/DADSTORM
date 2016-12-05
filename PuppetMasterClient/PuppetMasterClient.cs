@@ -15,7 +15,7 @@ namespace PuppetMasterClient {
 			// just copy from form
 
 			PuppetMaster pm = new PuppetMaster();
-			String fileNames = string.Join("", args);
+			string fileNames = string.Join("", args);
 
 			// Close all processes when ctrl+c is pressed
 			Console.CancelKeyPress += new ConsoleCancelEventHandler(pm.CloseProcesses);

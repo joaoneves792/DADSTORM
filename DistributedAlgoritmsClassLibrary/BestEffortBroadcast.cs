@@ -16,7 +16,5 @@ namespace DistributedAlgoritmsClassLibrary
 
         //Indicator
         //void Deliver(Process process, Message message);
-
-        void Connect(Process process);
     }
 }

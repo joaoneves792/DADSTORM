@@ -7,15 +7,15 @@ namespace DistributedAlgoritmsClassLibrary
     [Serializable]
     public class Process : IComparable
     {
-        private readonly String _name,
+        private readonly string _name,
                                 _url,
                                 _uri;
-        private String _serviceName;
+        private string _serviceName;
         private readonly int _port;
         private int _rank;
-        private IList<String> _suffixes;
+        private IList<string> _suffixes;
 
-        public Process(String name, String url) {
+        public Process(string name, string url) {
             _name = name;
             _url = url;
 
@@ -24,12 +24,12 @@ namespace DistributedAlgoritmsClassLibrary
             _uri = match.Groups[1].Value;
             _port = int.Parse(match.Groups[2].Value);
             _serviceName = match.Groups[3].Value;
-            _suffixes = new List<String>();
+            _suffixes = new List<string>();
 
             _rank = 0;
         }
 
-        public Process(String name, String url, IList<String> suffix) {
+        public Process(string name, string url, IList<string> suffix) {
             _name = name;
             _url = url;
 
@@ -42,20 +42,20 @@ namespace DistributedAlgoritmsClassLibrary
             _rank = 0;
         }
 
-        public String Name {
+        public string Name {
             get { return _name; }
         }
 
-        public String Url {
-            get { return _url + String.Join("_", _suffixes); }
+        public string Url {
+            get { return _url + string.Join("_", _suffixes); }
         }
 
-        public String Uri {
+        public string Uri {
             get { return _uri; }
         }
 
-        public String ServiceName {
-            get { return _serviceName + String.Join("_", _suffixes); }
+        public string ServiceName {
+            get { return _serviceName + string.Join("_", _suffixes); }
             set { _serviceName = value; }
         }
 
@@ -68,14 +68,14 @@ namespace DistributedAlgoritmsClassLibrary
             set { _rank = value; }
         }
 
-        public Process Concat(String suffixName) {
-            IList<String> suffixes = new List<String>(_suffixes);
+        public Process Concat(string suffixName) {
+            IList<string> suffixes = new List<string>(_suffixes);
             suffixes.Add(suffixName);
             return new Process(_name, _url, suffixes);
         }
 
-        public Process Unconcat(String suffixName) {
-            IList<String> suffixes = new List<String>(_suffixes);
+        public Process Unconcat(string suffixName) {
+            IList<string> suffixes = new List<string>(_suffixes);
             suffixes.Remove(suffixName);
             return new Process(_name, _url, suffixes);
         }
@@ -86,7 +86,7 @@ namespace DistributedAlgoritmsClassLibrary
                    "Service: " + _serviceName + Environment.NewLine +
                    "Port:    " + _port + Environment.NewLine +
                    "Rank:    " + _rank + Environment.NewLine +
-                   "Suffixes:" + Environment.NewLine + String.Join(Environment.NewLine, _suffixes);
+                   "Suffixes:" + Environment.NewLine + string.Join(Environment.NewLine, _suffixes);
         }
 
         public bool Equals(Process process) {

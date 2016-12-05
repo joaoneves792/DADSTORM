@@ -9,8 +9,8 @@ namespace CustomOperatorExamplaes {
 
 		public Basic() { }
 
-		public List<List<String>> Repeat(List<String> input) {
-            List<List<String>> result = new List<List<string>>();
+		public List<List<string>> Repeat(List<string> input) {
+            List<List<string>> result = new List<List<string>>();
             result.Add(input);
             return result;
 		}

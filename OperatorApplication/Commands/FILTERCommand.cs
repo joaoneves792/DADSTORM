@@ -7,16 +7,16 @@ using OperatorApplication.Exceptions;
 
 namespace OperatorApplication.Commands {
 	using System.Collections.Concurrent;
-	using TupleMessage = List<IList<String>>;
+	using TupleMessage = List<IList<string>>;
 
 	class FILTERCommand : Command {
 
-		private readonly Func<String, Boolean> _conditionEvalutor;
+		private readonly Func<string, Boolean> _conditionEvalutor;
         private readonly int _fieldNumber;
-        private readonly String _value;
+        private readonly string _value;
 		private Condition _condition;
 
-        public FILTERCommand(int fieldNumber, Condition condition, String value) {
+        public FILTERCommand(int fieldNumber, Condition condition, string value) {
 
 			_condition = condition;
 
@@ -37,24 +37,24 @@ namespace OperatorApplication.Commands {
             _value = value;
 		}
 
-        private Boolean IsGreater(String value) {
-            return String.Compare(value, _value) > 0;
+        private Boolean IsGreater(string value) {
+            return string.Compare(value, _value) > 0;
         }
 
-        private Boolean IsLess(String value) {
-            return String.Compare(value, _value) < 0;
+        private Boolean IsLess(string value) {
+            return string.Compare(value, _value) < 0;
         }
 
-        private Boolean IsEqual(String value) {
-            return String.Compare(value, _value) == 0;
+        private Boolean IsEqual(string value) {
+            return string.Compare(value, _value) == 0;
         }
 
         public override TupleMessage Execute(TupleMessage inputTuple) {
             TupleMessage result = new TupleMessage();
 
-            foreach (List<String> tuple in inputTuple)
+            foreach (List<string> tuple in inputTuple)
             {
-                String tupleElement = tuple[_fieldNumber - 1].Replace("\"", "");
+                string tupleElement = tuple[_fieldNumber - 1].Replace("\"", "");
                 if (_conditionEvalutor(tupleElement))
                 {
                     result.Add(tuple);

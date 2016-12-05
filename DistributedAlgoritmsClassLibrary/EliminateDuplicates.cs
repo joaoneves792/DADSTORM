@@ -15,7 +15,7 @@ namespace DistributedAlgoritmsClassLibrary {
         private StubbornPointToPointLink _stubbornPointToPointLink;
         private Process _self;
 
-        private IProducerConsumerCollection<String> _delivered;
+        private IProducerConsumerCollection<string> _delivered;
 
         private Timestamp _timestampCounter;
 
@@ -24,7 +24,7 @@ namespace DistributedAlgoritmsClassLibrary {
             _stubbornPointToPointLink = new RetransmitForever(process.Concat(CLASSNAME), Deliver);
             _self = process;
 
-            _delivered = new ConcurrentBag<String>();
+            _delivered = new ConcurrentBag<string>();
 
             _timestampCounter = 0;
         }
@@ -38,16 +38,16 @@ namespace DistributedAlgoritmsClassLibrary {
             _stubbornPointToPointLink = new RetransmitForever(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
             _self = process;
 
-            _delivered = new ConcurrentBag<String>();
+            _delivered = new ConcurrentBag<string>();
         }
 
         public void Send(Process process, Message message) {
-            message = (Message)new Tuple<String, Message>(_self.Url + _timestampCounter++, message);
+            message = (Message)new Tuple<string, Message>(_self.Url + _timestampCounter++, message);
             _stubbornPointToPointLink.Send(process.Concat(CLASSNAME), message);
         }
 
         public void Deliver(Process process, Message message) {
-            Tuple<String, Message> delivered = (Tuple<String, Message>)message;
+            Tuple<string, Message> delivered = (Tuple<string, Message>)message;
 
             if (!_delivered.Contains(delivered.Item1)) {
                 message = delivered.Item2;

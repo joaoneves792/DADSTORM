@@ -10,7 +10,7 @@ namespace PuppetMasterLibrary {
 	public partial class PuppetMaster {
         //Constants
         private const int PORT = 10001;
-        private const String SERVICE_NAME = "PuppetMaster",
+        private const string SERVICE_NAME = "PuppetMaster",
                                 START = @"^\ *",
                                 END = @"\ *$",
                                 SPACE = @"\ +",

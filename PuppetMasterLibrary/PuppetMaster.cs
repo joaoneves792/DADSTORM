@@ -1,27 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-
-using System.Net.Sockets;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Remoting.Channels;
 using System.Text.RegularExpressions;
 using System.Threading;
 
 using CommonTypesLibrary;
 
-namespace PuppetMasterLibrary {
-
-	using Url = String;
-	using OperatorId = String;
-	using ProcessName = String;
-
-
-	public partial class PuppetMaster {
+namespace PuppetMasterLibrary
+{
+    public partial class PuppetMaster {
 
 		public delegate void PrintToOutputHandler(object sender, TextEventArgs args);
 		public event PrintToOutputHandler PrintEvent;
@@ -79,7 +67,7 @@ namespace PuppetMasterLibrary {
 		}
 
 
-		private bool Matches(String pattern, String line, out GroupCollection groupCollection) {
+		private bool Matches(string pattern, string line, out GroupCollection groupCollection) {
 			Regex regex = new Regex(pattern, RegexOptions.Compiled);
 
 			Match match = regex.Match(line);
@@ -106,7 +94,7 @@ namespace PuppetMasterLibrary {
 		}
 
 
-		public void ParseLineAndExecuteCommand(String line) {
+		public void ParseLineAndExecuteCommand(string line) {
 			GroupCollection groupCollection;
 			if (Matches(OPERATOR_ID_COMMAND, line, out groupCollection)) {
 				Log(line);
@@ -179,13 +167,13 @@ namespace PuppetMasterLibrary {
 		}
 
 
-		public void Run(String fileNames) {
+		public void Run(string fileNames) {
 
 			System.Console.Clear();
 			string dir = GetScriptsDir();
 			ToggleToConfigurationMode();
 
-			foreach (String fileName in fileNames.Split(' ')) {
+			foreach (string fileName in fileNames.Split(' ')) {
 
 				if (!File.Exists(dir + "\\" + fileName)) {
 					//get a list of scripts inside the folder
@@ -210,7 +198,7 @@ namespace PuppetMasterLibrary {
 
 		// LEGACY
 		internal void StartCLI() {
-			String command;
+			string command;
 			while (true) {
 				System.Console.Write("PuppetMaster> ");
 				command = System.Console.ReadLine();
@@ -272,7 +260,7 @@ namespace PuppetMasterLibrary {
 //	//</summary>
 //	public static void Main(string[] args) {
 //		PuppetMaster puppetMaster = new PuppetMaster();
-//		String fileNames = string.Join("", args);
+//		string fileNames = string.Join("", args);
 
 //		// Close all processes when ctrl+c is pressed
 //		Console.CancelKeyPress += new ConsoleCancelEventHandler(puppetMaster.CloseProcesses);
@@ -284,8 +272,8 @@ namespace PuppetMasterLibrary {
 //	}
 //}
 
-//public void ExecuteConfigurationFile(String configurationFileName) {
-//	String line;
+//public void ExecuteConfigurationFile(string configurationFileName) {
+//	string line;
 //	StreamReader file = new StreamReader(configurationFileName);
 
 //	while ((line = file.ReadLine()) != null) {

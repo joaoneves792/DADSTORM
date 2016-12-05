@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace OperatorApplication
 {
     using Message = Object;
-    using TupleMessage = List<IList<String>>;
+    using TupleMessage = List<IList<string>>;
 
     internal partial class Operator : MarshalByRefObject, IPuppet {
         private enum LogStatus {
@@ -21,7 +21,7 @@ namespace OperatorApplication
         }
 
         #region Constants
-        private const String PUPPET_SERVICE_NAME = "Puppet";
+        private const string PUPPET_SERVICE_NAME = "Puppet";
         #endregion
         #region Variables
         //Puppet variables
@@ -34,7 +34,7 @@ namespace OperatorApplication
         private IProducerConsumerCollection<Message> _frozenInfrastructureRequests,
                                                      _frozenDownstreamRequests,
                                                      _frozenUpstreamRequests;
-        private IProducerConsumerCollection<Tuple<RequestType, String>> _frozenInfrastructureReplies;
+        private IProducerConsumerCollection<Tuple<RequestType, string>> _frozenInfrastructureReplies;
         private IProducerConsumerCollection<TupleMessage> _frozenDownstreamReplies;
         private IProducerConsumerCollection<Process> _frozenUpstreamReplies;
         #endregion
@@ -69,7 +69,7 @@ namespace OperatorApplication
             _frozenUpstreamRequests.TryAdd(request);
         }
 
-        private void FrozenInfrastructureReplyHandler(Tuple<RequestType, String> reply) {
+        private void FrozenInfrastructureReplyHandler(Tuple<RequestType, string> reply) {
             _frozenInfrastructureReplies.TryAdd(reply);
         }
 
@@ -100,16 +100,16 @@ namespace OperatorApplication
                 ThreadPool.QueueUserWorkItem((inputFileObject) => {
                     StreamReader inputFile = (StreamReader)inputFileObject;
 
-                    String currentLine;
+                    string currentLine;
                     while ((currentLine = inputFile.ReadLine()) != null) {
                         new Thread((lineObject) => {
                             //Assumption: all files and lines are valid
-                            String line = (String)lineObject;
+                            string line = (string)lineObject;
                             TupleMessage tupleMessage = new TupleMessage();
                             tupleMessage.Add(line.Split(',').ToList());
                             PaxosRequestHandler(tupleMessage);
 
-                            Console.WriteLine("Reading " + String.Join(" , ", tupleMessage.Select(aa => String.Join("-", aa))));
+                            Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
                         }).Start((Object)currentLine);
                     }
                     inputFile.Close();
@@ -128,7 +128,7 @@ namespace OperatorApplication
             _frozenInfrastructureRequests = new ConcurrentBag<Message>();
             _frozenDownstreamRequests = new ConcurrentBag<Message>();
             _frozenUpstreamRequests = new ConcurrentBag<Message>();
-            _frozenInfrastructureReplies = new ConcurrentBag<Tuple<RequestType, String>>();
+            _frozenInfrastructureReplies = new ConcurrentBag<Tuple<RequestType, string>>();
             _frozenDownstreamReplies = new ConcurrentBag<TupleMessage>();
             _frozenUpstreamReplies = new ConcurrentBag<Process>();
 
@@ -166,7 +166,7 @@ namespace OperatorApplication
                     _upstreamRequestListener(frozenUpstreamRequest);
                 }).Start();
             }
-            foreach (Tuple<RequestType, String> frozenInfrastructureReply in _frozenInfrastructureReplies) {
+            foreach (Tuple<RequestType, string> frozenInfrastructureReply in _frozenInfrastructureReplies) {
                 new Thread(() => {
                     _infrastructureReplyListener(frozenInfrastructureReply);
                 }).Start();
@@ -185,7 +185,7 @@ namespace OperatorApplication
             _frozenInfrastructureRequests = new ConcurrentBag<Message>();
             _frozenDownstreamRequests = new ConcurrentBag<Message>();
             _frozenUpstreamRequests = new ConcurrentBag<Message>();
-            _frozenInfrastructureReplies = new ConcurrentBag<Tuple<RequestType, String>>();
+            _frozenInfrastructureReplies = new ConcurrentBag<Tuple<RequestType, string>>();
             _frozenDownstreamReplies = new ConcurrentBag<TupleMessage>();
             _frozenUpstreamReplies = new ConcurrentBag<Process>();
         }
@@ -217,15 +217,15 @@ namespace OperatorApplication
             _sleepBetweenEvents = milliseconds;
         }
 
-        public void Routing(String routing) {
+        public void Routing(string routing) {
             //TODO: by default and on first release, the semantic is at-most-once
         }
 
-        public void Semantics(String semantics) {
+        public void Semantics(string semantics) {
             //TODO: by default and on first release, the semantic is at-most-once
         }
 
-        public void LoggingLevel(String loggingLevel) {
+        public void LoggingLevel(string loggingLevel) {
             if (loggingLevel.Equals("full")) {
                 _logStatus = LogStatus.FULL;
             } else if (loggingLevel.Equals("light")) {
@@ -234,10 +234,10 @@ namespace OperatorApplication
         }
         #endregion
         #region Log
-        private void Log(LogStatus logStatus, String message) {
+        private void Log(LogStatus logStatus, string message) {
             if (logStatus >= _logStatus) {
                 Task.Run(() => {
-                    _puppetMaster.Log(String.Format(
+                    _puppetMaster.Log(string.Format(
                     "tuple {0} {1}",
                     _process.Url,
                     message));

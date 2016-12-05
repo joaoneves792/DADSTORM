@@ -13,7 +13,7 @@ namespace ProcessCreationServiceApplication
     public class ProcessCreationService : MarshalByRefObject, IProcessCreationService
     {
         private static int PORT = 10000;
-        public static String SERVICE_NAME = "ProcessCreationService";
+        public static string SERVICE_NAME = "ProcessCreationService";
 
         internal void Run() {
             TcpChannel channel = new TcpChannel(PORT);
@@ -24,7 +24,7 @@ namespace ProcessCreationServiceApplication
                 typeof(IProcessCreationService));
         }
 
-        public void CreateProcess(String arguments) {
+        public void CreateProcess(string arguments) {
             Process.Start("OperatorApplication.exe", arguments);
         }
     }

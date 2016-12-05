@@ -8,6 +8,6 @@ namespace ProcessCreationServiceApplication
 {
     public interface IProcessCreationService
     {
-        void CreateProcess(String arguments);
+        void CreateProcess(string arguments);
     }
 }

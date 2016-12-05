@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OperatorApplication.Commands {
-    using TupleMessage = List<IList<String>>;
+    using TupleMessage = List<IList<string>>;
 
     class UNIQCommand : Command {
 
-		private IProducerConsumerCollection<String> _uniqueId = new ConcurrentBag<String>();
+		private IProducerConsumerCollection<string> _uniqueId = new ConcurrentBag<string>();
         private readonly int _fieldNumber;
 
 		public UNIQCommand(int fieldNumber) {
@@ -20,9 +20,9 @@ namespace OperatorApplication.Commands {
 		public override TupleMessage Execute(TupleMessage inputTuple) {
             TupleMessage result = new TupleMessage();
 
-            foreach (List<String> tuple in inputTuple)
+            foreach (List<string> tuple in inputTuple)
             {
-                String tupleElement = tuple[_fieldNumber];
+                string tupleElement = tuple[_fieldNumber];
                 lock (this)
                 {
                     if (!_uniqueId.Contains(tupleElement))
