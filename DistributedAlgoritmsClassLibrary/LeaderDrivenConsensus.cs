@@ -24,19 +24,21 @@ namespace DistributedAlgoritmsClassLibrary
         private Value _val;
         private bool _proposed,
                      _decided;
+        private object _proposedLock,
+                       _decidedLock;
         private Tuple<Timestamp, Process> _currentLeader,
                                           _newLeader;
 
-        private bool _relaxed;
-
         public LeaderDrivenConsensus(Process process,
-                              int replicationFactor,
-                              Action<Value> listener,
-                              Action<Timestamp, Process> epochChangeListener,
-                              bool relaxed,
-                              params Process[] otherProcesses) {
+                                     int replicationFactor,
+                                     Action<Value> listener,
+                                     Action<Timestamp, Process> epochChangeListener,
+                                     Process currentLeader,
+                                     params Process[] otherProcesses) {
+            _proposedLock = new Object();
+            _decidedLock = new Object();
+
             _epochChangeListener = epochChangeListener;
-            _relaxed = relaxed;
 
             Process[] suffixedProcesses = otherProcesses
                 .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
@@ -51,7 +53,7 @@ namespace DistributedAlgoritmsClassLibrary
             _proposed = false;
             _decided = false;
 
-            _currentLeader = new Tuple<Timestamp, Process>(0, null);
+            _currentLeader = new Tuple<Timestamp, Process>(0, currentLeader.Concat(CLASSNAME));
             _newLeader = new Tuple<Timestamp, Process>(0, null);
 
             Process[] suffixedEpochProcesses = _processes
@@ -66,14 +68,14 @@ namespace DistributedAlgoritmsClassLibrary
                                                                    Decide,
                                                                    Aborted,
                                                                    suffixedEpochProcesses));
-            _epochChange = new LeaderBasedEpochChange(_self, _self, StartEpoch, suffixedProcesses);
+            _epochChange = new LeaderBasedEpochChange(_self, _currentLeader.Item2, StartEpoch, suffixedProcesses);
             _waitHandle = new AutoResetEvent(false);
             _waitHandle.WaitOne();
         }
 
         public void Propose(Value value) {
             _val = value;
-            Task.Run(() => { TryPropose(); });
+            Task.Run(() => { Propose(); });
         }
 
         public void StartEpoch (Timestamp timestamp, Process process) {
@@ -103,16 +105,29 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         private void TryPropose () {
-            if ((_currentLeader.Item2.Equals(_self) || _relaxed) && _val != null && _proposed == false) {
-                _proposed = true;
-                _epochConsensus[_currentLeader.Item1].Propose(_val);
+            lock (_proposedLock) {
+                if (_currentLeader.Item2.Equals(_self) && _val != null && _proposed == false) {
+                    _proposed = true;
+                    Task.Run(() => { _epochConsensus[_currentLeader.Item1].Propose(_val); });
+                }
+            }
+        }
+
+        private void Propose() {
+            lock (_proposedLock) {
+                if (_val != null && _proposed == false) {
+                    _proposed = true;
+                    Task.Run(() => { _epochConsensus[_currentLeader.Item1].Propose(_val); });
+                }
             }
         }
 
         public void Decide (Value value) {
-            if (_decided == false) {
-                _decided = true;
-                _listener(value);
+            lock (_decidedLock) {
+                if (_decided == false) {
+                    _decided = true;
+                    Task.Run(() => { _listener(value); });
+                }
             }
         }
     }

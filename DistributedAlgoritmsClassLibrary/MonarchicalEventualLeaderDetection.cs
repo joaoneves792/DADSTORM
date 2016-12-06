@@ -52,9 +52,11 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void TryTrust() {
             Process usurper = _processes.Except(_suspected).Max();
-            if (!usurper.Equals(_leader)) {
-                _leader = usurper;
-                _listener(_leader.Unconcat(CLASSNAME));
+            lock (usurper) {
+                if (!usurper.Equals(_leader)) {
+                    _leader = usurper;
+                    _listener(_leader.Unconcat(CLASSNAME));
+                }
             }
         }
 

@@ -15,11 +15,6 @@ namespace OperatorApplication
     using TupleMessage = List<IList<string>>;
 
     internal partial class Operator {
-        private enum RequestType {
-            PAXOS,
-            QUORUM
-        }
-
         #region Variables
         private ICollection<StreamReader> _inputFiles;
         #endregion
@@ -38,7 +33,7 @@ namespace OperatorApplication
             _upstreamBroadcast = null;
             _downstreamBroadcast = null;
             _timestamp = 0;
-            _paxusConsenti = new List<UniformConsensus<TupleMessage>>();
+            _paxusConsenti = new List<UniformConsensus<Tuple<TupleMessage, string>>>();
             _quorumConsenti = new List<UniformConsensus<TupleMessage>>();
 
             //Puppet component
@@ -77,7 +72,7 @@ namespace OperatorApplication
         #endregion
         #region Submitters
         private void SubmitOperatorAsPrimaryNode() {
-            if(_replications.Count() == 0) {
+            if (_replications.Count() == 0) {
                 PrimaryEpochChangeReplyHandler();
                 return;
             }
@@ -125,6 +120,7 @@ namespace OperatorApplication
             //Define upstream broadcast network
             _upstreamBroadcast = new BasicBroadcast(_process.Concat("Upstream"), UpstreamReplyHandler, processes.ToArray());
             _upstreamRequestListener = _upstreamBroadcast.Broadcast;
+            UpstreamRequestHandler(_process);
         }
 
         private void SubmitOperatorAsRemotingNode() {

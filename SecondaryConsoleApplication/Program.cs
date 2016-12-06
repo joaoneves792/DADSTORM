@@ -52,20 +52,22 @@ namespace SecondaryConsoleApplication
             //    process3
             //);
 
-            //UniformConsensus<TupleMessage> consensus = new LeaderDrivenConsensus<TupleMessage>(
+            UniformConsensus<TupleMessage> consensus = new LeaderDrivenConsensus<TupleMessage>(
+                process1,
+                3,
+                listener.Decide,
+                listener.StartEpoch,
+                new Process("Teste1", "tcp://localhost:53001/teste"),
+                process2,
+                process3
+            );
+
+            //UniformConsensus<TupleMessage> consensus = new FloodingUniformConsensus<TupleMessage>(
             //    process1,
-            //    3,
             //    listener.Decide,
             //    process2,
             //    process3
             //);
-
-            UniformConsensus<TupleMessage> consensus = new FloodingUniformConsensus<TupleMessage>(
-                process1,
-                listener.Decide,
-                process2,
-                process3
-            );
 
             Thread.Sleep(5000);
 

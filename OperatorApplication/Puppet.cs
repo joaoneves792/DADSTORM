@@ -33,8 +33,8 @@ namespace OperatorApplication
         //Broadcast variables
         private IProducerConsumerCollection<Message> _frozenInfrastructureRequests,
                                                      _frozenDownstreamRequests,
-                                                     _frozenUpstreamRequests;
-        private IProducerConsumerCollection<Tuple<RequestType, string>> _frozenInfrastructureReplies;
+                                                     _frozenUpstreamRequests,
+                                                     _frozenInfrastructureReplies;
         private IProducerConsumerCollection<TupleMessage> _frozenDownstreamReplies;
         private IProducerConsumerCollection<Process> _frozenUpstreamReplies;
         #endregion
@@ -69,7 +69,7 @@ namespace OperatorApplication
             _frozenUpstreamRequests.TryAdd(request);
         }
 
-        private void FrozenInfrastructureReplyHandler(Tuple<RequestType, string> reply) {
+        private void FrozenInfrastructureReplyHandler(Message reply) {
             _frozenInfrastructureReplies.TryAdd(reply);
         }
 
@@ -128,7 +128,7 @@ namespace OperatorApplication
             _frozenInfrastructureRequests = new ConcurrentBag<Message>();
             _frozenDownstreamRequests = new ConcurrentBag<Message>();
             _frozenUpstreamRequests = new ConcurrentBag<Message>();
-            _frozenInfrastructureReplies = new ConcurrentBag<Tuple<RequestType, string>>();
+            _frozenInfrastructureReplies = new ConcurrentBag<Message>();
             _frozenDownstreamReplies = new ConcurrentBag<TupleMessage>();
             _frozenUpstreamReplies = new ConcurrentBag<Process>();
 
@@ -166,7 +166,7 @@ namespace OperatorApplication
                     _upstreamRequestListener(frozenUpstreamRequest);
                 }).Start();
             }
-            foreach (Tuple<RequestType, string> frozenInfrastructureReply in _frozenInfrastructureReplies) {
+            foreach (Message frozenInfrastructureReply in _frozenInfrastructureReplies) {
                 new Thread(() => {
                     _infrastructureReplyListener(frozenInfrastructureReply);
                 }).Start();
@@ -185,7 +185,7 @@ namespace OperatorApplication
             _frozenInfrastructureRequests = new ConcurrentBag<Message>();
             _frozenDownstreamRequests = new ConcurrentBag<Message>();
             _frozenUpstreamRequests = new ConcurrentBag<Message>();
-            _frozenInfrastructureReplies = new ConcurrentBag<Tuple<RequestType, string>>();
+            _frozenInfrastructureReplies = new ConcurrentBag<Message>();
             _frozenDownstreamReplies = new ConcurrentBag<TupleMessage>();
             _frozenUpstreamReplies = new ConcurrentBag<Process>();
         }
@@ -205,7 +205,9 @@ namespace OperatorApplication
 				count++;
 			}
 
-			if (count == 0) { Console.Write("\r\n"); }
+			if (count == 0) {
+                Console.Write("\r\n");
+            }
 			Console.Write("\r\n");
 
 			foreach (KeyValuePair<string,string> pair in _command.Status()) {
