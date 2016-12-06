@@ -30,13 +30,18 @@ namespace OperatorApplication
         private int _sleepBetweenEvents;
 		private string _state;
 
-        //Broadcast variables
-        private IProducerConsumerCollection<Message> _frozenInfrastructureRequests,
-                                                     _frozenDownstreamRequests,
-                                                     _frozenUpstreamRequests,
-                                                     _frozenInfrastructureReplies;
-        private IProducerConsumerCollection<TupleMessage> _frozenDownstreamReplies;
-        private IProducerConsumerCollection<Process> _frozenUpstreamReplies;
+        //Frozen request variables
+        private IProducerConsumerCollection<Message>                        _frozenInfrastructureRequests,
+                                                                            _frozenDownstreamRequests,
+                                                                            _frozenUpstreamRequests,
+
+        //Frozen reply variables
+                                                                            _frozenInfrastructureReplies;
+        private IProducerConsumerCollection<TupleMessage>                   _frozenDownstreamReplies;
+        private IProducerConsumerCollection<Process>                        _frozenUpstreamReplies;
+        private IProducerConsumerCollection<Tuple<int, Process>>            _frozenEpochChangeReplies;
+        private IProducerConsumerCollection<Tuple<TupleMessage, string>>    _frozenPaxosReplies;
+        private IProducerConsumerCollection<TupleMessage>                   _frozenQuorumReplies;
         #endregion
 
         #region Constructor
@@ -80,6 +85,18 @@ namespace OperatorApplication
         private void FrozenUpstreamReplyHandler(Process reply) {
             _frozenUpstreamReplies.TryAdd(reply);
         }
+
+        private void FrozenEpochChangeReplyHandler(int timestamp, Process process) {
+            _frozenEpochChangeReplies.TryAdd(new Tuple<int, Process>(timestamp, process));
+        }
+
+        private void FrozenPaxosReplyHandler(Tuple<TupleMessage, string> reply) {
+            _frozenPaxosReplies.TryAdd(reply);
+        }
+
+        private void FrozenQuorumReplyHandler(TupleMessage reply) {
+            _frozenQuorumReplies.TryAdd(reply);
+        }
         #endregion
         #region Commands
         public void Start() {
@@ -107,7 +124,7 @@ namespace OperatorApplication
                             string line = (string)lineObject;
                             TupleMessage tupleMessage = new TupleMessage();
                             tupleMessage.Add(line.Split(',').ToList());
-                            PaxosRequestHandler(tupleMessage);
+                            UnfrozenDownstreamReplyHandler(tupleMessage);
 
                             Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
                         }).Start((Object)currentLine);
@@ -125,32 +142,51 @@ namespace OperatorApplication
             Flag.Frozen = true;
 			_state = "froze";
 
-            _frozenInfrastructureRequests = new ConcurrentBag<Message>();
-            _frozenDownstreamRequests = new ConcurrentBag<Message>();
-            _frozenUpstreamRequests = new ConcurrentBag<Message>();
-            _frozenInfrastructureReplies = new ConcurrentBag<Message>();
-            _frozenDownstreamReplies = new ConcurrentBag<TupleMessage>();
-            _frozenUpstreamReplies = new ConcurrentBag<Process>();
+            //Reset frozen request sets
+            _frozenInfrastructureRequests   = new ConcurrentBag<Message>();
+            _frozenDownstreamRequests       = new ConcurrentBag<Message>();
+            _frozenUpstreamRequests         = new ConcurrentBag<Message>();
 
-            _infrastructureRequestListener = FrozenInfrastructureRequestHandler;
-            _downstreamRequestListener = FrozenDownstreamRequestHandler;
-            _upstreamRequestListener = FrozenUpstreamRequestHandler;
-            _infrastructureReplyListener = FrozenInfrastructureReplyHandler;
-            _downstreamReplyListener = FrozenDownstreamReplyHandler;
-            _upstreamReplyListener = FrozenUpstreamReplyHandler;
+            //Reset frozen reply sets
+            _frozenInfrastructureReplies    = new ConcurrentBag<Message>();
+            _frozenDownstreamReplies        = new ConcurrentBag<TupleMessage>();
+            _frozenUpstreamReplies          = new ConcurrentBag<Process>();
+            _frozenEpochChangeReplies       = new ConcurrentBag<Tuple<int, Process>>();
+            _frozenPaxosReplies             = new ConcurrentBag<Tuple<TupleMessage, string>>();
+            _frozenQuorumReplies            = new ConcurrentBag<TupleMessage>();
+
+            //Add frozen request handlers
+            _infrastructureRequestListener  = FrozenInfrastructureRequestHandler;
+            _downstreamRequestListener      = FrozenDownstreamRequestHandler;
+            _upstreamRequestListener        = FrozenUpstreamRequestHandler;
+
+            //Add frozen reply handlers
+            _infrastructureReplyListener    = FrozenInfrastructureReplyHandler;
+            _downstreamReplyListener        = FrozenDownstreamReplyHandler;
+            _upstreamReplyListener          = FrozenUpstreamReplyHandler;
+            _epochChangeReplyListener       = FrozenEpochChangeReplyHandler;
+            _paxosReplyListener             = FrozenPaxosReplyHandler;
+            _quorumReplyListener            = FrozenQuorumReplyHandler;
         }
 
         public void Unfreeze() {
             Flag.Frozen = false;
             _state = "running";
 
-            _infrastructureRequestListener = _infrastructureBroadcast.Broadcast;
-            _downstreamRequestListener = _downstreamBroadcast.Broadcast;
-            _upstreamRequestListener = _upstreamBroadcast.Broadcast;
-            _infrastructureReplyListener = InitHandler;
-            _downstreamReplyListener = PaxosRequestHandler;
-            _upstreamReplyListener = _downstreamBroadcast.Connect;
+            //Add unfrozen request handlers
+            _infrastructureRequestListener  = UnfrozenInfrastructureRequestHandler;
+            _downstreamRequestListener      = UnfrozenDownstreamRequestHandler;
+            _upstreamRequestListener        = UnfrozenUpstreamRequestHandler;
 
+            //Add unfrozen reply handlers
+            _infrastructureReplyListener    = UnfrozenInfrastructureReplyHandler;
+            _downstreamReplyListener        = UnfrozenDownstreamReplyHandler;
+            _upstreamReplyListener          = UnfrozenUpstreamReplyHandler;
+            _epochChangeReplyListener       = UnfrozenEpochChangeReplyHandler;
+            _paxosReplyListener             = UnfrozenPaxosReplyHandler;
+            _quorumReplyListener            = UnfrozenQuorumReplyHandler;
+
+            //Send frozen requests
             foreach (Message frozenInfrastructureRequest in _frozenInfrastructureRequests) {
                 new Thread(() => {
                     _infrastructureRequestListener(frozenInfrastructureRequest);
@@ -166,6 +202,8 @@ namespace OperatorApplication
                     _upstreamRequestListener(frozenUpstreamRequest);
                 }).Start();
             }
+
+            //Send frozen replies
             foreach (Message frozenInfrastructureReply in _frozenInfrastructureReplies) {
                 new Thread(() => {
                     _infrastructureReplyListener(frozenInfrastructureReply);
@@ -181,13 +219,34 @@ namespace OperatorApplication
                     _upstreamReplyListener(frozenUpstreamReply);
                 }).Start();
             }
+            foreach (Tuple<int, Process> frozenEpochChangeReply in _frozenEpochChangeReplies) {
+                new Thread(() => {
+                    _epochChangeReplyListener(frozenEpochChangeReply.Item1, frozenEpochChangeReply.Item2);
+                }).Start();
+            }
+            foreach (Tuple<TupleMessage, string> frozenPaxosReply in _frozenPaxosReplies) {
+                new Thread(() => {
+                    _paxosReplyListener(frozenPaxosReply);
+                }).Start();
+            }
+            foreach (TupleMessage frozenQuorumReply in _frozenQuorumReplies) {
+                new Thread(() => {
+                    _quorumReplyListener(frozenQuorumReply);
+                }).Start();
+            }
 
-            _frozenInfrastructureRequests = new ConcurrentBag<Message>();
-            _frozenDownstreamRequests = new ConcurrentBag<Message>();
-            _frozenUpstreamRequests = new ConcurrentBag<Message>();
-            _frozenInfrastructureReplies = new ConcurrentBag<Message>();
-            _frozenDownstreamReplies = new ConcurrentBag<TupleMessage>();
-            _frozenUpstreamReplies = new ConcurrentBag<Process>();
+            //Reset frozen request sets
+            _frozenInfrastructureRequests   = new ConcurrentBag<Message>();
+            _frozenDownstreamRequests       = new ConcurrentBag<Message>();
+            _frozenUpstreamRequests         = new ConcurrentBag<Message>();
+
+            //Reset frozen reply sets
+            _frozenInfrastructureReplies    = new ConcurrentBag<Message>();
+            _frozenDownstreamReplies        = new ConcurrentBag<TupleMessage>();
+            _frozenUpstreamReplies          = new ConcurrentBag<Process>();
+            _frozenEpochChangeReplies       = new ConcurrentBag<Tuple<int, Process>>();
+            _frozenPaxosReplies             = new ConcurrentBag<Tuple<TupleMessage, string>>();
+            _frozenQuorumReplies            = new ConcurrentBag<TupleMessage>();
         }
 
         public void Status() {

@@ -33,6 +33,7 @@ namespace OperatorApplication
             _upstreamBroadcast = null;
             _downstreamBroadcast = null;
             _timestamp = 0;
+            _timestampLock = new object();
             _paxusConsenti = new List<UniformConsensus<Tuple<TupleMessage, string>>>();
             _quorumConsenti = new List<UniformConsensus<TupleMessage>>();
 
@@ -73,7 +74,7 @@ namespace OperatorApplication
         #region Submitters
         private void SubmitOperatorAsPrimaryNode() {
             if (_replications.Count() == 0) {
-                PrimaryEpochChangeReplyHandler();
+                PrimaryEpochChangeInitHandler();
                 return;
             }
 
@@ -83,17 +84,16 @@ namespace OperatorApplication
                     _replications[0].Uri + "/Puppet");
                 _puppet.ToString();
 
-                ReplicationEpochChangeReplyHandler();
+                ReplicationEpochChangeInitHandler();
             } catch (Exception) {
-                PrimaryEpochChangeReplyHandler();
+                PrimaryEpochChangeInitHandler();
             }
         }
 
         private void SubmitOperatorAsDownstreamNode() {
             //Define downstream broadcast network
             _downstreamBroadcast = new PrimaryBroadcast(new EliminateDuplicates(_process.Concat("MutableBroadcast"), DownstreamReplyHandler));
-            _downstreamRequestListener = _downstreamBroadcast.Broadcast;
-            _upstreamReplyListener = _downstreamBroadcast.Connect;
+            _upstreamReplyListener = UnfrozenUpstreamReplyHandler;
         }
 
         private void SubmitOperatorAsUpstreamNode(string inputOps) {
@@ -119,7 +119,7 @@ namespace OperatorApplication
 
             //Define upstream broadcast network
             _upstreamBroadcast = new BasicBroadcast(_process.Concat("Upstream"), UpstreamReplyHandler, processes.ToArray());
-            _upstreamRequestListener = _upstreamBroadcast.Broadcast;
+            _upstreamRequestListener = UnfrozenUpstreamRequestHandler;
             UpstreamRequestHandler(_process);
         }
 
