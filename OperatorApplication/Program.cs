@@ -54,7 +54,9 @@ namespace OperatorApplication
                    url = args[1],
                    inputOps = args[2],
                    replicas = args[3],
-                   operatorSpec = args[4];
+                   operatorSpec = args[4],
+                   routing = args[5],
+                   semantics = args[6];
 
             //Define operator
             DefineOperator(operatorId, url, operatorSpec);
@@ -62,7 +64,7 @@ namespace OperatorApplication
             //Submit operator as nodes
             SubmitOperatorAsRemotingNode();
             SubmitOperatorAsPuppetryNode();
-            SubmitOperatorAsDownstreamNode();
+            SubmitOperatorAsDownstreamNode(routing, semantics);
             SubmitOperatorAsUpstreamNode(inputOps);
             SubmitOperatorAsInfrastructureNode(operatorId, replicas);
             SubmitOperatorAsPrimaryNode();
@@ -90,10 +92,29 @@ namespace OperatorApplication
             }
         }
 
-        private void SubmitOperatorAsDownstreamNode() {
-            //Define downstream broadcast network
-            _downstreamBroadcast = new PrimaryBroadcast(new EliminateDuplicates(_process.Concat("MutableBroadcast"), DownstreamReplyHandler));
-            _upstreamReplyListener = UnfrozenUpstreamReplyHandler;
+        private void SubmitOperatorAsDownstreamNode(String routing, String semantics) {
+            //Identify semantics policy
+            PointToPointLink semanticsPolicy;
+            if(semantics.Equals("at-most-once")) {
+                semanticsPolicy = new RemotingNode(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+            } else if (semantics.Equals("at-least-once")) {
+                semanticsPolicy = new RetransmitForever(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+            } else {
+                semanticsPolicy = new EliminateDuplicates(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+            }
+
+            //Identify routing policy
+            if (routing.Equals("primary")) {
+                _downstreamBroadcast = new PrimaryBroadcast(semanticsPolicy);
+            } else if (routing.Equals("random")) {
+                _downstreamBroadcast = new RandomBroadcast(semanticsPolicy);
+            } else {
+                GroupCollection groupCollection;
+                Matches(HASHING, routing, out groupCollection);
+                int hashing = Int32.Parse(groupCollection[1].Value);
+
+                _downstreamBroadcast = new HashingBroadcast(semanticsPolicy, hashing);
+            }
         }
 
         private void SubmitOperatorAsUpstreamNode(string inputOps) {
@@ -120,6 +141,7 @@ namespace OperatorApplication
             //Define upstream broadcast network
             _upstreamBroadcast = new BasicBroadcast(_process.Concat("Upstream"), UpstreamReplyHandler, processes.ToArray());
             _upstreamRequestListener = UnfrozenUpstreamRequestHandler;
+            _upstreamReplyListener = UnfrozenUpstreamReplyHandler;
             UpstreamRequestHandler(_process);
         }
 

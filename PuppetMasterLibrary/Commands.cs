@@ -159,7 +159,7 @@ namespace PuppetMasterLibrary
                 //Create process
                 string processCreationServiceUrl = groupCollection[1].Value + ":10000/";
                 _processCreationServiceTable[processCreationServiceUrl].CreateProcess(
-                    operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs);
+                    operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs + " " + routing + " " + _semantic);
 
                 _waitHandle.WaitOne();
 

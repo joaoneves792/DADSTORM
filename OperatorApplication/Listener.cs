@@ -111,15 +111,15 @@ namespace OperatorApplication
         #endregion
         #region Unfrozen Request Handlers
         private void UnfrozenInfrastructureRequestHandler(Message request) {
-            _infrastructureBroadcast.Broadcast(request);
+            Task.Run(() => { _infrastructureBroadcast.Broadcast(request); });
         }
 
         private void UnfrozenDownstreamRequestHandler(Message request) {
-            _downstreamBroadcast.Broadcast(request);
+            Task.Run(() => { _downstreamBroadcast.Broadcast(request); });
         }
 
         private void UnfrozenUpstreamRequestHandler(Message request) {
-            _upstreamBroadcast.Broadcast(request);
+            Task.Run(() => { _upstreamBroadcast.Broadcast(request); });
         }
         #endregion
         #region Reply Handlers
@@ -176,7 +176,7 @@ namespace OperatorApplication
 
                 // Init Paxos
                 UniformConsensus<Tuple<TupleMessage, string>> paxos = PaxosInitHandler(tuple);
-                Task.Run(() => { InfrastructureRequestHandler(tuple); });
+                InfrastructureRequestHandler(tuple);
 
                 // Propose Paxos value
                 Task.Run(() => { paxos.Propose(new Tuple<TupleMessage, string>(tupleMessage, suffix)); });
@@ -211,10 +211,9 @@ namespace OperatorApplication
                 Log(LogStatus.FULL, string.Join(" - ", tuple));
             }
 
-            Console.WriteLine("#Replications: " + _replications.Count());
-
             //Share result to downstream nodes if current node has no replications
-            if (_replications.Count() == 0) {
+            if (_replications == null) {
+                Console.WriteLine("No quorum");
                 QuorumReplyHandler(result);
                 return;
             }

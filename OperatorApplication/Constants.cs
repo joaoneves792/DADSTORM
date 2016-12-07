@@ -14,6 +14,7 @@ namespace OperatorApplication
                              PARTITION = "(?:[A-Z]:" + DIR + @")?",
                              DIRNAME = @"(?:.+" + DIR + @")*",
                              FILENAME = @".+" + DIR + @"?",
-                             PATH = @"(?:" + PARTITION + DIRNAME + FILENAME + @")";
+                             PATH = @"(?:" + PARTITION + DIRNAME + FILENAME + @")",
+                             HASHING = @"hashing\((\d+)\)";
     }
 }
