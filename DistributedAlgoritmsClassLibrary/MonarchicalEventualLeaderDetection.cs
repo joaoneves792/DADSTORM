@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -16,6 +14,8 @@ namespace DistributedAlgoritmsClassLibrary
         private IList<Process> _suspected;
         private Process _leader;
 
+        private object _leaderLock;
+
         public MonarchicalEventualLeaderDetection(Process process,
                                                   Action<Process> listener,
                                                   params Process[] otherProcesses) {
@@ -24,7 +24,6 @@ namespace DistributedAlgoritmsClassLibrary
                 .ToArray();
 
             _listener = listener;
-            _eventuallyPerfectFailureDetector = new IncreasingTimeout(process.Concat(CLASSNAME), Suspect, Restore, suffixedProcesses);
             _processes = new ConcurrentBag<Process>();
             foreach (Process otherProcess in suffixedProcesses) {
                 _processes.TryAdd(otherProcess);
@@ -33,31 +32,38 @@ namespace DistributedAlgoritmsClassLibrary
 
             _leader = null;
             _suspected = new List<Process>();
-            Task.Run(() => { TryAbort(); });
-            Task.Run(() => { TryTrust(); });
+
+            _leaderLock = new object();
+
+            _eventuallyPerfectFailureDetector = new IncreasingTimeout(process.Concat(CLASSNAME), Suspect, Restore, suffixedProcesses);
+
+            TryAbort();
+            TryTrust();
         }
 
         public void Suspect(Process process) {
             _suspected.Add(process);
             TryAbort();
-            Task.Run(() => { TryAbort(); });
-            Task.Run(() => { TryTrust(); });
+            TryTrust();
         }
 
         public void Restore(Process process) {
             _suspected.Remove(process);
-            Task.Run(() => { TryAbort(); });
-            Task.Run(() => { TryTrust(); });
+            TryAbort();
+            TryTrust();
         }
 
         public void TryTrust() {
             Process usurper = _processes.Except(_suspected).Max();
-            lock (usurper) {
-                if (!usurper.Equals(_leader)) {
-                    _leader = usurper;
-                    _listener(_leader.Unconcat(CLASSNAME));
+
+            lock (_leaderLock) {
+                if (usurper.Equals(_leader)) {
+                    return;
                 }
+                _leader = usurper;
             }
+
+            _listener(usurper.Unconcat(CLASSNAME));
         }
 
         public void TryAbort() {

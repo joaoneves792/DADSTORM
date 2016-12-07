@@ -1,20 +1,14 @@
-﻿using System;
+﻿using CommonTypesLibrary;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
-
-using System.Net.Sockets;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Remoting.Channels;
-using System.Threading;
-using System.Runtime.Serialization.Formatters;
 using System.IO;
-
-using CommonTypesLibrary;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Serialization.Formatters;
+using System.Threading;
 
 namespace TestingConsoleApplication
 {

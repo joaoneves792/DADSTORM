@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -30,13 +27,14 @@ namespace DistributedAlgoritmsClassLibrary
                 .ToArray();
 
             _listener = listener;
-            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
-            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
-            _eventualLeaderDetector = new MonarchicalEventualLeaderDetection(process.Concat(CLASSNAME), Trust, suffixedProcesses);
 
             _trusted = leader;
             _self = process.Concat(CLASSNAME);
             _lastts = 0;
+
+            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
+            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
+            _eventualLeaderDetector = new MonarchicalEventualLeaderDetection(process.Concat(CLASSNAME), Trust, suffixedProcesses);
         }
 
         public void Trust(Process process) {

@@ -35,6 +35,7 @@ namespace DistributedAlgoritmsClassLibrary
 
             //TODO: needs to check and handle parse faults
             Match match = Regex.Match(url, @"^(tcp://[\w\.]+:(\d{4,5}))/(\w+)$");
+            _uri = match.Groups[1].Value;
             _port = int.Parse(match.Groups[2].Value);
             _serviceName = match.Groups[3].Value;
             _suffixes = suffix;
@@ -47,14 +48,23 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public string Url {
-            get { return _url + string.Join("_", _suffixes); }
+            get { return _url; }
         }
 
         public string Uri {
             get { return _uri; }
         }
 
+        public string SuffixedUrl {
+            get { return _url + string.Join("_", _suffixes); }
+        }
+
         public string ServiceName {
+            get { return _serviceName; }
+            set { _serviceName = value; }
+        }
+
+        public string SuffixedServiceName {
             get { return _serviceName + string.Join("_", _suffixes); }
             set { _serviceName = value; }
         }

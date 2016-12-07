@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace OperatorApplication.Commands {
-	using System.Collections.Concurrent;
-	using TupleMessage = List<IList<string>>;
+namespace OperatorApplication.Commands
+{
+    using TupleMessage = List<IList<string>>;
 
-	class DUPCommand : Command {
+    class DUPCommand : Command {
 		public override TupleMessage Execute(TupleMessage inputTuple) {
 			return inputTuple;
 		}

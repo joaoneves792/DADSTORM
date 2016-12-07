@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Remoting.Channels;
 using System.Threading;
-using System.Runtime.Serialization.Formatters;
+using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -27,13 +20,13 @@ namespace DistributedAlgoritmsClassLibrary
         private IDictionary<string, FairLossPointToPointLink> _fairLossPointToPointLinks;
 
         private IProducerConsumerCollection<Tuple<Process, Message>> _frozenSends, _frozenDelivers;
-        private Action<Process, Message> _freezableSend, _freezableDeliver;
+        private Action<Process, Message> _send, _deliver;
 
         public RemotingNode(Process process, Action<Process, Message> listener) {
             _process = process;
             _listener = listener;
-            _freezableSend = FreezableSend;
-            _freezableDeliver = FreezableDeliver;
+            _send = UnfrozenSend;
+            _deliver = UnfrozenDeliver;
 
             _frozenSends = new ConcurrentBag<Tuple<Process, Message>>();
             _frozenDelivers = new ConcurrentBag<Tuple<Process, Message>>();
@@ -47,7 +40,7 @@ namespace DistributedAlgoritmsClassLibrary
 
             RemotingServices.Marshal(
                 this,
-                process.ServiceName,
+                process.SuffixedServiceName,
                 typeof(FairLossPointToPointLink));
         }
 
@@ -59,23 +52,10 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Connect(Process process) {
-            //Console.WriteLine("\nConnect to:");
-            //Console.WriteLine("Service:\n" + process.ServiceName);
-            //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
-            //Thread.Sleep(2000);
-
-            FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
-                typeof(FairLossPointToPointLink),
-                process.Url);
-
-            if (_fairLossPointToPointLinks.ContainsKey(process.Url)) {
-                _fairLossPointToPointLinks[process.Url] = fairLossPointToPointLink;
-            } else {
-                _fairLossPointToPointLinks.Add(process.Url, fairLossPointToPointLink);
-            }
+            FairLossPointToPointLink fairLossPointToPointLink = SubmitProcessAsFairLossPointToPointLinkNode(process);
 
             try {
-                fairLossPointToPointLink.Anchor(_process);
+                fairLossPointToPointLink.SubmitProcessAsFairLossPointToPointLinkNode(_process);
             } catch (Exception) {
                 new Thread(() => {
                     //Console.WriteLine("------------------------------------------");
@@ -86,22 +66,14 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Reconnect(Process process) {
-            FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
-                typeof(FairLossPointToPointLink),
-                process.Url);
+            FairLossPointToPointLink fairLossPointToPointLink = SubmitProcessAsFairLossPointToPointLinkNode(process);
 
-            if (_fairLossPointToPointLinks.ContainsKey(process.Url)) {
-                _fairLossPointToPointLinks[process.Url] = fairLossPointToPointLink;
-            } else {
-                _fairLossPointToPointLinks.Add(process.Url, fairLossPointToPointLink);
-            }
-
-            try {
-                fairLossPointToPointLink.Anchor(_process);
-            } catch (SocketException) { }
+            Task.Run(() => {
+                fairLossPointToPointLink.SubmitProcessAsFairLossPointToPointLinkNode(_process);
+            });
         }
 
-        public void Anchor(Process process) {
+        public FairLossPointToPointLink SubmitProcessAsFairLossPointToPointLinkNode(Process process) {
             //Console.WriteLine("\nConnect by:");
             //Console.WriteLine("Service:\n" + process.ServiceName);
             //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
@@ -109,35 +81,36 @@ namespace DistributedAlgoritmsClassLibrary
 
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
-                process.Url);
-            //@"tcp://" + serviceURL + ":" + PORT + "/" + SERVICE_NAME);
+                process.SuffixedUrl);
 
-            if (_fairLossPointToPointLinks.ContainsKey(process.Url)) {
-                _fairLossPointToPointLinks[process.Url] = fairLossPointToPointLink;
+            if (_fairLossPointToPointLinks.ContainsKey(process.SuffixedUrl)) {
+                _fairLossPointToPointLinks[process.SuffixedUrl] = fairLossPointToPointLink;
             } else {
-                _fairLossPointToPointLinks.Add(process.Url, fairLossPointToPointLink);
+                _fairLossPointToPointLinks.Add(process.SuffixedUrl, fairLossPointToPointLink);
             }
+
+            return fairLossPointToPointLink;
         }
 
         public void Send(Process process, Message message) {
-            if(Flag.Frozen) {
-                Freeze();
-            } else {
-                Unfreeze();
-            }
-            _freezableSend(process, message);
+            CheckFrozenFlag();
+            _send(process, message);
         }
 
         public void Deliver(Process process, Message message) {
+            CheckFrozenFlag();
+            _deliver(process, message);
+        }
+
+        private void CheckFrozenFlag() {
             if(Flag.Frozen) {
                 Freeze();
             } else {
                 Unfreeze();
             }
-            _freezableDeliver(process, message);
         }
 
-        public void FreezableSend(Process process, Message message) {
+        public void UnfrozenSend(Process process, Message message) {
             //Console.WriteLine("\nSend to:");
             //Console.WriteLine("Service:\n" + process.ServiceName);
             //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
@@ -145,7 +118,7 @@ namespace DistributedAlgoritmsClassLibrary
             //Thread.Sleep(2000);
 
             Task.Run(() => {
-                _fairLossPointToPointLinks[process.Url].Deliver(_process, message);
+                _fairLossPointToPointLinks[process.SuffixedUrl].Deliver(_process, message);
             }).ContinueWith(task => {
                 //Handles remote exception
                 task.Exception.Handle(ex => {
@@ -157,42 +130,36 @@ namespace DistributedAlgoritmsClassLibrary
             }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
-        public void FreezableDeliver(Process process, Message message) {
+        public void UnfrozenDeliver(Process process, Message message) {
             _listener(process, message);
         }
 
         public void Freeze() {
-            _freezableSend = StoreSend;
-            _freezableDeliver = StoreDeliver;
+            _send = FrozenSend;
+            _deliver = FrozenDeliver;
         }
 
         public void Unfreeze() {
-            _freezableSend = FreezableSend;
-            _freezableDeliver = FreezableDeliver;
+            _send = UnfrozenSend;
+            _deliver = UnfrozenDeliver;
 
-            foreach (Tuple<Process, Message> send in _frozenSends)
-            {
-                new Thread(() => {
-                    _freezableSend(send.Item1, send.Item2);
-                }).Start();
-            }
-            foreach (Tuple<Process, Message> deliver in _frozenDelivers)
-            {
-                new Thread(() => {
-                    _freezableDeliver(deliver.Item1, deliver.Item2);
-                }).Start();
-            }
+            Parallel.ForEach(_frozenSends, (send) => {
+                _send(send.Item1, send.Item2);
+            });
+            Parallel.ForEach(_frozenDelivers, (deliver) => {
+                    _deliver(deliver.Item1, deliver.Item2);
+            });
 
             _frozenSends = new ConcurrentBag<Tuple<Process, Message>>();
             _frozenDelivers = new ConcurrentBag<Tuple<Process, Message>>();
         }
 
-        private void StoreSend(Process process, Message message) {
+        private void FrozenSend(Process process, Message message) {
 			Tuple<Process, Message> send = new Tuple<Process, Message>(process, message);
 			_frozenSends.TryAdd(send);
 		}
 
-		private void StoreDeliver(Process process, Message message) {
+		private void FrozenDeliver(Process process, Message message) {
 			Tuple<Process, Message> deliver = new Tuple<Process, Message>(process, message);
 			_frozenDelivers.TryAdd(deliver);
 		}

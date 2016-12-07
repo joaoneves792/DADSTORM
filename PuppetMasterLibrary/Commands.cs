@@ -1,18 +1,16 @@
-﻿using System;
+﻿using CommonTypesLibrary;
+using ProcessCreationServiceApplication;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using System.Text.RegularExpressions;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Remoting.Channels;
-using System.Threading;
-using System.Runtime.Serialization.Formatters;
 using System.IO;
-
-using ProcessCreationServiceApplication;
-using CommonTypesLibrary;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Serialization.Formatters;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PuppetMasterLibrary
 {
@@ -30,6 +28,8 @@ namespace PuppetMasterLibrary
 
         private readonly EventWaitHandle _waitHandle;
 
+        private object _logLock;
+
         // internal -> public
         public PuppetMaster() {
             ToggleToConfigurationMode();
@@ -44,6 +44,8 @@ namespace PuppetMasterLibrary
             string processCreationServiceUrl = "tcp://localhost:10000/";
 
             _waitHandle = new AutoResetEvent(false);
+
+            _logLock = new object();
 
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
@@ -73,7 +75,7 @@ namespace PuppetMasterLibrary
         }
 
         public void Log(string message) {
-            lock (this) {
+            lock (_logLock) {
                 StreamWriter w = File.AppendText("log.txt");
                 w.WriteLine(message);
                 w.Flush();
@@ -286,7 +288,7 @@ namespace PuppetMasterLibrary
 
 
         public void CloseProcesses(object sender, ConsoleCancelEventArgs args) {
-            CloseProcesses();
+            Task.Run(() => { CloseProcesses(); });
         }
 
 

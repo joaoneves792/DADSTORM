@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DistributedAlgoritmsClassLibrary
+﻿namespace DistributedAlgoritmsClassLibrary
 {
     public interface FairLossPointToPointLink : PointToPointLink
     {
-        void Anchor(Process process);
+        FairLossPointToPointLink SubmitProcessAsFairLossPointToPointLinkNode(Process process);
     }
 }

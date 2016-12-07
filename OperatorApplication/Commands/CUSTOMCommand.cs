@@ -1,17 +1,14 @@
-﻿using System;
+﻿using OperatorApplication.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OperatorApplication.Exceptions;
 
 
-namespace OperatorApplication.Commands {
-	using System.Collections.Concurrent;
-	using TupleMessage = List<IList<string>>;
+namespace OperatorApplication.Commands
+{
+    using TupleMessage = List<IList<string>>;
 
-	class CUSTOMCommand : Command {
+    class CUSTOMCommand : Command {
 
 		private Assembly _assembly = null;
 		private Object _obj = null;

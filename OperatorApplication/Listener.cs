@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace OperatorApplication
 {
@@ -15,7 +14,6 @@ namespace OperatorApplication
 
     internal partial class Operator {
         private enum ServerType {
-            UNDEFINED,
             PRIMARY,
             REPLICATION
         }
@@ -111,15 +109,15 @@ namespace OperatorApplication
         #endregion
         #region Unfrozen Request Handlers
         private void UnfrozenInfrastructureRequestHandler(Message request) {
-            Task.Run(() => { _infrastructureBroadcast.Broadcast(request); });
+            _infrastructureBroadcast.Broadcast(request);
         }
 
         private void UnfrozenDownstreamRequestHandler(Message request) {
-            Task.Run(() => { _downstreamBroadcast.Broadcast(request); });
+            _downstreamBroadcast.Broadcast(request);
         }
 
         private void UnfrozenUpstreamRequestHandler(Message request) {
-            Task.Run(() => { _upstreamBroadcast.Broadcast(request); });
+            _upstreamBroadcast.Broadcast(request);
         }
         #endregion
         #region Reply Handlers
@@ -169,18 +167,25 @@ namespace OperatorApplication
         }
 
         private void UnfrozenDownstreamReplyHandler(TupleMessage tupleMessage) {
-            lock (_timestampLock) {
-                // Define Paxos and Quorum nonce
-                String suffix = _process.Url + "_" + _timestamp++;
-                Tuple<string, Process> tuple = new Tuple<string, Process>(suffix, _process.Concat(suffix));
-
-                // Init Paxos
-                UniformConsensus<Tuple<TupleMessage, string>> paxos = PaxosInitHandler(tuple);
-                InfrastructureRequestHandler(tuple);
-
-                // Propose Paxos value
-                Task.Run(() => { paxos.Propose(new Tuple<TupleMessage, string>(tupleMessage, suffix)); });
+            if (_replications.Count() == 0) {
+                Console.WriteLine("No paxos");
+                PaxosReplyHandler(new Tuple<TupleMessage, string>(tupleMessage, null));
+                return;
             }
+
+            // Define Paxos and Quorum nonce
+            String suffix;
+            lock (_timestampLock) {
+                suffix = _process.SuffixedUrl + "_" + _timestamp++;
+            }
+            Tuple<string, Process> tuple = new Tuple<string, Process>(suffix, _process.Concat(suffix));
+
+            // Init Paxos
+            UniformConsensus<Tuple<TupleMessage, string>> paxos = PaxosInitHandler(tuple);
+            InfrastructureRequestHandler(tuple);
+
+            // Propose Paxos value
+            paxos.Propose(new Tuple<TupleMessage, string>(tupleMessage, suffix));
         }
 
         private void UnfrozenUpstreamReplyHandler(Process reply) {
@@ -212,7 +217,7 @@ namespace OperatorApplication
             }
 
             //Share result to downstream nodes if current node has no replications
-            if (_replications == null) {
+            if (value.Item2 == null) {
                 Console.WriteLine("No quorum");
                 QuorumReplyHandler(result);
                 return;

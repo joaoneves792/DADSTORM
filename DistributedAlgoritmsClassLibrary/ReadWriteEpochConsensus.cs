@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -41,8 +39,6 @@ namespace DistributedAlgoritmsClassLibrary
 
             _decideListener = decideListener;
             _abortedListener = abortedListener;
-            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
-            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
 
             _state = state;
             _tmpval = default(Value);
@@ -50,6 +46,9 @@ namespace DistributedAlgoritmsClassLibrary
             _accepted = 0;
             _replicationFactor = replicationFactor;
             _ets = ets;
+
+            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
+            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
         }
 
         public void Propose(Value value) {
@@ -88,20 +87,22 @@ namespace DistributedAlgoritmsClassLibrary
         public void DeliverState(Process process, Tuple<Timestamp, Value> message) {
             _states[process] = message;
             
-            Task.Run(() => { TryWrite(); });
+            TryWrite();
         }
 
         private void TryWrite() {
             lock (_states) {
-                if (_states.Count > _replicationFactor / 2) {
-                    _state = Highest(_states);
-                    if (_state.Item2 != null) {
-                        _tmpval = _state.Item2;
-                    }
-                    _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
-                    Task.Run(() => { _bestEffortBroadcast.Broadcast(new Tuple<Signal, Value>(Signal.WRITE, _tmpval)); });
+                if (!(_states.Count > _replicationFactor / 2)) {
+                    return;
                 }
+                _state = Highest(_states);
+                if (_state.Item2 != null) {
+                    _tmpval = _state.Item2;
+                }
+                _states = new ConcurrentDictionary<Process, Tuple<Timestamp, Value>>();
             }
+
+            _bestEffortBroadcast.Broadcast(new Tuple<Signal, Value>(Signal.WRITE, _tmpval));
         }
 
         private Tuple<Timestamp, Value> Highest(IDictionary<Process, Tuple<Timestamp, Value>> states) {
@@ -123,16 +124,18 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void DeliverAccept(Process process) {
             _accepted++;
-            Task.Run(() => { TryDecide(); });
+            TryDecide();
         }
 
         private void TryDecide() {
             lock (_acceptedLock) {
-                if (_accepted > _replicationFactor / 2 && _tmpval != null) {
-                    _accepted = 0;
-                    Task.Run(() => { _bestEffortBroadcast.Broadcast(new Tuple<Signal, Value>(Signal.DECIDED, _tmpval)); });
+                if (!(_accepted > _replicationFactor / 2 && _tmpval != null)) {
+                    return;
                 }
+                _accepted = 0;
             }
+
+            _bestEffortBroadcast.Broadcast(new Tuple<Signal, Value>(Signal.DECIDED, _tmpval));
         }
 
         public void DeliverDecided(Process process, Value message) {

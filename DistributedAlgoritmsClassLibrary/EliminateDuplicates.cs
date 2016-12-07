@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary {
     using Message   = Object;
@@ -21,12 +18,13 @@ namespace DistributedAlgoritmsClassLibrary {
 
         public EliminateDuplicates(Process process, Action<Process, Message> listener) {
             _listener = listener;
-            _stubbornPointToPointLink = new RetransmitForever(process.Concat(CLASSNAME), Deliver);
             _self = process;
 
             _delivered = new ConcurrentBag<string>();
 
             _timestampCounter = 0;
+
+            _stubbornPointToPointLink = new RetransmitForever(process.Concat(CLASSNAME), Deliver);
         }
 
         public EliminateDuplicates(Process process, Action<Process, Message> listener, params Process[] otherProcesses) {
@@ -42,7 +40,7 @@ namespace DistributedAlgoritmsClassLibrary {
         }
 
         public void Send(Process process, Message message) {
-            message = (Message)new Tuple<string, Message>(_self.Url + _timestampCounter++, message);
+            message = (Message)new Tuple<string, Message>(_self.SuffixedUrl + _timestampCounter++, message);
             _stubbornPointToPointLink.Send(process.Concat(CLASSNAME), message);
         }
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace DistributedAlgoritmsClassLibrary
@@ -75,7 +73,7 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Propose(Value value) {
             _val = value;
-            Task.Run(() => { Propose(); });
+            TryPropose();
         }
 
         public void StartEpoch (Timestamp timestamp, Process process) {
@@ -86,7 +84,7 @@ namespace DistributedAlgoritmsClassLibrary
         public void Aborted (Tuple<Timestamp, Value> state) {
             _currentLeader = _newLeader;
 
-            Task.Run(() => { _epochChangeListener(_currentLeader.Item1, _currentLeader.Item2); });
+            _epochChangeListener(_currentLeader.Item1, _currentLeader.Item2);
 
             Process[] suffixedProcesses = _processes
                 .Select((suffixedProcess) => suffixedProcess.Concat(_currentLeader.Item1.ToString()))
@@ -100,35 +98,30 @@ namespace DistributedAlgoritmsClassLibrary
                                                                    Aborted,
                                                                    suffixedProcesses));
             _proposed = false;
-            Task.Run(() => { TryPropose(); });
+            TryPropose();
             _waitHandle.Set();
         }
 
         private void TryPropose () {
             lock (_proposedLock) {
-                if (_currentLeader.Item2.Equals(_self) && _val != null && _proposed == false) {
-                    _proposed = true;
-                    Task.Run(() => { _epochConsensus[_currentLeader.Item1].Propose(_val); });
+                if (!(_currentLeader.Item2.Equals(_self) && _val != null && !_proposed)) {
+                    return;
                 }
+                _proposed = true;
             }
-        }
 
-        private void Propose() {
-            lock (_proposedLock) {
-                if (_val != null && _proposed == false) {
-                    _proposed = true;
-                    Task.Run(() => { _epochConsensus[_currentLeader.Item1].Propose(_val); });
-                }
-            }
+            _epochConsensus[_currentLeader.Item1].Propose(_val);
         }
 
         public void Decide (Value value) {
             lock (_decidedLock) {
-                if (_decided == false) {
-                    _decided = true;
-                    Task.Run(() => { _listener(value); });
+                if (_decided) {
+                    return;
                 }
+                _decided = true;
             }
+
+            _listener(value);
         }
     }
 }

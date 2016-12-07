@@ -1,23 +1,17 @@
-﻿using System;
+﻿using DistributedAlgoritmsClassLibrary;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-using DistributedAlgoritmsClassLibrary;
-using CommonTypesLibrary;
 
 namespace SecondaryConsoleApplication
 {
+    using System.Collections;
+    using System.Runtime.Remoting.Channels;
+    using System.Runtime.Remoting.Channels.Tcp;
+    using System.Runtime.Serialization.Formatters;
     using Message = Object;
-    using Value = IList<string>;
     using Timestamp = Int32;
     using TupleMessage = IList<string>;
-    using System.Runtime.Remoting.Channels;
-    using System.Runtime.Serialization.Formatters;
-    using System.Collections;
-    using System.Runtime.Remoting.Channels.Tcp;
+    using Value = IList<string>;
 
     class Program
     {
@@ -68,8 +62,6 @@ namespace SecondaryConsoleApplication
             //    process2,
             //    process3
             //);
-
-            Thread.Sleep(5000);
 
             if (args[0].Equals("Teste1")) {
                 TupleMessage proposal = new List<string>();

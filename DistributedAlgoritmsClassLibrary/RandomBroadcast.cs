@@ -21,8 +21,8 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public RandomBroadcast(PointToPointLink pointToPointLink) {
-            _pointToPointLink = pointToPointLink;
             _processes = new Dictionary<string, IList<Process>>();
+            _pointToPointLink = pointToPointLink;
         }
 
         public void Broadcast(Message message) {

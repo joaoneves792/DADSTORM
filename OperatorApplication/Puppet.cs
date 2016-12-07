@@ -57,7 +57,7 @@ namespace OperatorApplication
                 typeof(IPuppetMaster),
                 "tcp://localhost:10001/PuppetMaster");
 
-            _puppetMaster.ReceiveUrl(_process.Url, objRef);
+            _puppetMaster.ReceiveUrl(_process.SuffixedUrl, objRef);
         }
         #endregion
 
@@ -106,10 +106,6 @@ namespace OperatorApplication
             Unfreeze();
 
             //Process files
-            while (_serverType == ServerType.UNDEFINED) {
-                Console.WriteLine("Warning: The server is still undefined.");
-                Thread.Sleep(1000);
-            }
             if (_serverType == ServerType.REPLICATION) {
                 return;
             }
@@ -119,15 +115,14 @@ namespace OperatorApplication
 
                     string currentLine;
                     while ((currentLine = inputFile.ReadLine()) != null) {
-                        new Thread((lineObject) => {
+                        ThreadPool.QueueUserWorkItem((lineObject) => {
                             //Assumption: all files and lines are valid
                             string line = (string)lineObject;
                             TupleMessage tupleMessage = new TupleMessage();
                             tupleMessage.Add(line.Split(',').ToList());
-                            UnfrozenDownstreamReplyHandler(tupleMessage);
-
                             Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
-                        }).Start((Object)currentLine);
+                            UnfrozenDownstreamReplyHandler(tupleMessage);
+                        }, (Object)currentLine);
                     }
                     inputFile.Close();
                 }, (Object)currentInputFile);
@@ -300,7 +295,7 @@ namespace OperatorApplication
                 Task.Run(() => {
                     _puppetMaster.Log(string.Format(
                     "tuple {0} {1}",
-                    _process.Url,
+                    _process.SuffixedUrl,
                     message));
                 });
             }

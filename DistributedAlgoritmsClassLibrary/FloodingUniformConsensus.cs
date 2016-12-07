@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -33,8 +30,6 @@ namespace DistributedAlgoritmsClassLibrary
                 .ToArray();
 
             _listener = listener;
-            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
-            _perfectFailureDetector = new ExcludeOnTimeout(process.Concat(CLASSNAME), Crash, suffixedProcesses);
 
             _correct = new List<Process>();
             _correct.Add(process.Concat(CLASSNAME));
@@ -45,11 +40,14 @@ namespace DistributedAlgoritmsClassLibrary
             _decision = default(Value);
             _proposalSet = new ConcurrentBag<Value>();
             _receivedFrom = new ConcurrentBag<Process>();
+
+            _perfectFailureDetector = new ExcludeOnTimeout(process.Concat(CLASSNAME), Crash, suffixedProcesses);
+            _bestEffortBroadcast = new BasicBroadcast(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
         }
 
         public void Crash(Process process) {
             _correct.Remove(process);
-            Task.Run(() => { TryDecide(); });
+            TryDecide();
         }
 
         public void Propose(Value value) {
@@ -60,39 +58,45 @@ namespace DistributedAlgoritmsClassLibrary
         public void Deliver(Process process, Message message) {
             Tuple<Round, IProducerConsumerCollection<Value>> tuple = (Tuple<Round, IProducerConsumerCollection<Value>>)message;
 
-            if (tuple.Item1 != _round) {
+            if (tuple.Item1 < _round) {
                 return;
             }
 
+            if (tuple.Item1 > _round) {
+                _round = tuple.Item1;
+            }
             _receivedFrom.TryAdd(process);
-            foreach(Value value in tuple.Item2) {
+            foreach (Value value in tuple.Item2) {
                 _proposalSet.TryAdd(value);
             }
-            Task.Run(() => { TryDecide(); });
+            TryDecide();
         }
 
         public void TryDecide() {
-            Thread.Sleep(100); //WARNING: Duck-taped code
-            if (_receivedFrom.Intersect(_correct).Any() && _decision == null) {
+            int round;
+
+            // Check if received messages from any correct process
+            lock (_receivedFrom) {
+                if (!(_receivedFrom.Intersect(_correct).Any() && _decision == null)) {
+                    return;
+                }
                 if (_round == N) {
-                    lock (_proposalSet) { //WARNING: Duck-taped code
-                        if (_decision == null) {
-                            _decision = _proposalSet.GroupBy(value => value)
+                    _decision = _proposalSet.GroupBy(value => value)
                                                 .OrderByDescending(group => group.Count())
                                                 .Select(group => group.Key)
                                                 .First();
-                            _listener(_decision);
-                        }
-                    }
-                } else {
-                    lock (_receivedFrom) { //WARNING: Duck-taped code
-                        if (_receivedFrom.Any()) {
-                            _round++;
-                            _receivedFrom = new ConcurrentBag<Process>();
-                            _bestEffortBroadcast.Broadcast((Message)new Tuple<Round, IProducerConsumerCollection<Value>>(_round, _proposalSet));
-                        }
-                    }
                 }
+
+                _receivedFrom = new ConcurrentBag<Process>();
+                round = ++_round;
+            }
+
+            // Return result if the consensus reaches round N
+            if (round == N + 1) {
+                _listener(_decision);
+            // Go to next round
+            } else {
+                _bestEffortBroadcast.Broadcast((Message)new Tuple<Round, IProducerConsumerCollection<Value>>(round, _proposalSet));
             }
         }
     }

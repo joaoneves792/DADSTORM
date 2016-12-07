@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace OperatorApplication.Commands {
-    using System.Collections.Concurrent;
+namespace OperatorApplication.Commands
+{
     using TupleMessage = List<IList<string>>;
 
     class COUNTCommand : Command {
 
-		int _count = 0;
+        private object _countLock;
+		int _count;
 
-		public override TupleMessage Execute(TupleMessage inputTuple) {
-            foreach (List<string> tuple in inputTuple)
-            {
-                lock (this)
-                {
-                    _count++;
-                }
+        public COUNTCommand() {
+            _countLock = new object();
+            _count = 0;
+        }
+
+        public override TupleMessage Execute(TupleMessage inputTuple) {
+            lock (_countLock) {
+                _count += inputTuple.Count;
             }
 
             return null;
@@ -26,10 +24,9 @@ namespace OperatorApplication.Commands {
 
 
 		public override List<KeyValuePair<string, string>> Status() {
-
 			List<KeyValuePair<string, string>> status = new List<KeyValuePair<string, string>>();
 
-			status.Add(new KeyValuePair<string, string>("Seen tuples", ""+_count));
+			status.Add(new KeyValuePair<string, string>("Seen tuples", _count.ToString()));
 
 			return status;
 		}

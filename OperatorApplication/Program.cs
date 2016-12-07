@@ -28,7 +28,7 @@ namespace OperatorApplication
             _process = null;
             _replications = null;
             _command = null;
-            _serverType = ServerType.UNDEFINED;
+            _serverType = ServerType.REPLICATION;
             _infrastructureBroadcast = null;
             _upstreamBroadcast = null;
             _downstreamBroadcast = null;

@@ -22,8 +22,8 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public PrimaryBroadcast(PointToPointLink pointToPointLink) {
-            _pointToPointLink = pointToPointLink;
             _processes = new Dictionary<string, Tuple<Process, IList<Process>>>();
+            _pointToPointLink = pointToPointLink;
         }
 
         public void Broadcast(Message message) {

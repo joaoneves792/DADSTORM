@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PuppetMasterLibrary
+{
 
-namespace PuppetMasterLibrary {
-
-	// internal -> public
-	public partial class PuppetMaster {
+    // internal -> public
+    public partial class PuppetMaster {
         //Constants
         private const int PORT = 10001;
         private const string SERVICE_NAME = "PuppetMaster",

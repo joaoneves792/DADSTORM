@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -26,13 +24,14 @@ namespace DistributedAlgoritmsClassLibrary
             _processes = otherProcesses
                 .Select((suffixedProcess) => suffixedProcess.Concat(CLASSNAME))
                 .ToArray();
-            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, _processes);
 
             _alive = new ConcurrentBag<Process>();
             foreach (Process otherProcess in _processes) {
                 _alive.TryAdd(otherProcess);
             }
             _detected = new List<Process>();
+
+            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, _processes);
             StartTimer();
         }
 

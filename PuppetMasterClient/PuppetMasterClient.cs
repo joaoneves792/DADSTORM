@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PuppetMasterLibrary;
+using System;
 
-using PuppetMasterLibrary;
-using System.IO;
-
-namespace PuppetMasterClient {
-	class PuppetMasterClient {
+namespace PuppetMasterClient
+{
+    class PuppetMasterClient {
 		static void Main(string[] args) {
 
 			// LEGACY puppetmaster now requires events to print

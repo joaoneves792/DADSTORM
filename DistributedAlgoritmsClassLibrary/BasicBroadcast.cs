@@ -24,13 +24,14 @@ namespace DistributedAlgoritmsClassLibrary
                 .ToArray();
 
             _listener = listener;
-            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
 
             _processes = new List<Process>();
             _processes.Add(process.Concat(CLASSNAME));
             foreach (Process otherProcess in suffixedProcesses) {
                 _processes.Add(otherProcess);
             }
+
+            _perfectPointToPointLink = new EliminateDuplicates(process.Concat(CLASSNAME), Deliver, suffixedProcesses);
         }
 
         public void Broadcast(Message message) {

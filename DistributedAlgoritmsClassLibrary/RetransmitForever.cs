@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace DistributedAlgoritmsClassLibrary {
+namespace DistributedAlgoritmsClassLibrary
+{
     using Message = Object;
 
     public class RetransmitForever : StubbornPointToPointLink {
@@ -18,9 +16,10 @@ namespace DistributedAlgoritmsClassLibrary {
 
         public RetransmitForever(Process process, Action<Process, Message> listener) {
             _listener = listener;
-            _fairLossPointToPointLink = new RemotingNode(process.Concat(CLASSNAME), Deliver);
 
             _sent = new ConcurrentBag<Tuple<Process, Message>>();
+
+            _fairLossPointToPointLink = new RemotingNode(process.Concat(CLASSNAME), Deliver);
             StartTimer();
         }
 

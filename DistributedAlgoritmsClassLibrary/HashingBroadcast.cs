@@ -23,9 +23,9 @@ namespace DistributedAlgoritmsClassLibrary
         private int _hashing;
 
         public HashingBroadcast(PointToPointLink pointToPointLink, int hashing) {
-            _pointToPointLink = pointToPointLink;
             _hashing = hashing;
             _processes = new Dictionary<string, IList<Process>>();
+            _pointToPointLink = pointToPointLink;
         }
 
         public void Broadcast(Message message) {
