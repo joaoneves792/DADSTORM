@@ -268,14 +268,14 @@ namespace PuppetMasterLibrary
                     }
                     catch (Exception) { }
                 });
+
+                ToggleToConfigurationMode();
+
+                _operatorResolutionCache = new Dictionary<string, IList<string>>();
+                _puppetTable = new Dictionary<string, IPuppet>();
+                _semantic = "at-most-once";
+                _loggingLevel = "light";
             });
-
-            ToggleToConfigurationMode();
-
-            _operatorResolutionCache = new Dictionary<string, IList<string>>();
-            _puppetTable = new Dictionary<string, IPuppet>();
-            _semantic = "at-most-once";
-            _loggingLevel = "light";
         }
     }
 }
