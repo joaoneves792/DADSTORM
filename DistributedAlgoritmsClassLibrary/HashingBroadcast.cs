@@ -37,9 +37,11 @@ namespace DistributedAlgoritmsClassLibrary
             string nonce = ((Tuple<TupleMessage, string>)message).Item2;
 
             Parallel.ForEach(((Tuple<TupleMessage, string>)message).Item1, tuple => {
-                hash = tuple[_fieldId].GetHashCode() % _processes.Values.Count;
+                //hash = tuple[_fieldId].GetHashCode() % _processes.Values.Count;
                 request = new Tuple<TupleMessage, string>(new TupleMessage() { tuple }, nonce);
-                Parallel.ForEach(_processes.Values.Select((list) => list[hash]), process => {
+
+                Parallel.ForEach(_processes.Values.Select((list) => list[tuple[_fieldId].GetHashCode() % (list.Count)]), process => {
+                    Console.WriteLine("Sending to " + process.Name + process.Port +" FIELD WAS " + tuple[_fieldId]);
                     _pointToPointLink.Send(process, request);
                 });
             });
