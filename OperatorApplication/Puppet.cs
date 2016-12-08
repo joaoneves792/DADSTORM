@@ -37,15 +37,15 @@ namespace OperatorApplication
 
         //Frozen reply variables
                                                                             _frozenInfrastructureReplies;
-        private IProducerConsumerCollection<TupleMessage>                   _frozenDownstreamReplies;
+        private IProducerConsumerCollection<Tuple<TupleMessage, string>>    _frozenDownstreamReplies;
         private IProducerConsumerCollection<Process>                        _frozenUpstreamReplies;
         private IProducerConsumerCollection<Tuple<int, Process>>            _frozenEpochChangeReplies;
         private IProducerConsumerCollection<Tuple<TupleMessage, string>>    _frozenPaxosReplies;
-        private IProducerConsumerCollection<TupleMessage>                   _frozenQuorumReplies;
+        private IProducerConsumerCollection<Tuple<TupleMessage, string>>    _frozenQuorumReplies;
         #endregion
 
         #region Constructor
-        public void SubmitOperatorAsPuppetryNode(String loggingLevel) {
+        public void SubmitOperatorAsPuppetryNode(string loggingLevel) {
 			_state = "ready";
 
             if (loggingLevel.Equals("full")) {
@@ -84,7 +84,7 @@ namespace OperatorApplication
             _frozenInfrastructureReplies.TryAdd(reply);
         }
 
-        private void FrozenDownstreamReplyHandler(TupleMessage reply) {
+        private void FrozenDownstreamReplyHandler(Tuple<TupleMessage, string> reply) {
             _frozenDownstreamReplies.TryAdd(reply);
         }
 
@@ -100,27 +100,30 @@ namespace OperatorApplication
             _frozenPaxosReplies.TryAdd(reply);
         }
 
-        private void FrozenQuorumReplyHandler(TupleMessage reply) {
+        private void FrozenQuorumReplyHandler(Tuple<TupleMessage, string> reply) {
             _frozenQuorumReplies.TryAdd(reply);
         }
         #endregion
         #region Commands
         public void Start() {
-			_state = "running";
+            //Save current server type before unfreezing operator
+            ServerType serverType = _serverType;
+
+            _state = "running";
 
             //Process already received tuples
             Unfreeze();
 
             //Process files
-            if (_serverType == ServerType.REPLICATION) {
+            if (serverType == ServerType.REPLICATION) {
                 return;
             }
             Parallel.ForEach(_inputFiles, inputFile => {
                 Parallel.ForEach(File.ReadLines(inputFile), (line, _, lineNumber) => {
                     TupleMessage tupleMessage = new TupleMessage();
                     tupleMessage.Add(line.Split(',').ToList());
-                    Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
-                    UnfrozenDownstreamReplyHandler(tupleMessage);
+                    //DEBUG: Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
+                    UnfrozenDownstreamReplyHandler(new Tuple<TupleMessage, string>(tupleMessage, Nonce));
                 });
             });
         }
@@ -140,11 +143,11 @@ namespace OperatorApplication
 
             //Reset frozen reply sets
             _frozenInfrastructureReplies    = new ConcurrentBag<Message>();
-            _frozenDownstreamReplies        = new ConcurrentBag<TupleMessage>();
+            _frozenDownstreamReplies        = new ConcurrentBag<Tuple<TupleMessage, string>>();
             _frozenUpstreamReplies          = new ConcurrentBag<Process>();
             _frozenEpochChangeReplies       = new ConcurrentBag<Tuple<int, Process>>();
             _frozenPaxosReplies             = new ConcurrentBag<Tuple<TupleMessage, string>>();
-            _frozenQuorumReplies            = new ConcurrentBag<TupleMessage>();
+            _frozenQuorumReplies            = new ConcurrentBag<Tuple<TupleMessage, string>>();
 
             //Add frozen request handlers
             _infrastructureRequestListener  = FrozenInfrastructureRequestHandler;
@@ -215,11 +218,11 @@ namespace OperatorApplication
 
             //Reset frozen reply sets
             _frozenInfrastructureReplies    = new ConcurrentBag<Message>();
-            _frozenDownstreamReplies        = new ConcurrentBag<TupleMessage>();
+            _frozenDownstreamReplies        = new ConcurrentBag<Tuple<TupleMessage, string>>();
             _frozenUpstreamReplies          = new ConcurrentBag<Process>();
             _frozenEpochChangeReplies       = new ConcurrentBag<Tuple<int, Process>>();
             _frozenPaxosReplies             = new ConcurrentBag<Tuple<TupleMessage, string>>();
-            _frozenQuorumReplies            = new ConcurrentBag<TupleMessage>();
+            _frozenQuorumReplies            = new ConcurrentBag<Tuple<TupleMessage, string>>();
         }
 
         public void Status() {

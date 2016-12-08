@@ -37,8 +37,9 @@ namespace OperatorApplication
             _downstreamBroadcast = null;
             _timestamp = 0;
             _timestampLock = new object();
-            _paxusConsenti = new List<UniformConsensus<Tuple<TupleMessage, string>>>();
-            _quorumConsenti = new List<UniformConsensus<TupleMessage>>();
+            _archives = new List<Tuple<TupleMessage, string>>();
+            _paxosConsenti = new Dictionary<string, UniformConsensus<Tuple<TupleMessage, string>>>();
+            _quorumConsenti = new Dictionary<string, UniformConsensus<Tuple<TupleMessage, string>>>();
 
             //Puppet component
             _puppetMaster = null;
@@ -96,7 +97,7 @@ namespace OperatorApplication
             }
         }
 
-        private void SubmitOperatorAsDownstreamNode(String routing, String semantics) {
+        private void SubmitOperatorAsDownstreamNode(string routing, string semantics) {
             //Identify semantics policy
             PointToPointLink semanticsPolicy;
             if(semantics.Equals("at-most-once")) {

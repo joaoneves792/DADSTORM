@@ -33,13 +33,14 @@ namespace DistributedAlgoritmsClassLibrary
 
         public void Broadcast(Message message) {
             int hash;
-            TupleMessage tupleMessage;
+            Tuple<TupleMessage, string> request;
+            string nonce = ((Tuple<TupleMessage, string>)message).Item2;
 
-            Parallel.ForEach((TupleMessage)message, tuple => {
+            Parallel.ForEach(((Tuple<TupleMessage, string>)message).Item1, tuple => {
                 hash = tuple[_fieldId].GetHashCode() % _processes.Values.Count;
-                tupleMessage = new TupleMessage() { tuple };
+                request = new Tuple<TupleMessage, string>(new TupleMessage() { tuple }, nonce);
                 Parallel.ForEach(_processes.Values.Select((list) => list[hash]), process => {
-                    _pointToPointLink.Send(process, tupleMessage);
+                    _pointToPointLink.Send(process, request);
                 });
             });
         }
