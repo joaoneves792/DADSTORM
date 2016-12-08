@@ -45,8 +45,14 @@ namespace OperatorApplication
         #endregion
 
         #region Constructor
-        public void SubmitOperatorAsPuppetryNode() {
+        public void SubmitOperatorAsPuppetryNode(String loggingLevel) {
 			_state = "ready";
+
+            if (loggingLevel.Equals("full")) {
+                _logStatus = LogStatus.FULL;
+            } else if (loggingLevel.Equals("light")) {
+                _logStatus = LogStatus.LIGHT;
+            }
 
             ObjRef objRef = RemotingServices.Marshal(
                 this,
@@ -109,24 +115,14 @@ namespace OperatorApplication
             if (_serverType == ServerType.REPLICATION) {
                 return;
             }
-            foreach (StreamReader currentInputFile in _inputFiles) {
-                ThreadPool.QueueUserWorkItem((inputFileObject) => {
-                    StreamReader inputFile = (StreamReader)inputFileObject;
-
-                    string currentLine;
-                    while ((currentLine = inputFile.ReadLine()) != null) {
-                        ThreadPool.QueueUserWorkItem((lineObject) => {
-                            //Assumption: all files and lines are valid
-                            string line = (string)lineObject;
-                            TupleMessage tupleMessage = new TupleMessage();
-                            tupleMessage.Add(line.Split(',').ToList());
-                            Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
-                            UnfrozenDownstreamReplyHandler(tupleMessage);
-                        }, (Object)currentLine);
-                    }
-                    inputFile.Close();
-                }, (Object)currentInputFile);
-            }
+            Parallel.ForEach(_inputFiles, inputFile => {
+                Parallel.ForEach(File.ReadLines(inputFile), (line, _, lineNumber) => {
+                    TupleMessage tupleMessage = new TupleMessage();
+                    tupleMessage.Add(line.Split(',').ToList());
+                    Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
+                    UnfrozenDownstreamReplyHandler(tupleMessage);
+                });
+            });
         }
 
         public void Crash() {
@@ -182,53 +178,35 @@ namespace OperatorApplication
             _quorumReplyListener            = UnfrozenQuorumReplyHandler;
 
             //Send frozen requests
-            foreach (Message frozenInfrastructureRequest in _frozenInfrastructureRequests) {
-                new Thread(() => {
-                    _infrastructureRequestListener(frozenInfrastructureRequest);
-                }).Start();
-            }
-            foreach (Message frozenDownstreamRequest in _frozenDownstreamRequests) {
-                new Thread(() => {
-                    _downstreamRequestListener(frozenDownstreamRequest);
-                }).Start();
-            }
-            foreach (Message frozenUpstreamRequest in _frozenUpstreamRequests) {
-                new Thread(() => {
-                    _upstreamRequestListener(frozenUpstreamRequest);
-                }).Start();
-            }
+            Parallel.ForEach(_frozenInfrastructureRequests, frozenInfrastructureRequest => {
+                _infrastructureRequestListener(frozenInfrastructureRequest);
+            });
+            Parallel.ForEach(_frozenDownstreamRequests, frozenDownstreamRequest => {
+                _downstreamRequestListener(frozenDownstreamRequest);
+            });
+            Parallel.ForEach(_frozenUpstreamRequests, frozenUpstreamRequest => {
+                _upstreamRequestListener(frozenUpstreamRequest);
+            });
 
             //Send frozen replies
-            foreach (Message frozenInfrastructureReply in _frozenInfrastructureReplies) {
-                new Thread(() => {
-                    _infrastructureReplyListener(frozenInfrastructureReply);
-                }).Start();
-            }
-            foreach (TupleMessage frozenDownstreamReply in _frozenDownstreamReplies) {
-                new Thread(() => {
-                    _downstreamReplyListener(frozenDownstreamReply);
-                }).Start();
-            }
-            foreach (Process frozenUpstreamReply in _frozenUpstreamReplies) {
-                new Thread(() => {
-                    _upstreamReplyListener(frozenUpstreamReply);
-                }).Start();
-            }
-            foreach (Tuple<int, Process> frozenEpochChangeReply in _frozenEpochChangeReplies) {
-                new Thread(() => {
-                    _epochChangeReplyListener(frozenEpochChangeReply.Item1, frozenEpochChangeReply.Item2);
-                }).Start();
-            }
-            foreach (Tuple<TupleMessage, string> frozenPaxosReply in _frozenPaxosReplies) {
-                new Thread(() => {
-                    _paxosReplyListener(frozenPaxosReply);
-                }).Start();
-            }
-            foreach (TupleMessage frozenQuorumReply in _frozenQuorumReplies) {
-                new Thread(() => {
-                    _quorumReplyListener(frozenQuorumReply);
-                }).Start();
-            }
+            Parallel.ForEach(_frozenInfrastructureReplies, frozenInfrastructureReply => {
+                _infrastructureReplyListener(frozenInfrastructureReply);
+            });
+            Parallel.ForEach(_frozenDownstreamReplies, frozenDownstreamReply => {
+                _downstreamReplyListener(frozenDownstreamReply);
+            });
+            Parallel.ForEach(_frozenUpstreamReplies, frozenUpstreamReply => {
+                _upstreamReplyListener(frozenUpstreamReply);
+            });
+            Parallel.ForEach(_frozenEpochChangeReplies, frozenEpochChangeReply => {
+                _epochChangeReplyListener(frozenEpochChangeReply.Item1, frozenEpochChangeReply.Item2);
+            });
+            Parallel.ForEach(_frozenPaxosReplies, frozenPaxosReply => {
+                _paxosReplyListener(frozenPaxosReply);
+            });
+            Parallel.ForEach(_frozenQuorumReplies, frozenQuorumReply => {
+                _quorumReplyListener(frozenQuorumReply);
+            });
 
             //Reset frozen request sets
             _frozenInfrastructureRequests   = new ConcurrentBag<Message>();
@@ -245,48 +223,29 @@ namespace OperatorApplication
         }
 
         public void Status() {
-            Console.WriteLine("status:");
+            Console.WriteLine("Status:");
 			Console.WriteLine("\t Operator type: \t" + _command.ToString());
-			Console.WriteLine("\t State: \t\t" + _state);
+            Console.WriteLine("\t Replication type: \t" + _serverType.ToString());
+			Console.WriteLine("\t Routing Policy: \t" + _routingPolicy.ToString() + (_hashing > -1 && _routingPolicy == RoutingPolicy.HASHING ? "(" + _hashing + ")" : ""));
+			Console.WriteLine("\t Semantics Policy: \t" + _semanticsPolicy.ToString());
 			Console.WriteLine("\t Waiting interval: \t" + _sleepBetweenEvents);
+			Console.WriteLine("\t State: \t\t" + _state);
 
-			//TODO display more stuff in status?
-			Console.Write("\r\n\t Recievers: \t");
-			int count = 0;
-			foreach (Process receiver in _downstreamBroadcast.Processes) {
-				Console.Write("\t" + receiver.ServiceName +"  at " + receiver.Url);
-				Console.Write("\r\n\t\t\t");
-				count++;
-			}
-
-			if (count == 0) {
-                Console.Write("\r\n");
-            }
-			Console.Write("\r\n");
-
-			foreach (KeyValuePair<string,string> pair in _command.Status()) {
+            //TODO display more stuff in status?
+            foreach (KeyValuePair<string, string> pair in _command.Status()) {
                 Console.WriteLine("\t " + pair.Key + ": \t\t" + pair.Value);
+            }
+
+            Console.WriteLine("\t Receivers:");
+            if (_downstreamBroadcast.Processes != null) {
+                foreach (Process receiver in _downstreamBroadcast.Processes) {
+                    Console.WriteLine("\t\t\t\t" + receiver.ServiceName + "  at " + receiver.Url);
+                }
             }
         }
 
         public void Interval(int milliseconds) {
             _sleepBetweenEvents = milliseconds;
-        }
-
-        public void Routing(string routing) {
-            //TODO: by default and on first release, the semantic is at-most-once
-        }
-
-        public void Semantics(string semantics) {
-            //TODO: by default and on first release, the semantic is at-most-once
-        }
-
-        public void LoggingLevel(string loggingLevel) {
-            if (loggingLevel.Equals("full")) {
-                _logStatus = LogStatus.FULL;
-            } else if (loggingLevel.Equals("light")) {
-                _logStatus = LogStatus.LIGHT;
-            }
         }
         #endregion
         #region Log

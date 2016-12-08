@@ -84,7 +84,6 @@ namespace PuppetMasterLibrary
 		private void ToggleToExecutionMode() {
 			if (isConfiguring) {
 				isConfiguring = false;
-				Thread.Sleep(5000);
 			}
 		}
 
@@ -124,19 +123,19 @@ namespace PuppetMasterLibrary
 			} else if (Matches(CRASH_COMMAND, line, out groupCollection)) {
 				ToggleToExecutionMode();
 				Log(line);
-				ExecuteCrashCommand(groupCollection[1].Value);
+				ExecuteCrashCommand(groupCollection[1].Value, groupCollection[2].Value);
 
-			} else if (Matches(FREEZE_COMMAND, line, out groupCollection)) {
+            } else if (Matches(FREEZE_COMMAND, line, out groupCollection)) {
 				ToggleToExecutionMode();
 				Log(line);
-				ExecuteFreezeCommand(groupCollection[1].Value);
+				ExecuteFreezeCommand(groupCollection[1].Value, groupCollection[2].Value);
 
-			} else if (Matches(UNFREEZE_COMMAND, line, out groupCollection)) {
+            } else if (Matches(UNFREEZE_COMMAND, line, out groupCollection)) {
 				ToggleToExecutionMode();
 				Log(line);
-				ExecuteUnfreezeCommand(groupCollection[1].Value);
+				ExecuteUnfreezeCommand(groupCollection[1].Value, groupCollection[2].Value);
 
-			} else if (Matches(WAIT_COMMAND, line, out groupCollection)) {
+            } else if (Matches(WAIT_COMMAND, line, out groupCollection)) {
 				ToggleToExecutionMode();
 				Log(line);
 				ExecuteWaitCommand(groupCollection[1].Value);

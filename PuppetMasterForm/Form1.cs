@@ -309,7 +309,7 @@ namespace PuppetMasterForm
 		#region Output handling
 
 		private void PrintToOutput(string text) {
-			Output.Text = text + "\r\n\r\n" + Output.Text;
+			Output.Text = text + Environment.NewLine + Output.Text;
 		}
 
 		private void PrintToOutput(object sender, TextEventArgs e) {

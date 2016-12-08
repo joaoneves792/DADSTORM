@@ -11,7 +11,5 @@ namespace CommonTypesLibrary
         void Crash();
         void Freeze();
         void Unfreeze();
-        void Semantics(string semantic);
-        void LoggingLevel(string loggingLevel);
     }
 }

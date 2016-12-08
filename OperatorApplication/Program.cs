@@ -16,19 +16,22 @@ namespace OperatorApplication
 
     internal partial class Operator {
         #region Variables
-        private ICollection<StreamReader> _inputFiles;
+        private ICollection<string> _inputFiles;
         #endregion
 
         #region Constructor
         internal Operator() {
             //Configuration component
-            _inputFiles = new HashSet<StreamReader>();
+            _inputFiles = new HashSet<string>();
 
             //Execution component
             _process = null;
             _replications = null;
             _command = null;
             _serverType = ServerType.REPLICATION;
+            _routingPolicy = RoutingPolicy.PRIMARY;
+            _semanticsPolicy = SemanticsPolicy.AT_LEAST_ONCE;
+            _hashing = -1;
             _infrastructureBroadcast = null;
             _upstreamBroadcast = null;
             _downstreamBroadcast = null;
@@ -56,14 +59,15 @@ namespace OperatorApplication
                    replicas = args[3],
                    operatorSpec = args[4],
                    routing = args[5],
-                   semantics = args[6];
+                   semantics = args[6],
+                   loggingLevel = args[7];
 
             //Define operator
             DefineOperator(operatorId, url, operatorSpec);
 
             //Submit operator as nodes
             SubmitOperatorAsRemotingNode();
-            SubmitOperatorAsPuppetryNode();
+            SubmitOperatorAsPuppetryNode(loggingLevel);
             SubmitOperatorAsDownstreamNode(routing, semantics);
             SubmitOperatorAsUpstreamNode(inputOps);
             SubmitOperatorAsInfrastructureNode(operatorId, replicas);
@@ -97,23 +101,29 @@ namespace OperatorApplication
             PointToPointLink semanticsPolicy;
             if(semantics.Equals("at-most-once")) {
                 semanticsPolicy = new RemotingNode(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+                _semanticsPolicy = SemanticsPolicy.AT_MOST_ONCE;
             } else if (semantics.Equals("at-least-once")) {
                 semanticsPolicy = new RetransmitForever(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+                _semanticsPolicy = SemanticsPolicy.AT_LEAST_ONCE;
             } else {
                 semanticsPolicy = new EliminateDuplicates(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+                _semanticsPolicy = SemanticsPolicy.EXACTLY_ONCE;
             }
 
             //Identify routing policy
             if (routing.Equals("primary")) {
                 _downstreamBroadcast = new PrimaryBroadcast(semanticsPolicy);
+                _routingPolicy = RoutingPolicy.PRIMARY;
             } else if (routing.Equals("random")) {
                 _downstreamBroadcast = new RandomBroadcast(semanticsPolicy);
+                _routingPolicy = RoutingPolicy.RANDOM;
             } else {
                 GroupCollection groupCollection;
                 Matches(HASHING, routing, out groupCollection);
-                int hashing = Int32.Parse(groupCollection[1].Value);
+                _hashing = Int32.Parse(groupCollection[1].Value);
 
-                _downstreamBroadcast = new HashingBroadcast(semanticsPolicy, hashing);
+                _downstreamBroadcast = new HashingBroadcast(semanticsPolicy, _hashing);
+                _routingPolicy = RoutingPolicy.HASHING;
             }
         }
 
@@ -122,13 +132,11 @@ namespace OperatorApplication
             GroupCollection groupCollection;
             Process process;
             IList<Process> processes = new List<Process>();
-            FileStream fileStream;
 
             foreach (string inputOp in inputOpsList) {
                 //Or get file data
                 if (Matches(PATH, inputOp, out groupCollection) && File.Exists(inputOp)) {
-                    fileStream = File.Open(inputOp, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    _inputFiles.Add(new StreamReader(fileStream));
+                    _inputFiles.Add(inputOp);
 
                 //Or get upstream Operator
                 } else /*if (Matches(URL, inputOp, out groupCollection)) */{

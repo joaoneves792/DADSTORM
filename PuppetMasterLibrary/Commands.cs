@@ -36,10 +36,11 @@ namespace PuppetMasterLibrary
 
             _operatorResolutionCache = new Dictionary<string, IList<string>>();
             _puppetTable = new Dictionary<string, IPuppet>();
-            _processCreationServiceTable = new Dictionary<string, IProcessCreationService>();
-
             _semantic = "at-most-once";
             _loggingLevel = "light";
+
+            _processCreationServiceTable = new Dictionary<string, IProcessCreationService>();
+
 
             string processCreationServiceUrl = "tcp://localhost:10000/";
 
@@ -69,8 +70,6 @@ namespace PuppetMasterLibrary
 
         public void ReceiveUrl(string url, ObjRef objRef) {
             IPuppet puppet = (IPuppet)RemotingServices.Unmarshal(objRef);
-            puppet.Semantics(_semantic);
-            puppet.LoggingLevel(_loggingLevel);
             _puppetTable.Add(url, puppet);
         }
 
@@ -161,7 +160,7 @@ namespace PuppetMasterLibrary
                 //Create process
                 string processCreationServiceUrl = groupCollection[1].Value + ":10000/";
                 _processCreationServiceTable[processCreationServiceUrl].CreateProcess(
-                    operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs + " " + routing + " " + _semantic);
+                    operatorId + " " + groupCollection[0].Value + " " + sources + " " + replicas + " " + operatorSpecs + " " + routing + " " + _semantic + " " + _loggingLevel);
 
                 _waitHandle.WaitOne();
 
@@ -176,7 +175,6 @@ namespace PuppetMasterLibrary
                     _operatorResolutionCache.Add(operatorId, urlList);
                 }
             }
-            Thread.Sleep(1000);
         }
 
         public void ResetWaitHandle() {
@@ -187,124 +185,97 @@ namespace PuppetMasterLibrary
         private void ExecuteStartCommand(string operatorId) {
             IList<string> urlList = _operatorResolutionCache[operatorId];
 
-			foreach (string url in urlList) {
-				IPuppet puppet = _puppetTable[url];
-				Task.Run(() => {
-					puppet.Start();
-				});
-			}
+            Task.Run(() => {
+                Parallel.ForEach(urlList, url => {
+                    _puppetTable[url].Start();
+                });
+            });
         }
 
 
         private void ExecuteIntervalCommand(string operatorId, string milliseconds) {
             IList<string> urlList = _operatorResolutionCache[operatorId];
-            foreach(string url in urlList) {
-                IPuppet puppet = _puppetTable[url];
-                Task.Run(() => {
-                    puppet.Interval(Int32.Parse(milliseconds));
+
+            Task.Run(() => {
+                Parallel.ForEach(urlList, url => {
+                    _puppetTable[url].Interval(Int32.Parse(milliseconds));
                 });
-            }
+            });
         }
 
 
         private void ExecuteStatusCommand() {
-            foreach (KeyValuePair<string, IPuppet> entry in _puppetTable) {
-                IPuppet puppet = entry.Value;
-                Task.Run(() => {
-                    puppet.Status();
+            Task.Run(() => {
+                Parallel.ForEach(_puppetTable.Values, puppet => {
+                        puppet.Status();
                 });
-            }
+            });
         }
 
 
-        private void ExecuteCrashCommand(string operatorId) {
-            IList<string> urlList = _operatorResolutionCache[operatorId];
-            foreach (string url in urlList)
-            {
-                IPuppet puppet = _puppetTable[url];
-                Task.Run(() => {
-                    puppet.Crash();
-                });
-            }
+        private void ExecuteCrashCommand(string operatorId, string replica) {
+            string url = _operatorResolutionCache[operatorId][Int32.Parse(replica)];
 
+            Task.Run(() => {
+                _puppetTable[url].Crash();
+            });
         }
 
 
-        private void ExecuteFreezeCommand(string operatorId){
-            IList<string> urlList = _operatorResolutionCache[operatorId];
-            foreach (string url in urlList)
-            {
-                IPuppet puppet = _puppetTable[url];
-                Task.Run(() => {
-                    puppet.Freeze();
-                });
-            }
+        private void ExecuteFreezeCommand(string operatorId, string replica){
+            string url = _operatorResolutionCache[operatorId][Int32.Parse(replica)];
 
+            Task.Run(() => {
+                _puppetTable[url].Freeze();
+            });
         }
 
 
-        private void ExecuteUnfreezeCommand(string operatorId)
-        {
-            IList<string> urlList = _operatorResolutionCache[operatorId];
-            foreach (string url in urlList)
-            {
-                IPuppet puppet = _puppetTable[url];
-                Task.Run(() => {
-                    puppet.Unfreeze();
-                });
-            }
+        private void ExecuteUnfreezeCommand(string operatorId, string replica) {
+            string url = _operatorResolutionCache[operatorId][Int32.Parse(replica)];
 
+            Task.Run(() => {
+                _puppetTable[url].Unfreeze();
+            });
         }
 
 
         private void ExecuteWaitCommand(string milliseconds) {
-            //TODO: double-check this
             Thread.Sleep(Int32.Parse(milliseconds));
         }
 
 
         private void ExecuteSemanticsCommand(string semantic) {
             _semantic = semantic;
-
-            foreach (KeyValuePair<string, IPuppet> entry in _puppetTable) {
-                IPuppet puppet = entry.Value;
-                Task.Run(() => {
-                    puppet.Semantics(semantic);
-                });
-            }
         }
 
 
         private void ExecuteLoggingLevelCommand(string loggingLevel) {
             _loggingLevel = loggingLevel;
-
-            foreach (KeyValuePair<string, IPuppet> entry in _puppetTable) {
-                IPuppet puppet = entry.Value;
-                Task.Run(() => {
-                    puppet.LoggingLevel(loggingLevel);
-                });
-            }
         }
 
 
         public void CloseProcesses(object sender, ConsoleCancelEventArgs args) {
-            Task.Run(() => { CloseProcesses(); });
+            CloseProcesses();
         }
 
 
         public void CloseProcesses() {
-            Thread.Sleep(2000);
-
-            foreach (IPuppet puppet in _puppetTable.Values) {
-                try {
-                    puppet.Crash();
-                }
-                catch (Exception) { }
-            }
+            Task.Run(() => {
+                Parallel.ForEach(_puppetTable.Values, puppet => {
+                    try {
+                        puppet.Crash();
+                    }
+                    catch (Exception) { }
+                });
+            });
 
             ToggleToConfigurationMode();
+
             _operatorResolutionCache = new Dictionary<string, IList<string>>();
             _puppetTable = new Dictionary<string, IPuppet>();
+            _semantic = "at-most-once";
+            _loggingLevel = "light";
         }
     }
 }

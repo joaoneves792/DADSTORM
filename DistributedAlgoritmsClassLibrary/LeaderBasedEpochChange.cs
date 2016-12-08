@@ -40,7 +40,6 @@ namespace DistributedAlgoritmsClassLibrary
         public void Trust(Process process) {
             _trusted = process;
             if (_trusted.Equals(_self)) {
-                Thread.Sleep(1000);
                 _self.Rank += N;
                 _bestEffortBroadcast.Broadcast((Message)_self.Rank);
             }

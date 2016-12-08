@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OperatorApplication
 {
@@ -18,12 +19,27 @@ namespace OperatorApplication
             REPLICATION
         }
 
+        private enum RoutingPolicy {
+            PRIMARY,
+            RANDOM,
+            HASHING
+        }
+
+        private enum SemanticsPolicy {
+            AT_MOST_ONCE,
+            AT_LEAST_ONCE,
+            EXACTLY_ONCE
+        }
+
         #region Variables
         //Operator variables
         private Process _process;
         private Process[] _replications;
         private Command _command;
         private ServerType _serverType;
+        private RoutingPolicy _routingPolicy;
+        private SemanticsPolicy _semanticsPolicy;
+        private int _hashing;
 
         //Broadcast variables
         private BestEffortBroadcast _infrastructureBroadcast,
@@ -168,7 +184,6 @@ namespace OperatorApplication
 
         private void UnfrozenDownstreamReplyHandler(TupleMessage tupleMessage) {
             if (_replications.Count() == 0) {
-                Console.WriteLine("No paxos");
                 PaxosReplyHandler(new Tuple<TupleMessage, string>(tupleMessage, null));
                 return;
             }
@@ -212,9 +227,9 @@ namespace OperatorApplication
                 return;
             }
 
-            foreach (List<string> tuple in result) {
+            Parallel.ForEach(result, tuple => {
                 Log(LogStatus.FULL, string.Join(" - ", tuple));
-            }
+            });
 
             //Share result to downstream nodes if current node has no replications
             if (value.Item2 == null) {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -35,9 +35,9 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Broadcast(Message message) {
-            foreach (Process process in _processes) {
+            Parallel.ForEach(_processes, process => {
                 _perfectPointToPointLink.Send(process, message);
-            }
+            });
         }
 
         public void Deliver(Process process, Message message) {

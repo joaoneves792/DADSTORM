@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DistributedAlgoritmsClassLibrary
 {
@@ -26,9 +27,9 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void Broadcast(Message message) {
-            foreach (Process process in _processes.Values.Select((list) => list[new Random().Next(list.Count)])) {
+            Parallel.ForEach(_processes.Values.Select((list) => list[new Random().Next(list.Count)]), process => {
                 _pointToPointLink.Send(process, message);
-            }
+            });
         }
 
         public void Connect(Process process) {

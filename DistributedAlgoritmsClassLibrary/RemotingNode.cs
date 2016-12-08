@@ -33,11 +33,6 @@ namespace DistributedAlgoritmsClassLibrary
 
             _fairLossPointToPointLinks = new Dictionary<string, FairLossPointToPointLink>();
 
-            //Console.WriteLine("\nSubmit:");
-            //Console.WriteLine("Service:\n" + process.ServiceName);
-            //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
-            //Thread.Sleep(2000);
-
             RemotingServices.Marshal(
                 this,
                 process.SuffixedServiceName,
@@ -45,7 +40,6 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public RemotingNode(Process process, Action<Process, Message> listener, params Process[] otherProcesses) : this(process, listener) {
-            Thread.Sleep(1000);
             foreach (Process otherProcess in otherProcesses) {
                 Connect(otherProcess);
             }
@@ -54,15 +48,16 @@ namespace DistributedAlgoritmsClassLibrary
         public void Connect(Process process) {
             FairLossPointToPointLink fairLossPointToPointLink = SubmitProcessAsFairLossPointToPointLinkNode(process);
 
-            try {
+            Task.Run(() => {
                 fairLossPointToPointLink.SubmitProcessAsFairLossPointToPointLinkNode(_process);
-            } catch (Exception) {
-                new Thread(() => {
-                    //Console.WriteLine("------------------------------------------");
+            }).ContinueWith(task => {
+                //Handles remote exception
+                task.Exception.Handle(ex => {
                     Thread.Sleep(TIMER);
                     Connect(process);
-                }).Start();
-            }
+                    return true;
+                });
+            }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
         public void Reconnect(Process process) {
@@ -74,11 +69,6 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public FairLossPointToPointLink SubmitProcessAsFairLossPointToPointLinkNode(Process process) {
-            //Console.WriteLine("\nConnect by:");
-            //Console.WriteLine("Service:\n" + process.ServiceName);
-            //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
-            //Thread.Sleep(2000);
-
             FairLossPointToPointLink fairLossPointToPointLink = (FairLossPointToPointLink) Activator.GetObject(
                 typeof(FairLossPointToPointLink),
                 process.SuffixedUrl);
@@ -111,18 +101,11 @@ namespace DistributedAlgoritmsClassLibrary
         }
 
         public void UnfrozenSend(Process process, Message message) {
-            //Console.WriteLine("\nSend to:");
-            //Console.WriteLine("Service:\n" + process.ServiceName);
-            //Console.WriteLine("Hashcode:\n" + process.Url.GetHashCode());
-            //Console.WriteLine("List:\n" + string.Join("\n", _fairLossPointToPointLinks.Keys.Select((aaa) => aaa.GetHashCode())));
-            //Thread.Sleep(2000);
-
             Task.Run(() => {
                 _fairLossPointToPointLinks[process.SuffixedUrl].Deliver(_process, message);
             }).ContinueWith(task => {
                 //Handles remote exception
                 task.Exception.Handle(ex => {
-                    //Console.WriteLine("------------------------------------------");
                     Thread.Sleep(TIMER);
                     Reconnect(process);
                     return true;

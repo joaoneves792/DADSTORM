@@ -70,19 +70,6 @@ namespace SecondaryConsoleApplication
                 proposal.Add("c");
                 consensus.Propose(proposal);
             }
-
-            // else {
-            //    Flag.Frozen = true;
-            //IList<string> proposal2 = new List<string>();
-            //proposal2.Add("d");
-            //proposal2.Add("e");
-            //proposal2.Add("f");
-            //quorumConsensus.Propose(proposal2);
-            //}
-            //Thread.Sleep(100000);
-            //Flag.Frozen = false;
-
-            //Console.ReadLine();
         }
 
         internal class Listener
