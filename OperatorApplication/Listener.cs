@@ -15,6 +15,7 @@ namespace OperatorApplication
 
     internal partial class Operator {
         private enum ServerType {
+            UNDEFINED,
             PRIMARY,
             REPLICATION
         }
@@ -49,7 +50,6 @@ namespace OperatorApplication
         //Consensus variables
         private int _timestamp;
         private object _timestampLock;
-        private IList<Tuple<TupleMessage, string>> _archives;
         private IDictionary<string, UniformConsensus<Tuple<TupleMessage, string>>> _paxosConsenti;
         private IDictionary<string, UniformConsensus<Tuple<TupleMessage, string>>> _quorumConsenti;
 
@@ -131,6 +131,14 @@ namespace OperatorApplication
             // Propose Quorum value
             quorum.Propose(request);
         }
+
+        private void FileQuorumRequestHandler(Tuple<TupleMessage, string> request, string suffix) {
+            // Init file Quorum
+            UniformConsensus<Tuple<TupleMessage, string>> quorum = FileQuorumInitHandler(suffix);
+
+            // Propose Quorum value
+            quorum.Propose(request);
+        }
         #endregion
         #region Unfrozen Request Handlers
         private void UnfrozenInfrastructureRequestHandler(Message request) {
@@ -202,7 +210,7 @@ namespace OperatorApplication
             lock (_paxosConsenti) {
                 paxos = _paxosConsenti
                     .Where(keyValuePair => {
-                        //DEBUG: Console.WriteLine("Does " + keyValuePair.Key + " contain " + reply.Item2 + "?");
+                        //Debug: Console.WriteLine("Does " + keyValuePair.Key + " contain " + reply.Item2 + "?");
                         return keyValuePair.Key.Contains(reply.Item2);
                     })
                     .FirstOrDefault()
@@ -210,26 +218,19 @@ namespace OperatorApplication
 
                 if (paxos == null) {
                     // Init Paxos
-                    Tuple<string, Process> tuple = new Tuple<string, Process>(suffix, _process);
-                    paxos = PaxosInitHandler(tuple);
-                    InfrastructureRequestHandler(tuple);
+                    Tuple<string, Process> infrastructureRequest = new Tuple<string, Process>(suffix, _process);
+                    paxos = PaxosInitHandler(infrastructureRequest);
+                    InfrastructureRequestHandler(infrastructureRequest);
                 }
             }
 
             // Propose Paxos value
-            paxos.Propose(new Tuple<TupleMessage, string>(reply.Item1, suffix));
+            Tuple<TupleMessage, string> paxosRequest = new Tuple<TupleMessage, string>(reply.Item1, suffix);
+            paxos.Propose(paxosRequest);
         }
 
         private void UnfrozenUpstreamReplyHandler(Process reply) {
             _downstreamBroadcast.Connect(reply);
-
-            //Console.WriteLine("New leader: " + reply.Url);
-
-            // Send older but possibly unreached requests
-            Parallel.ForEach(_archives, request => {
-                //DEBUG: Console.WriteLine("Resending " + string.Join(" , ", request.Item1.Select(aa => string.Join("-", aa))));
-                DownstreamRequestHandler(request);
-            });
         }
 
         private void UnfrozenEpochChangeReplyHandler(Timestamp timestamp, Process process) {
@@ -241,7 +242,7 @@ namespace OperatorApplication
         }
 
         private void UnfrozenPaxosReplyHandler(Tuple<TupleMessage, string> reply) {
-            //DEBUG: Console.WriteLine("Executing " + string.Join(" , ", reply.Item1.Select(aa => string.Join("-", aa))));
+            Console.WriteLine("Executing " + string.Join(" , ", reply.Item1.Select(aa => string.Join("-", aa))));
 
             TupleMessage result = _command.Execute(reply.Item1);
 
@@ -271,19 +272,15 @@ namespace OperatorApplication
         }
 
         private void UnfrozenQuorumReplyHandler(Tuple<TupleMessage, string> reply) {
-            //DEBUG: Console.WriteLine("Sending " + string.Join(" , ", reply.Item1.Select(aa => string.Join("-", aa))));
+            Console.WriteLine("Sending " + string.Join(" , ", reply.Item1.Select(aa => string.Join("-", aa))));
 
-            Tuple<TupleMessage, string> request = new Tuple<TupleMessage, string>(reply.Item1, Nonce);
-
-            // Save request for future epochs
-            _archives.Add(request);
-
-            DownstreamRequestHandler(request);
+            Tuple<TupleMessage, string> downstreamRequest = new Tuple<TupleMessage, string>(reply.Item1, Nonce);
+            DownstreamRequestHandler(downstreamRequest);
         }
         #endregion
         #region Init Handlers
         private void PrimaryEpochChangeInitHandler() {
-            if(_serverType == ServerType.PRIMARY) {
+            if (_routingPolicy != RoutingPolicy.PRIMARY || _serverType == ServerType.PRIMARY) {
                 return;
             }
             _serverType = ServerType.PRIMARY;
@@ -291,6 +288,9 @@ namespace OperatorApplication
         }
 
         private void ReplicationEpochChangeInitHandler() {
+            if (_routingPolicy != RoutingPolicy.PRIMARY) {
+                return;
+            }
             _serverType = ServerType.REPLICATION;
         }
 
@@ -319,6 +319,19 @@ namespace OperatorApplication
             UniformConsensus<Tuple<TupleMessage, string>> quorum = new FloodingUniformConsensus<Tuple<TupleMessage, string>>(
                 _process.Concat(suffix),
                 QuorumReplyHandler,
+                suffixedReplications);
+            _quorumConsenti.Add(suffix, quorum);
+
+            return quorum;
+        }
+        private UniformConsensus<Tuple<TupleMessage, string>> FileQuorumInitHandler(string suffix) {
+            Process[] suffixedReplications = _replications
+                .Select((suffixedProcess) => suffixedProcess.Concat(suffix))
+                .ToArray();
+
+            UniformConsensus<Tuple<TupleMessage, string>> quorum = new FloodingUniformConsensus<Tuple<TupleMessage, string>>(
+                _process.Concat(suffix),
+                PaxosReplyHandler,
                 suffixedReplications);
             _quorumConsenti.Add(suffix, quorum);
 

@@ -28,7 +28,7 @@ namespace OperatorApplication
             _process = null;
             _replications = null;
             _command = null;
-            _serverType = ServerType.REPLICATION;
+            _serverType = ServerType.UNDEFINED;
             _routingPolicy = RoutingPolicy.PRIMARY;
             _semanticsPolicy = SemanticsPolicy.AT_LEAST_ONCE;
             _hashing = -1;
@@ -37,7 +37,6 @@ namespace OperatorApplication
             _downstreamBroadcast = null;
             _timestamp = 0;
             _timestampLock = new object();
-            _archives = new List<Tuple<TupleMessage, string>>();
             _paxosConsenti = new Dictionary<string, UniformConsensus<Tuple<TupleMessage, string>>>();
             _quorumConsenti = new Dictionary<string, UniformConsensus<Tuple<TupleMessage, string>>>();
 
@@ -80,6 +79,10 @@ namespace OperatorApplication
         #endregion
         #region Submitters
         private void SubmitOperatorAsPrimaryNode() {
+            if (_routingPolicy != RoutingPolicy.PRIMARY) {
+                return;
+            }
+
             if (_replications.Count() == 0) {
                 PrimaryEpochChangeInitHandler();
                 return;

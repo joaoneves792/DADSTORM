@@ -8476,3 +8476,975 @@ Crash OP1 0
 OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
 OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
 Crash OP1 0
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11006/op 2
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11000/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11005/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 4
+Semantics at-most-once
+LoggingLevel full
+OP1 input ops Scripts/tweeters.dat rep fact 2 routing hashing(1) address tcp://localhost:11000/op, tcp://localhost:11001/op operator spec FILTER 3,=,"www.tecnico.ulisboa.pt"
+OP2 input ops OP1 rep fact 2 routing random address tcp://localhost:11002/op, tcp://localhost:11003/op operator spec CUSTOM LibOperator.dll,IdentityOperator,CustomOperation
+OP3 input ops OP2 rep fact 2 routing hashing(1) address tcp://localhost:11004/op, tcp://localhost:11005/op operator spec UNIQ 1
+OP4 input ops OP3 rep fact 1 routing primary address tcp://localhost:11006/op operator spec COUNT
+Interval OP1 500
+Status
+Start OP1
+Start OP2
+Start OP3
+Start OP4
+Status
+Freeze OP2 1
+Wait 10000
+tuple tcp://localhost:11000/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11001/op 12 - user5 - "www.tecnico.ulisboa.pt"
+Unfreeze OP2 1
+Wait 5000
+Status
+tuple tcp://localhost:11002/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11002/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 1 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 1
+tuple tcp://localhost:11002/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11003/op 10 - user3 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 6 - user4 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 12 - user5 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11005/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11004/op 9 - user6 - "www.tecnico.ulisboa.pt"
+tuple tcp://localhost:11006/op 2
+tuple tcp://localhost:11006/op 3
+tuple tcp://localhost:11006/op 4

@@ -13,6 +13,8 @@ namespace DistributedAlgoritmsClassLibrary
 
         private IDictionary<string, Tuple<Process, IList<Process>>> _processes;
 
+        private IList<Message> _archives;
+
         public IList<Process> Processes {
             get {
                 return _processes
@@ -24,12 +26,16 @@ namespace DistributedAlgoritmsClassLibrary
 
         public PrimaryBroadcast(PointToPointLink pointToPointLink) {
             _processes = new Dictionary<string, Tuple<Process, IList<Process>>>();
+            _archives = new List<Message>();
             _pointToPointLink = pointToPointLink;
         }
 
-        public void Broadcast(Message message) {
+        public void Broadcast(Message request) {
+            // Save request for future epochs
+            _archives.Add(request);
+
             Parallel.ForEach(_processes.Values.Select((tuple) => tuple.Item1), process => {
-                _pointToPointLink.Send(process, message);
+                _pointToPointLink.Send(process, request);
             });
         }
 
@@ -57,6 +63,14 @@ namespace DistributedAlgoritmsClassLibrary
                     _processes[suffixedProcess.Name] = new Tuple<Process, IList<Process>>(suffixedProcess, tuple.Item2);
                 }
             }
+
+            //Console.WriteLine("New leader: " + reply.Url);
+
+            // Send older but possibly unreached requests
+            Parallel.ForEach(_archives, request => {
+                //DEBUG: Console.WriteLine("Resending " + string.Join(" , ", request.Item1.Select(aa => string.Join("-", aa))));
+                _pointToPointLink.Send(process, request);
+            });
         }
     }
 }

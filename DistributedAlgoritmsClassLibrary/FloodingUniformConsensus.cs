@@ -66,9 +66,7 @@ namespace DistributedAlgoritmsClassLibrary
                 _round = tuple.Item1;
             }
             _receivedFrom.TryAdd(process);
-            foreach (Value value in tuple.Item2) {
-                _proposalSet.TryAdd(value);
-            }
+            _proposalSet = new ConcurrentBag<Value>(_proposalSet.Union(tuple.Item2));
             TryDecide();
         }
 

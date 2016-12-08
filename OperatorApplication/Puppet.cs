@@ -115,15 +115,12 @@ namespace OperatorApplication
             Unfreeze();
 
             //Process files
-            if (serverType == ServerType.REPLICATION) {
-                return;
-            }
             Parallel.ForEach(_inputFiles, inputFile => {
-                Parallel.ForEach(File.ReadLines(inputFile), (line, _, lineNumber) => {
+                Parallel.ForEach(File.ReadLines(inputFile), (line, parallelLoopState, lineNumber) => {
                     TupleMessage tupleMessage = new TupleMessage();
                     tupleMessage.Add(line.Split(',').ToList());
-                    //DEBUG: Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
-                    UnfrozenDownstreamReplyHandler(new Tuple<TupleMessage, string>(tupleMessage, Nonce));
+                    Console.WriteLine("Reading " + string.Join(" , ", tupleMessage.Select(aa => string.Join("-", aa))));
+                    FileQuorumRequestHandler(new Tuple<TupleMessage, string>(tupleMessage, _process.SuffixedUrl + "_" + inputFile + "_" + lineNumber), inputFile + "_" + lineNumber);
                 });
             });
         }
