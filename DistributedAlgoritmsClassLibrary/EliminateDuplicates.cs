@@ -47,11 +47,15 @@ namespace DistributedAlgoritmsClassLibrary {
         public void Deliver(Process process, Message message) {
             Tuple<string, Message> delivered = (Tuple<string, Message>)message;
 
-            if (!_delivered.Contains(delivered.Item1)) {
+            lock (_delivered) {
+                if (_delivered.Contains(delivered.Item1)) {
+                    return;
+                }
+
                 message = delivered.Item2;
                 _delivered.TryAdd(delivered.Item1);
-                _listener(process.Unconcat(CLASSNAME), message);
             }
+            _listener(process.Unconcat(CLASSNAME), message);
         }
 
         public void Connect(Process process) {

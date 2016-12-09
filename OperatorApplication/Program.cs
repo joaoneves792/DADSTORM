@@ -104,29 +104,59 @@ namespace OperatorApplication
             //Identify semantics policy
             PointToPointLink semanticsPolicy;
             if(semantics.Equals("at-most-once")) {
-                semanticsPolicy = new RemotingNode(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
                 _semanticsPolicy = SemanticsPolicy.AT_MOST_ONCE;
             } else if (semantics.Equals("at-least-once")) {
-                semanticsPolicy = new RetransmitForever(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
                 _semanticsPolicy = SemanticsPolicy.AT_LEAST_ONCE;
             } else {
-                semanticsPolicy = new EliminateDuplicates(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
                 _semanticsPolicy = SemanticsPolicy.EXACTLY_ONCE;
             }
 
             //Identify routing policy
             if (routing.Equals("primary")) {
+                switch (_semanticsPolicy) {
+                    case SemanticsPolicy.AT_MOST_ONCE:
+                        semanticsPolicy = new RemotingNode(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
+                        break;
+                    case SemanticsPolicy.AT_LEAST_ONCE:
+                        semanticsPolicy = new RetransmitForever(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
+                        break;
+                    case SemanticsPolicy.EXACTLY_ONCE:
+                        semanticsPolicy = new EliminateDuplicates(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
+                        break;
+                    default:
+                        return;
+                }
                 _downstreamBroadcast = new PrimaryBroadcast(_process, semanticsPolicy);
                 _routingPolicy = RoutingPolicy.PRIMARY;
             } else if (routing.Equals("random")) {
-                _downstreamBroadcast = new RandomBroadcast(_process, semanticsPolicy);
+                switch (_semanticsPolicy) {
+                    case SemanticsPolicy.AT_MOST_ONCE:
+                        _downstreamBroadcast = new RandomBroadcast(_process, DownstreamReplyHandler);
+                        break;
+                    case SemanticsPolicy.AT_LEAST_ONCE:
+                        _downstreamBroadcast = new StubbornRandomBroadcast(_process, DownstreamReplyHandler);
+                        break;
+                    case SemanticsPolicy.EXACTLY_ONCE:
+                        _downstreamBroadcast = new PerfectRandomBroadcast(_process, DownstreamReplyHandler);
+                        break;
+                }
                 _routingPolicy = RoutingPolicy.RANDOM;
             } else {
                 GroupCollection groupCollection;
                 Matches(HASHING, routing, out groupCollection);
                 _hashing = Int32.Parse(groupCollection[1].Value);
 
-                _downstreamBroadcast = new HashingBroadcast(_process, semanticsPolicy, _hashing);
+                switch (_semanticsPolicy) {
+                    case SemanticsPolicy.AT_MOST_ONCE:
+                        _downstreamBroadcast = new HashingBroadcast(_process, DownstreamReplyHandler, _hashing);
+                        break;
+                    case SemanticsPolicy.AT_LEAST_ONCE:
+                        _downstreamBroadcast = new StubbornHashingBroadcast(_process, DownstreamReplyHandler, _hashing);
+                        break;
+                    case SemanticsPolicy.EXACTLY_ONCE:
+                        _downstreamBroadcast = new PerfectHashingBroadcast(_process, DownstreamReplyHandler, _hashing);
+                        break;
+                }
                 _routingPolicy = RoutingPolicy.HASHING;
             }
         }
@@ -160,9 +190,10 @@ namespace OperatorApplication
         private void SubmitOperatorAsRemotingNode() {
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
-            IDictionary RemoteChannelProperties = new Hashtable();
-            RemoteChannelProperties["port"] = _process.Port;
-            TcpChannel channel = new TcpChannel(RemoteChannelProperties, null, provider);
+            IDictionary remoteChannelProperties = new Hashtable();
+            remoteChannelProperties["port"] = _process.Port;
+            remoteChannelProperties["connectionTimeout"] = 100;
+            TcpChannel channel = new TcpChannel(remoteChannelProperties, null, provider);
             ChannelServices.RegisterChannel(channel, true);
         }
 

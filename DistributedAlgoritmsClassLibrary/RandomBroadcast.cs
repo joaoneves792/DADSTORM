@@ -9,12 +9,9 @@ namespace DistributedAlgoritmsClassLibrary
 
     public class RandomBroadcast : ReliableBroadcast {
         private const string CLASSNAME = "ReliableBroadcast";
-        private PointToPointLink _pointToPointLink;
-        private EventuallyPerfectFailureDetector _eventuallyPerfectFailureDetector;
+        private FairLossPointToPointLink _fairLossPointToPointLink;
 
         private IDictionary<string, IList<Process>> _correct;
-
-        private IList<Message> _fromSelf;
 
         public IList<Process> Processes {
             get {
@@ -32,75 +29,32 @@ namespace DistributedAlgoritmsClassLibrary
             }
         }
 
-        public RandomBroadcast(Process process, PointToPointLink pointToPointLink) {
+        public RandomBroadcast(Process process, Action<Process, Message> listener) {
             _correct = new Dictionary<string, IList<Process>>();
-            _fromSelf = new List<Message>();
-            _pointToPointLink = pointToPointLink;
-            _eventuallyPerfectFailureDetector = new MaintainingTimeout(process.Concat(CLASSNAME), Suspect, Restore);
-        }
-
-        public void Suspect(Process process) {
-            Process nextProcess;
-
-            lock (_correct) {
-                _correct[process.Name].Remove(process);
-
-                if (_correct[process.Name].Count == 0) {
-                    return;
-                }
-
-                nextProcess = _correct[process.Name][new Random().Next(_correct[process.Name].Count)];
-            }
-
-            Parallel.ForEach(_fromSelf, message => {
-                _pointToPointLink.Send(nextProcess, message);
-            });
-        }
-
-        public void Restore(Process process) {
-            Process nextProcess;
-
-            lock (_correct) {
-                _correct[process.Name].Add(process);
-
-                if (_correct[process.Name].Count != 1) {
-                    return;
-                }
-
-                nextProcess = _correct[process.Name][0];
-            }
-
-            Parallel.ForEach(_fromSelf, message => {
-                _pointToPointLink.Send(nextProcess, message);
-            });
+            _fairLossPointToPointLink = new RemotingNode(process.Concat(CLASSNAME), listener);
         }
 
         public void Broadcast(Message message) {
-            // Save request for future epochs
-            _fromSelf.Add(message);
-
             Parallel.ForEach(Correct, process => {
-                _pointToPointLink.Send(process, message);
+                _fairLossPointToPointLink.Send(process, message);
             });
         }
 
         public void Connect(Process process) {
             Process suffixedProcess = process.Concat(CLASSNAME);
 
-            _eventuallyPerfectFailureDetector.Submit(suffixedProcess);
-
             lock (_correct) {
                 //Create new list if list does not exist
                 if (!_correct.ContainsKey(suffixedProcess.Name)) {
                     _correct.Add(suffixedProcess.Name, new List<Process>() { suffixedProcess });
-                    _pointToPointLink.Connect(suffixedProcess);
+                    _fairLossPointToPointLink.Connect(suffixedProcess);
                     return;
                 }
 
                 //Add process if process is not on list (list already exists)
                 if (!_correct[suffixedProcess.Name].Contains(suffixedProcess)) {
                     _correct[suffixedProcess.Name].Add(suffixedProcess);
-                    _pointToPointLink.Connect(suffixedProcess);
+                    _fairLossPointToPointLink.Connect(suffixedProcess);
                 }
             }
         }

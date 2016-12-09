@@ -44,6 +44,8 @@
     <Compile Include="BasicBroadcast.cs" />
     <Compile Include="BestEffortBroadcast.cs" />
     <Compile Include="Broadcast.cs" />
+    <Compile Include="PerfectRandomBroadcast.cs" />
+    <Compile Include="PerfectHashingBroadcast.cs" />
     <Compile Include="EpochChange.cs" />
     <Compile Include="EpochConsensus.cs" />
     <Compile Include="EventualLeaderDetector.cs" />
@@ -65,6 +67,8 @@
     <Compile Include="Process.cs" />
     <Compile Include="RandomBroadcast.cs" />
     <Compile Include="ReadWriteEpochConsensus.cs" />
+    <Compile Include="StubbornRandomBroadcast.cs" />
+    <Compile Include="StubbornHashingBroadcast.cs" />
     <Compile Include="RetransmitForever.cs" />
     <Compile Include="RemotingNode.cs" />
     <Compile Include="FairLossPointToPointLink.cs" />

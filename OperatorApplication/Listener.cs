@@ -200,11 +200,6 @@ namespace OperatorApplication
         }
 
         private void UnfrozenDownstreamReplyHandler(Tuple<TupleMessage, string> reply) {
-            if (_replications.Count() == 0) {
-                UnfrozenPaxosReplyHandler(new Tuple<TupleMessage, string>(reply.Item1, null));
-                return;
-            }
-
             String suffix = reply.Item2 + "_" + _process.SuffixedUrl;
             UniformConsensus<Tuple<TupleMessage, string>> paxos;
             lock (_paxosConsenti) {

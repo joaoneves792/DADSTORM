@@ -175,6 +175,8 @@ namespace PuppetMasterLibrary
                     _operatorResolutionCache.Add(operatorId, urlList);
                 }
             }
+
+            Thread.Sleep(2000);
         }
 
         public void ResetWaitHandle() {
