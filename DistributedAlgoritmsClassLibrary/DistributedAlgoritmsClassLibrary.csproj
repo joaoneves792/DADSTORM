@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="BasicBroadcast.cs" />
     <Compile Include="BestEffortBroadcast.cs" />
+    <Compile Include="Broadcast.cs" />
     <Compile Include="EpochChange.cs" />
     <Compile Include="EpochConsensus.cs" />
     <Compile Include="EventualLeaderDetector.cs" />
@@ -50,12 +51,13 @@
     <Compile Include="ExcludeOnTimeout.cs" />
     <Compile Include="FloodingUniformConsensus.cs" />
     <Compile Include="HashingBroadcast.cs" />
+    <Compile Include="MaintainingTimeout.cs" />
     <Compile Include="IncreasingTimeout.cs" />
     <Compile Include="EliminateDuplicates.cs" />
     <Compile Include="LeaderBasedEpochChange.cs" />
     <Compile Include="LeaderDrivenConsensus.cs" />
     <Compile Include="MonarchicalEventualLeaderDetection.cs" />
-    <Compile Include="MutableBroadcast.cs" />
+    <Compile Include="ReliableBroadcast.cs" />
     <Compile Include="PerfectFailureDetector.cs" />
     <Compile Include="PerfectPointToPointLink.cs" />
     <Compile Include="PointToPointLink.cs" />

@@ -104,29 +104,29 @@ namespace OperatorApplication
             //Identify semantics policy
             PointToPointLink semanticsPolicy;
             if(semantics.Equals("at-most-once")) {
-                semanticsPolicy = new RemotingNode(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+                semanticsPolicy = new RemotingNode(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
                 _semanticsPolicy = SemanticsPolicy.AT_MOST_ONCE;
             } else if (semantics.Equals("at-least-once")) {
-                semanticsPolicy = new RetransmitForever(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+                semanticsPolicy = new RetransmitForever(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
                 _semanticsPolicy = SemanticsPolicy.AT_LEAST_ONCE;
             } else {
-                semanticsPolicy = new EliminateDuplicates(_process.Concat("MutableBroadcast"), DownstreamReplyHandler);
+                semanticsPolicy = new EliminateDuplicates(_process.Concat("ReliableBroadcast"), DownstreamReplyHandler);
                 _semanticsPolicy = SemanticsPolicy.EXACTLY_ONCE;
             }
 
             //Identify routing policy
             if (routing.Equals("primary")) {
-                _downstreamBroadcast = new PrimaryBroadcast(semanticsPolicy);
+                _downstreamBroadcast = new PrimaryBroadcast(_process, semanticsPolicy);
                 _routingPolicy = RoutingPolicy.PRIMARY;
             } else if (routing.Equals("random")) {
-                _downstreamBroadcast = new RandomBroadcast(semanticsPolicy);
+                _downstreamBroadcast = new RandomBroadcast(_process, semanticsPolicy);
                 _routingPolicy = RoutingPolicy.RANDOM;
             } else {
                 GroupCollection groupCollection;
                 Matches(HASHING, routing, out groupCollection);
                 _hashing = Int32.Parse(groupCollection[1].Value);
 
-                _downstreamBroadcast = new HashingBroadcast(semanticsPolicy, _hashing);
+                _downstreamBroadcast = new HashingBroadcast(_process, semanticsPolicy, _hashing);
                 _routingPolicy = RoutingPolicy.HASHING;
             }
         }

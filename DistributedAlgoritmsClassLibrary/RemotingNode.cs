@@ -126,15 +126,23 @@ namespace DistributedAlgoritmsClassLibrary
             _send = UnfrozenSend;
             _deliver = UnfrozenDeliver;
 
-            Parallel.ForEach(_frozenSends, (send) => {
+            IProducerConsumerCollection<Tuple<Process, Message>> frozenSends,
+                                                                 frozenDelivers;
+
+            lock (_frozenSends) {
+                frozenSends = _frozenSends;
+                frozenDelivers = _frozenDelivers;
+
+                _frozenSends = new ConcurrentBag<Tuple<Process, Message>>();
+                _frozenDelivers = new ConcurrentBag<Tuple<Process, Message>>();
+            }
+
+            Parallel.ForEach(frozenSends, (send) => {
                 _send(send.Item1, send.Item2);
             });
-            Parallel.ForEach(_frozenDelivers, (deliver) => {
-                    _deliver(deliver.Item1, deliver.Item2);
+            Parallel.ForEach(frozenDelivers, (deliver) => {
+                _deliver(deliver.Item1, deliver.Item2);
             });
-
-            _frozenSends = new ConcurrentBag<Tuple<Process, Message>>();
-            _frozenDelivers = new ConcurrentBag<Tuple<Process, Message>>();
         }
 
         private void FrozenSend(Process process, Message message) {

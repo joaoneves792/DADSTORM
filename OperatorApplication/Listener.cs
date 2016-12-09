@@ -45,7 +45,7 @@ namespace OperatorApplication
         //Broadcast variables
         private BestEffortBroadcast _infrastructureBroadcast,
                                     _upstreamBroadcast;
-        private MutableBroadcast _downstreamBroadcast;
+        private ReliableBroadcast _downstreamBroadcast;
 
         //Consensus variables
         private int _timestamp;
@@ -210,15 +210,15 @@ namespace OperatorApplication
             lock (_paxosConsenti) {
                 paxos = _paxosConsenti
                     .Where(keyValuePair => {
-                        //Debug: Console.WriteLine("Does " + keyValuePair.Key + " contain " + reply.Item2 + "?");
-                        return keyValuePair.Key.Contains(reply.Item2);
+                        //Debug: Console.WriteLine(keyValuePair.Key + " == " + reply.Item2 + "?");
+                        return keyValuePair.Key.Equals(reply.Item2);
                     })
                     .FirstOrDefault()
                     .Value;
 
                 if (paxos == null) {
                     // Init Paxos
-                    Tuple<string, Process> infrastructureRequest = new Tuple<string, Process>(suffix, _process);
+                    Tuple<string, Process> infrastructureRequest = new Tuple<string, Process>(reply.Item2, _process);
                     paxos = PaxosInitHandler(infrastructureRequest);
                     InfrastructureRequestHandler(infrastructureRequest);
                 }

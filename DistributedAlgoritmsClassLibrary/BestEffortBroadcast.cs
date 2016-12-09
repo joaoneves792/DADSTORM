@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DistributedAlgoritmsClassLibrary
+﻿namespace DistributedAlgoritmsClassLibrary
 {
-    using Message = Object;
-
-    public interface BestEffortBroadcast
+    public interface BestEffortBroadcast : Broadcast
     {
-        IList<Process> Processes { get; }
-
-        void Broadcast(Message message);
-
-        //Indicator
-        //void Deliver(Process process, Message message);
     }
 }

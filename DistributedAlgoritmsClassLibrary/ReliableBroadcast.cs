@@ -1,6 +1,6 @@
 ﻿namespace DistributedAlgoritmsClassLibrary
 {
-    public interface MutableBroadcast : BestEffortBroadcast
+    public interface ReliableBroadcast : Broadcast
     {
         void Connect(Process process);
     }
